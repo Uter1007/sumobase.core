@@ -1,0 +1,428 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Cleansumo",
+    "version": "1.0.0",
+    "title": "Cleansumo REST API"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "tags": [
+    {
+      "name": "authentication",
+      "description": "Operations for authentication"
+    }, {
+      "name": "users",
+      "description": "Operations for user management"
+    }, {
+      "name": "account",
+      "description": "Operations for account management"
+    }, {
+      "name": "domain",
+      "description": "Basic operations for the application"
+    }
+  ],
+  "paths": {
+    "/api/auth": {
+      "post": {
+        "tags": ["authentication"],
+        "name": "auth",
+        "summary": "Authentication",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Login",
+            "in": "body",
+            "description": "Login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Login",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          }
+        }
+      }
+    },
+    "/api/token/reject": {
+      "post": {
+        "tags": ["authentication"],
+        "name": "Reject Token",
+        "summary": "reject",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "RefreshToken",
+            "in": "body",
+            "description": "RefreshToken",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshToken"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Rejections"
+          }
+        }
+      }
+    },
+    "/api/token": {
+      "post": {
+        "tags": ["authentication"],
+        "name": "refresh",
+        "summary": "Refresh Token",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "RefreshToken",
+            "in": "body",
+            "description": "RefreshToken",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshToken"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Refresh",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          }
+        }
+      }
+    },
+    "/api/user/me": {
+      "get": {
+        "tags": ["users"],
+        "name": "me",
+        "summary": "Get User Object",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Registration",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Ressource not found"
+          },
+          "401": {
+            "description": "Not Authorized"
+          }
+        }
+      }
+    },
+    "/api/user/register": {
+      "post": {
+        "tags": ["users"],
+        "name": "register",
+        "summary": "Registration Process",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "RegisterModel",
+            "in": "body",
+            "description": "RegisterModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Registration",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Ressource not found"
+          },
+          "432": {
+            "description": "Accountname not URL friendly"
+          },
+          "433": {
+            "description": "Account already exist"
+          }
+        }
+      }
+    },
+    "/api/accounts/check": {
+      "post": {
+        "tags": ["account"],
+        "name": "check",
+        "summary": "Checks accountname",
+        "description": "Checks if account name is already in Use + if url conform",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "AccountName",
+            "in": "body",
+            "description": "AccountName",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AccountName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Lookup"
+          },
+          "404": {
+            "description": "Ressource not found"
+          },
+          "432": {
+            "description": "Accountname not URL friendly"
+          },
+          "433": {
+            "description": "Account already exist"
+          }
+        }
+      }
+    },
+    "/api/accounts/create": {
+      "post": {
+        "tags": ["account"],
+        "name": "create",
+        "summary": "Create account",
+        "description": "Checks if account name is already in Use + if url conform -> then creates it",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "AccountName",
+            "in": "body",
+            "description": "AccountName",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AccountName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Registration"
+          },
+          "404": {
+            "description": "Ressource not found"
+          },
+          "432": {
+            "description": "Accountname not URL friendly"
+          },
+          "433": {
+            "description": "Account already exist"
+          }
+        }
+      }
+    },
+    "/api/domain/menu": {
+      "get": {
+        "tags": ["domain"],
+        "name": "menu",
+        "summary": "Get menu (=route configuration)",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Route elements each containing additional information for permission purposes."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Session": {
+      "type": "object",
+      "required": [
+        "token", "user"
+      ],
+      "properties": {
+        "token": {
+          "$ref": "#/definitions/Token"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "Account": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    "RegisterUser": {
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "UserName"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "Firstname"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Lastname"
+        },
+        "password": {
+          "type": "string",
+          "description": "password"
+        }
+      }
+    },
+    "User": {
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Id"
+        },
+        "account": {
+          "type": "string",
+          "description": "Account Id"
+        },
+        "createdOn": {
+          "type": "string",
+          "description": "createdon"
+        },
+        "username": {
+          "type": "string",
+          "description": "UserName"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "Firstname"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Lastname"
+        },
+        "state": {
+          "type": "string",
+          "description": "Active | Pending | Inactive"
+        },
+        "role": {
+          "type": "string",
+          "description": "Admin | Supervisor | Employee"
+        },
+        "modifedOn": {
+          "type": "string",
+          "description": "modifedOn"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "required": ["accessToken"],
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "required AccessToken for executing Requests"
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "permanent Token to renew AccessTokens"
+        }
+      }
+    },
+    "RegisterModel": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/Account"
+        },
+        "user": {
+          "$ref": "#/definitions/RegisterUser"
+        }
+      }
+    },
+    "RefreshToken": {
+      "type": "object",
+      "required": ["token"],
+      "properties": {
+        "token": {
+          "type": "object",
+          "properties": {
+            "refreshToken": {
+              "type": "string",
+              "description": "permanent Token to renew AccessTokens"
+            }
+          }
+        },
+        "user": {
+          "type": "object",
+          "description": "User",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "LoginData": {
+      "type": "object",
+      "required": [
+        "username", "password", "accountName"
+      ],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "permanent": {
+          "description": "use permanent login",
+          "type": "boolean"
+        }
+      }
+    },
+    "AccountName": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
