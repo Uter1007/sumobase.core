@@ -11,7 +11,7 @@
     "debug": "node_modules/.bin/cross-env NODE_ENV=development npm run node-inspector & node --debug www/development.js",
     "start": "node_modules/.bin/cross-env NODE_ENV=production npm run gulp",
     "test": "node_modules/.bin/cross-env NODE_ENV=test npm run gulp fulltest",
-    "postinstall": "typings install && cd frontend && npm i && cd ..",
+    "postinstall": "typings install",
     "server": "npm run gulp serve",
     "serverReload": "node_modules/.bin/cross-env NODE_ENV=production & node_modules/.bin/pm2 restart all"
   },
