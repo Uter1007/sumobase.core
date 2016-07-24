@@ -55,12 +55,5 @@ gulp.task('testCoverage', 'Generate a test coverage report (for mocha spec only)
 gulp.task('cleanCoverage', false, () => $.del(['coverage']));
 
 // Main test tasks
-gulp.task('fulltest', 'Build, then run unit spec (once)', ['buildThenMochaTests']);
+gulp.task('build+test', 'Build, then run unit spec (once)', ['buildThenMochaTests']);
 gulp.task('test', 'Run unit spec (once)', ['pureMochaTests']);
-
-gulp.task('testFrontend', function (done) {
-    new Server({
-        configFile: path.join(__dirname, '../frontend/karma.conf.js'),
-        singleRun: true
-    }, done).start();
-});

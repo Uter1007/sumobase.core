@@ -59,7 +59,7 @@ gulp.task('compile', false, () => {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', 'Builds and lints server app and fe (compiles & copies)', (callback) => {
+gulp.task('build', 'Builds and lints the server app (compiles & copies)', (callback) => {
     $.runSequence('lintAndBuildServer', callback);
 });
 
