@@ -37,7 +37,7 @@ gulp.task('inspect', 'Debug via NodeInspector', () => {
         }));
 });
 
-gulp.task('dbg', 'Launch the server on development mode, autoreloads it when there are code changes',
+gulp.task('server-debug', 'Launch the server on development mode, autoreloads it when there are code changes',
     ['build', 'inspect', 'swagger-ui'], () => {
 
         var cfg = JSON.parse(JSON.stringify(nodemonConfiguration));
