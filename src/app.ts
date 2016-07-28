@@ -22,7 +22,6 @@ import * as configFile from './config/env/config';
 
 import {UserRouteProvider, UserSecureRouteProvider} from './modules/user/routes/user.route.provider';
 import {AuthRouteProvider} from './modules/session/routes/session.route.provider';
-import {AccountRouteProvider} from './modules/account/routes/account.route.provider';
 
 // error handler service
 import {
@@ -65,8 +64,6 @@ app.use(function(req, res, next) {
 });
 
 // register routes (as middleware layer through express.Router())
-app.use(new AuthRouteProvider().getRouter());
-app.use(new AccountRouteProvider().getRouter());
 app.use(new UserRouteProvider().getRouter());
 app.use(new UserSecureRouteProvider().getRouter());
 
