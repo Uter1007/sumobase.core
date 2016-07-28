@@ -2,8 +2,8 @@
 
 // typings
 import {transports, LoggerOptions} from 'winston';
-import {ILogOptions, LogLevel} from '../../commons/logger/logModel';
-import {MongooseTransport} from '../../commons/logger/winstonMongooseTransport';
+import {ILogOptions, LogLevel} from '../../commons/logger/log.model';
+import {MongooseTransport} from '../../commons/logger/winston.mongoose.transport';
 
 const logFileName: string = './logs/all-logs.log';
 
