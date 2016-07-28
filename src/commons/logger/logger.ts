@@ -1,6 +1,6 @@
 import * as winston from 'winston';
 import * as Promise from 'bluebird';
-import {IBaseLoggerOptions, LogLevel} from './logModel';
+import {IBaseLoggerOptions, LogLevel} from './log.model';
 import {TestConfig} from '../../config/env/config';
 let fs = require( 'fs' );
 let path = require('path');

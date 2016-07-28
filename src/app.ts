@@ -13,26 +13,22 @@ const helmet = require('helmet');
 import {logger} from './commons/logger/logger';
 
 /* tslint:disable */
-require ('./modules/auth/logic/strategy/passport');
+require ('./modules/session/logic/strategy/passport');
 /* tslint:enable */
 
 import * as configFile from './config/env/config';
 
 // modular Route definitions
-import {
-    HealthCheckRouteProvider,
-    SecureHealthCheckRouteProvider
-} from './modules/healthcheck/routes/healthCheckRouteProvider';
-import {UserRouteProvider, UserSecureRouteProvider} from './modules/user/routes/userRouteProvider';
-import {AuthRouteProvider} from './modules/auth/routes/authRouteProvider';
-import {AccountRouteProvider} from './modules/account/routes/accountRouteProvider';
-import {DomainRouteProvider} from './modules/domain/routes/domainRouteProvider';
+
+import {UserRouteProvider, UserSecureRouteProvider} from './modules/user/routes/user.route.provider';
+import {AuthRouteProvider} from './modules/session/routes/session.route.provider';
+import {AccountRouteProvider} from './modules/account/routes/account.route.provider';
 
 // error handler service
 import {
     development as DevelopmentErrorHandler,
     production as ProductionErrorHandler,
-} from './commons/services/errorHandler';
+} from './commons/services/error.handler';
 
 // main app
 const app = express();
@@ -69,11 +65,8 @@ app.use(function(req, res, next) {
 });
 
 // register routes (as middleware layer through express.Router())
-app.use(new SecureHealthCheckRouteProvider().getRouter());
-app.use(new HealthCheckRouteProvider().getRouter());
 app.use(new AuthRouteProvider().getRouter());
 app.use(new AccountRouteProvider().getRouter());
-app.use(new DomainRouteProvider().getRouter());
 app.use(new UserRouteProvider().getRouter());
 app.use(new UserSecureRouteProvider().getRouter());
 
