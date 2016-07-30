@@ -16,7 +16,6 @@ import SVC_TAGS from './constant/services.tags';
 import REPO_TAGS from './constant/repositories.tags';
 import {UserRepository} from './modules/user/repository/user.repository';
 import UserService from './modules/user/services/user.service';
-import {BaseRepository} from './modules/base/base.repository';
 
 export class Bootstrap {
 

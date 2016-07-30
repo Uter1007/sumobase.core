@@ -1,4 +1,4 @@
-import {BaseRepository} from '../../base/base.repository';
+import {BaseRepository} from '../../commons/base/base.repository';
 import { injectable, inject, named } from 'inversify';
 import * as mongoose from 'mongoose';
 

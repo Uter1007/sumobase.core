@@ -1,6 +1,6 @@
 import {UserRepository} from '../repository/user.repository';
 import {injectable, inject} from 'inversify';
-import {ILogger} from '../../logging/interfaces/logger.interface';
+import {ILogger} from '../../commons/logging/interfaces/logger.interface';
 import SVC_TAGS from '../../../constant/services.tags';
 import REPO_TAGS from '../../../constant/repositories.tags';
 import {IUser} from '../interfaces/user.interface';

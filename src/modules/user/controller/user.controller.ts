@@ -8,6 +8,9 @@ import UserService from '../services/user.service';
 import {User} from '../models/user.model';
 import {IUser} from '../interfaces/user.interface';
 import {Deserialize} from 'cerialize';
+/* tslint: disable */
+let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
+/* tslint:enable */
 
 @injectable()
 @Controller('/api/v1.0/user')

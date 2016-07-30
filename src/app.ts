@@ -13,8 +13,8 @@ require('./modules/authenticate/strategy/passport');
 
 import session = require('express-session');
 
-import errorHandler = require('./modules/error/middleware/error.handler.logic');
-import notFoundHandler = require('./modules/error/middleware/notfound.handler.logic');
+import errorHandler = require('./modules/commons/error/middleware/error.handler.logic');
+import notFoundHandler = require('./modules/commons/error/middleware/notfound.handler.logic');
 
 mongoose.connect('url', {
     pass: 'pass',
