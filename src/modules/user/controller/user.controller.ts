@@ -35,10 +35,10 @@ export class UserController extends BaseController {
 
         let user: IUser =  Deserialize(request.body, User);
 
-        let founduser = await this._userService.findUserByNameAsync(user.email);
+        let founduser = await this._userService.findUserByName(user.email);
 
         if (!founduser) {
-            return await this._userService.createAsync(user);
+            return await this._userService.create(user);
         }
 
         throw new Error('Error on register');

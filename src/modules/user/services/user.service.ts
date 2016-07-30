@@ -24,7 +24,7 @@ export class UserService {
         this._log = log;
     }
 
-    public async findUserByUserNameAndPasswordAsync(userName: string, password: string) {
+    public async findUserByUserNameAndPassword(userName: string, password: string) {
         try {
 
             let user =  await this._userRepository.findOne({ 'username': userName });
@@ -49,7 +49,7 @@ export class UserService {
         }
     }
 
-    public async findUserByNameAsync(userName: string) {
+    public async findUserByName(userName: string) {
         try {
             return await this._userRepository.findOne({'username': userName, });
         } catch (err) {
@@ -58,7 +58,7 @@ export class UserService {
         }
     }
 
-    public async findUserByIdAsync(userId) {
+    public async findUserById(userId) {
         try {
             return await this._userRepository.findById(userId);
         } catch (err) {
@@ -67,7 +67,7 @@ export class UserService {
         }
     }
 
-    public async createAsync(userModel: IUser) {
+    public async create(userModel: IUser) {
         try {
             let hashpw = await this.hashPassword(userModel.password);
             userModel.password = hashpw;
