@@ -36,3 +36,6 @@ swagger-ui/dist
 build/
 
 src/config/env/*config.ts
+
+# OS X
+.DS_Store
