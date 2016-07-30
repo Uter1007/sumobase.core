@@ -7,7 +7,7 @@ import * as passport from 'passport';
 import * as mongoose from 'mongoose';
 
 /* tslint:disable */
-require('./modules/authenticate/strategy/passport');
+require('./modules/commons/authenticate/strategy/passport');
 
 import session = require('express-session');
 

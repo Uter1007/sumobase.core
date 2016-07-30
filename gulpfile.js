@@ -21,8 +21,8 @@ nodemonConfiguration = {
     }
 };
 
-gulp.task("clean", function() {
-    return del(['dist/**']);
+gulp.task("clean", function(callback) {
+    return del(['dist/**'], callback);
 });
 
 gulp.task("lint", function() {
@@ -38,6 +38,7 @@ gulp.task("lint", function() {
 gulp.task('ts-compile', function() {
     return gulp.src([
         "src/**/**.ts",
+        "src/**/**.json",
         "typings/index.d.ts",
         "node_modules/inversify-dts/inversify-binding-decorators/inversify-binding-decorators.d.ts",
         "node_modules/inversify-dts/inversify-express-utils/inversify-express-utils.d.ts",
@@ -46,7 +47,7 @@ gulp.task('ts-compile', function() {
     ])
         .pipe(sourcemaps.init())
         .pipe(tsc(tsProject))
-        .js.pipe(sourcemaps.write('./ts'))
+        .js.pipe(sourcemaps.write('./src/ts'))
         .pipe(gulp.dest('dist'));
 });
 
@@ -90,12 +91,12 @@ gulp.task('test', false, function() {
 });
 
 gulp.task('copyConfigurations', function() {
-    return gulp.src('src/**/*.json')
+    gulp.src('src/**/*.json')
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('compile', function() {
-   runSequence('clean', 'copyConfigurations', 'ts-compile');
+gulp.task('compile', function(callback) {
+    runSequence('clean', 'copyConfigurations', 'ts-compile', callback);
 });
 
 gulp.task('default', function() {
