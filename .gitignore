@@ -35,4 +35,4 @@ src/.env
 swagger-ui/dist
 build/
 
-src/config/env/config.ts
+src/config/env/*config.ts
