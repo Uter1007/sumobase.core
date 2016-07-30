@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 import { autoserialize } from 'cerialize';
-import {IUser} from '../interfaces/user.interface';
-import {IUserDBSchema} from './user.db.model';
-import {UserState} from './userstate.model';
+import { IUser } from '../interfaces/user.interface';
+import { IUserDBSchema } from './user.db.model';
+import { UserState } from './userstate.model';
 
 @injectable()
 export class User implements IUser {

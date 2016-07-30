@@ -1,18 +1,19 @@
-import {UserRepository} from '../repository/user.repository';
-import {injectable, inject} from 'inversify';
-import {ILogger} from '../../commons/logging/interfaces/logger.interface';
-import SVC_TAGS from '../../../constant/services.tags';
+import { injectable, inject } from 'inversify';
+import { UserRepository } from '../repository/user.repository';
+import { ILogger } from '../../commons/logging/interfaces/logger.interface';
+import { IUser } from '../interfaces/user.interface';
+import { IUserDBSchema } from '../models/user.db.model';
+import { UserState } from '../models/userstate.model';
+
 import REPO_TAGS from '../../../constant/repositories.tags';
-import {IUser} from '../interfaces/user.interface';
-import {IUserDBSchema} from '../models/user.db.model';
-import {UserState} from '../models/userstate.model';
+import SVC_TAGS from '../../../constant/services.tags';
 
 /* tslint:disable */
 let bcrypt = require('bcrypt');
 /* tslint:enable */
 
 @injectable()
-class UserService {
+export class UserService {
 
     private _userRepository: UserRepository;
     private _log: ILogger;
@@ -101,5 +102,3 @@ class UserService {
         });
     }
 }
-
-export default UserService;

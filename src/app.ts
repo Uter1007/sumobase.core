@@ -1,5 +1,6 @@
 import {InversifyExpressServer} from 'inversify-express-utils';
 import {Bootstrap} from './bootstrap';
+
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
@@ -8,6 +9,7 @@ import * as mongoose from 'mongoose';
 
 /* tslint:disable */
 require('./modules/commons/authenticate/strategy/passport');
+/* tslint:enable */
 
 import session = require('express-session');
 

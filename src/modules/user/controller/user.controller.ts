@@ -1,13 +1,17 @@
-import { Controller, Get, Post } from 'inversify-express-utils';
-import { injectable, inject  } from 'inversify';
 import * as express from 'express';
+
 import BaseController from '../../commons/base/base.controller';
-import {ILogger} from '../../commons/logging/interfaces/logger.interface';
+
+import { injectable, inject  } from 'inversify';
+import { Controller, Get, Post } from 'inversify-express-utils';
+import { ILogger } from '../../commons/logging/interfaces/logger.interface';
+import { User } from '../models/user.model';
+import { IUser } from '../interfaces/user.interface';
+import { Deserialize } from 'cerialize';
+import { UserService } from '../services/user.service';
+
 import TYPES from '../../../constant/services.tags';
-import UserService from '../services/user.service';
-import {User} from '../models/user.model';
-import {IUser} from '../interfaces/user.interface';
-import {Deserialize} from 'cerialize';
+
 /* tslint: disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
 /* tslint:enable */
