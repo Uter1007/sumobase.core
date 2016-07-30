@@ -14,6 +14,9 @@ import { Kernel } from 'inversify';
 import CTRL_TAGS from './constant/controller.tags';
 import SVC_TAGS from './constant/services.tags';
 import REPO_TAGS from './constant/repositories.tags';
+import {UserRepository} from './modules/user/repository/user.repository';
+import UserService from './modules/user/services/user.service';
+import {BaseRepository} from './modules/base/base.repository';
 
 export class Bootstrap {
 
@@ -31,6 +34,12 @@ export class Bootstrap {
 
         kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
             .to(LogRepository);
+
+        kernel.bind<UserRepository>(REPO_TAGS.UserRepository)
+            .to(UserRepository);
+
+        kernel.bind<UserService>(SVC_TAGS.UserService)
+            .to(UserService);
 
         return kernel;
     }

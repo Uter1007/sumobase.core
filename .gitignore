@@ -37,5 +37,8 @@ build/
 
 src/config/env/*config.ts
 
+#VSCODE
+.vscode
+
 # OS X
 .DS_Store

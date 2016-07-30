@@ -5,6 +5,7 @@ import { injectable } from 'inversify';
 @injectable()
 export class LogRepository extends BaseRepository<ILogModel> {
     constructor() {
-        super(logDAO);
+        super();
+        this._model = logDAO;
     }
 }

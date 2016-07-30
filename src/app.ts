@@ -4,15 +4,22 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
 import * as passport from 'passport';
+import * as mongoose from 'mongoose';
+
 /* tslint:disable */
 require('./modules/authenticate/strategy/passport');
-import * as testConfigFile from './config/env/testconfig';
+// import * as testConfigFile from './config/env/testconfig';
 /* tslint:enable */
 
 import session = require('express-session');
 
 import errorHandler = require('./modules/error/middleware/error.handler.logic');
 import notFoundHandler = require('./modules/error/middleware/notfound.handler.logic');
+
+mongoose.connect('url', {
+    pass: 'pass',
+    user: 'user',
+});
 
 let kernel = new Bootstrap().getKernel();
 
@@ -38,8 +45,6 @@ server.setConfig((app) => {
 server.setErrorConfig((app) => {
     app.use(errorHandler);
 });
-
-
 
 let app = server.build();
 
