@@ -7,6 +7,7 @@ var nodeInspector = require('gulp-node-inspector');
 var runSequence = require('run-sequence');
 var nodemon = require('gulp-nodemon');
 var mocha = require('gulp-mocha');
+var del = require('del');
 
 var tsProject = tsc.createProject('tsconfig.json');
 
@@ -20,6 +21,10 @@ nodemonConfiguration = {
     }
 };
 
+gulp.task("clean", function() {
+    del(['dist/**']);
+});
+
 gulp.task("lint", function() {
     return gulp.src([
         "src/**/**.ts"
@@ -30,19 +35,20 @@ gulp.task("lint", function() {
     .pipe(tslint.report());
 });
 
-gulp.task("compile", ["copy"], function() {
+gulp.task('ts-compile', function() {
     return gulp.src([
         "src/**/**.ts",
+        "src/**/**.json",
         "typings/index.d.ts",
         "node_modules/inversify-dts/inversify-binding-decorators/inversify-binding-decorators.d.ts",
         "node_modules/inversify-dts/inversify-express-utils/inversify-express-utils.d.ts",
         "node_modules/inversify-dts/inversify-logger-middleware/inversify-logger-middleware.d.ts",
         "node_modules/inversify-dts/inversify/inversify.d.ts"
     ])
-    .pipe(sourcemaps.init())
-    .pipe(tsc(tsProject))
-    .js.pipe(sourcemaps.write('./src/ts'))
-       .pipe(gulp.dest('dist'));
+        .pipe(sourcemaps.init())
+        .pipe(tsc(tsProject))
+        .js.pipe(sourcemaps.write('./src/ts'))
+        .pipe(gulp.dest('dist'));
 });
 
 
@@ -84,11 +90,14 @@ gulp.task('test', false, function() {
         .pipe(mocha({}));
 });
 
-gulp.task('copy', function() {
+gulp.task('copyConfigurations', function() {
     gulp.src('src/**/*.json')
         .pipe(gulp.dest('dist'));
 });
 
+gulp.task('compile', function() {
+   runSequence('clean', 'copyConfigurations', 'ts-compile');
+});
 
 gulp.task('default', function() {
     runSequence(
