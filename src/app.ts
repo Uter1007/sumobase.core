@@ -30,7 +30,7 @@ server.setConfig((app) => {
 
     app.post('/login', passport.authenticate('local', {
         failureRedirect : '/login2',
-        successRedirect : '/settings'
+        successRedirect : '/api/v1.0/user/settings'
     }));
 });
 
@@ -38,8 +38,6 @@ server.setConfig((app) => {
 server.setErrorConfig((app) => {
     app.use(errorHandler);
 });
-
-
 
 let app = server.build();
 
