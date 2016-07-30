@@ -8,17 +8,19 @@ import * as mongoose from 'mongoose';
 
 /* tslint:disable */
 require('./modules/authenticate/strategy/passport');
-// import * as testConfigFile from './config/env/testconfig';
-/* tslint:enable */
 
 import session = require('express-session');
 
 import errorHandler = require('./modules/commons/error/middleware/error.handler.logic');
 import notFoundHandler = require('./modules/commons/error/middleware/notfound.handler.logic');
 
-mongoose.connect('url', {
-    pass: 'pass',
-    user: 'user',
+import configLoader from './modules/commons/configloader/configloader.service';
+
+let config = configLoader.getConfig();
+
+mongoose.connect(config.db.uri, {
+    pass: config.db.password,
+    user: config.db.username,
 });
 
 let kernel = new Bootstrap().getKernel();
