@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 import { autoserialize } from 'cerialize';
-import {IUser} from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user.interface';
 import {IUserDBSchema, userDBModel} from './user.db.model';
-import {UserState} from './userstate.model';
+import { UserState } from './userstate.model';
 import {BaseModel} from '../../commons/base/base.model';
 
 @injectable()

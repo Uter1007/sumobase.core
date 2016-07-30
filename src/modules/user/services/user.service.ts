@@ -1,19 +1,20 @@
-import {UserRepository} from '../repository/user.repository';
-import {injectable, inject} from 'inversify';
-import {ILogger} from '../../commons/logging/interfaces/logger.interface';
-import SVC_TAGS from '../../../constant/services.tags';
-import REPO_TAGS from '../../../constant/repositories.tags';
-import {IUser} from '../interfaces/user.interface';
-import {IUserDBSchema} from '../models/user.db.model';
-import {UserState} from '../models/userstate.model';
+import { injectable, inject } from 'inversify';
+import { UserRepository } from '../repository/user.repository';
+import { ILogger } from '../../commons/logging/interfaces/logger.interface';
+import { IUser } from '../interfaces/user.interface';
+import { IUserDBSchema } from '../models/user.db.model';
+import { UserState } from '../models/userstate.model';
 import {User} from '../models/user.model';
+
+import REPO_TAGS from '../../../constant/repositories.tags';
+import SVC_TAGS from '../../../constant/services.tags';
 
 /* tslint:disable */
 let bcrypt = require('bcrypt');
 /* tslint:enable */
 
 @injectable()
-class UserService {
+export class UserService {
 
     private _userRepository: UserRepository;
     private _log: ILogger;
@@ -24,7 +25,7 @@ class UserService {
         this._log = log;
     }
 
-    public async findUserByUserNameAndPasswordAsync(userName: string, password: string) {
+    public async findUserByUserNameAndPassword(userName: string, password: string) {
         try {
 
             let user =  await this._userRepository.findOne({ 'username': userName });
@@ -49,7 +50,7 @@ class UserService {
         }
     }
 
-    public async findUserByNameAsync(userName: string) {
+    public async findUserByName(userName: string) {
         try {
             return await this._userRepository.findOne({'username': userName, });
         } catch (err) {
@@ -58,7 +59,7 @@ class UserService {
         }
     }
 
-    public async findUserByIdAsync(userId) {
+    public async findUserById(userId) {
         try {
             return await this._userRepository.findById(userId);
         } catch (err) {
@@ -67,7 +68,7 @@ class UserService {
         }
     }
 
-    public async createAsync(userModel: IUser, password: string) {
+    public async create(userModel: IUser, password: string) {
         try {
             let hashpw = await this.hashPassword(password);
             let toDbModel = userModel.toDBmodel();
@@ -104,5 +105,3 @@ class UserService {
         });
     }
 }
-
-export default UserService;

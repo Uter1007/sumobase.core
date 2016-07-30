@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {UserState} from './userstate.model';
+import { UserState } from './userstate.model';
 
 export interface IUserDBSchema extends mongoose.Document {
     createdOn?: string;

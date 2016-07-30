@@ -1,21 +1,21 @@
 // load everything needed to the kernel
 
 import 'reflect-metadata';
-import {LogRepository} from './modules/commons/logging/repository/log.repository';
-import {WinstonLoggerFactory} from './modules/commons/logging/factory/winston.logger.factory';
-import {ILogger} from './modules/commons/logging/interfaces/logger.interface';
-import {Controller} from 'inversify-express-utils';
-import {UserController} from './modules/user/controller/user.controller';
-
-import {TYPE} from 'inversify-express-utils';
-
+import { TYPE } from 'inversify-express-utils';
 import { Kernel } from 'inversify';
+
+import { LogRepository } from './modules/commons/logging/repository/log.repository';
+import { WinstonLoggerFactory } from './modules/commons/logging/factory/winston.logger.factory';
+import { ILogger } from './modules/commons/logging/interfaces/logger.interface';
+import { Controller } from 'inversify-express-utils';
+import { UserController } from './modules/user/controller/user.controller';
+import { UserRepository } from './modules/user/repository/user.repository';
+import { UserService } from './modules/user/services/user.service';
+import { MailService } from './modules/commons/mail/services/mail.service';
 
 import CTRL_TAGS from './constant/controller.tags';
 import SVC_TAGS from './constant/services.tags';
 import REPO_TAGS from './constant/repositories.tags';
-import {UserRepository} from './modules/user/repository/user.repository';
-import UserService from './modules/user/services/user.service';
 
 export class Bootstrap {
 
@@ -39,6 +39,10 @@ export class Bootstrap {
 
         kernel.bind<UserService>(SVC_TAGS.UserService)
             .to(UserService);
+
+        kernel.bind<MailService>(SVC_TAGS.MailService)
+            .to(MailService);
+
 
         return kernel;
     }

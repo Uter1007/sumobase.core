@@ -1,5 +1,6 @@
-import {UserState} from '../models/userstate.model';
-import {IUserDBSchema} from '../models/user.db.model';
+import { UserState } from '../models/userstate.model';
+import { IUserDBSchema } from '../models/user.db.model';
+
 export interface IUser {
     id: string;
     createdOn: string;

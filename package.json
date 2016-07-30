@@ -28,6 +28,7 @@
     "inversify-express-utils": "^1.0.0-rc.2",
     "inversify-logger-middleware": "^1.0.0-rc.3",
     "lodash": "^4.14.1",
+    "mailgun-js": "^0.7.11",
     "moment": "^2.14.1",
     "mongoose": "^4.5.7",
     "passport": "^0.3.2",

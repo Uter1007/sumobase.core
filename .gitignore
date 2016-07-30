@@ -23,6 +23,7 @@ typings/
 
 # IDE config
 .idea
+.vscode
 
 # output
 output/
