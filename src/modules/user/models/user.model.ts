@@ -1,11 +1,15 @@
 import { injectable } from 'inversify';
 import { autoserialize } from 'cerialize';
 import {IUser} from '../interfaces/user.interface';
-import {IUserDBSchema} from './user.db.model';
+import {IUserDBSchema, userDBModel} from './user.db.model';
 import {UserState} from './userstate.model';
+import {BaseModel} from '../../commons/base/base.model';
 
 @injectable()
-export class User implements IUser {
+export class User extends BaseModel implements IUser {
+
+    @autoserialize
+    public id: string;
 
     @autoserialize
     public email: string;
@@ -20,9 +24,6 @@ export class User implements IUser {
     public userState: UserState;
 
     @autoserialize
-    public password: string;
-
-    @autoserialize
     public createdOn: string;
 
     @autoserialize
@@ -30,30 +31,31 @@ export class User implements IUser {
 
     public static createFromDB(userModel: IUserDBSchema) {
         return new User(userModel.email,
-            userModel.password,
             userModel.firstName,
             userModel.lastName,
             userModel.userState,
             userModel.modifiedOn,
-            userModel.createdOn);
+            userModel.createdOn,
+            userModel.id);
     }
 
     public toDBmodel(): IUserDBSchema {
-        let userdb = {
-            createdOn:  this.createdOn,
-            email:      this.email,
-            firstName:  this.firstName,
-            lastName:   this.lastName,
-            modifiedOn: this.modifiedOn,
-            password:   this.password,
-            userState:  this.userState,
-        };
-        return <IUserDBSchema>userdb;
+        let userdb: IUserDBSchema = new userDBModel({
+            email: this.email,
+            firstName: this.firstName,
+            id: this.id,
+            lastName: this.lastName,
+            userState: this.userState,
+
+        });
+
+        return userdb;
     }
 
-    constructor(email, password, firstname, lastname, userState, modifiedOn?, createdOn?) {
+    constructor(email, firstname, lastname, userState, modifiedOn?, createdOn?, id?) {
+        super();
+        this.id = id;
         this.email = email;
-        this.password = password;
         this.firstName = firstname;
         this.lastName = lastname;
         this.userState = userState;

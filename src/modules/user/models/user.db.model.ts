@@ -1,15 +1,14 @@
 import * as mongoose from 'mongoose';
 import {UserState} from './userstate.model';
-import { injectable } from 'inversify';
 
 export interface IUserDBSchema extends mongoose.Document {
-    createdOn: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    modifiedOn: string;
-    password: string;
-    userState: UserState;
+    createdOn?: string;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    modifiedOn?: string;
+    password?: string;
+    userState?: UserState;
 }
 
 let userSchema = new mongoose.Schema({

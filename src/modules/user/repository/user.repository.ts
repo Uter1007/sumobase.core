@@ -1,6 +1,5 @@
 import {BaseRepository} from '../../commons/base/base.repository';
-import { injectable, inject, named } from 'inversify';
-import * as mongoose from 'mongoose';
+import { injectable} from 'inversify';
 
 import {IUserDBSchema, userDBModel} from '../models/user.db.model';
 

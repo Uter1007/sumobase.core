@@ -1,7 +1,9 @@
 import { injectable } from 'inversify';
 
+/* tslint:disable */
 const config = require('../../../config/config.json');
 const localConfig = require ('../../../config/config.local.json');
+/* tslint:enable */
 
 import * as lodash from 'lodash';
 
@@ -10,11 +12,8 @@ class ConfigLoader {
 
     private static mergedConfig;
 
-    constructor() {
-    }
-
     public static getConfig() {
-        if(!this.mergedConfig) {
+        if (!this.mergedConfig) {
             this.initConfig();
         }
         return this.mergedConfig;
@@ -24,6 +23,7 @@ class ConfigLoader {
         console.log('initConfig');
         this.mergedConfig = lodash.merge(config, localConfig);
     }
+
 }
 
 export default ConfigLoader;

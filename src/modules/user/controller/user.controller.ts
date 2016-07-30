@@ -8,7 +8,7 @@ import UserService from '../services/user.service';
 import {User} from '../models/user.model';
 import {IUser} from '../interfaces/user.interface';
 import {Deserialize} from 'cerialize';
-/* tslint: disable */
+/* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
 /* tslint:enable */
 
@@ -34,7 +34,8 @@ export class UserController extends BaseController {
         let founduser = await this._userService.findUserByNameAsync(user.email);
 
         if (!founduser) {
-            return await this._userService.createAsync(user);
+            let clearTextPassword: string = request.body.password;
+            return await this._userService.createAsync(user, clearTextPassword);
         }
 
         throw new Error('Error on register');

@@ -3,14 +3,12 @@
 import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
 // import {LogLevel} from '../logging/models/loglevel.model';
-import { injectable, inject } from 'inversify';
+import { injectable } from 'inversify';
 
 @injectable()
 class BaseRepository<T extends mongoose.Document> {
 
     protected _model: mongoose.Model<mongoose.Document>;
-
-    constructor () {}
 
     public create: ((item: T) => Promise<any>) = (item: T) => {
         return new Promise( (resolve: any, reject: any) => {

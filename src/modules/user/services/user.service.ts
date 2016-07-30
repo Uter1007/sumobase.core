@@ -6,6 +6,7 @@ import REPO_TAGS from '../../../constant/repositories.tags';
 import {IUser} from '../interfaces/user.interface';
 import {IUserDBSchema} from '../models/user.db.model';
 import {UserState} from '../models/userstate.model';
+import {User} from '../models/user.model';
 
 /* tslint:disable */
 let bcrypt = require('bcrypt');
@@ -66,11 +67,13 @@ class UserService {
         }
     }
 
-    public async createAsync(userModel: IUser) {
+    public async createAsync(userModel: IUser, password: string) {
         try {
-            let hashpw = await this.hashPassword(userModel.password);
-            userModel.password = hashpw;
-            return await this._userRepository.create(userModel.toDBmodel());
+            let hashpw = await this.hashPassword(password);
+            let toDbModel = userModel.toDBmodel();
+            toDbModel.password = hashpw;
+            let dbmodel = await this._userRepository.create(toDbModel);
+            return User.createFromDB(dbmodel);
         } catch (err) {
             this._log.error('An error occured:', err);
             return err;
