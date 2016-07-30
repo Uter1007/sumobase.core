@@ -35,7 +35,8 @@ src/.env
 swagger-ui/dist
 build/
 
-src/config/env/*config.ts
+# local configuration file (which may contain secret information)
+src/config/**/*.local.*
 
 # OS X
 .DS_Store
