@@ -6,6 +6,7 @@ var tslint = require("gulp-tslint");
 var nodeInspector = require('gulp-node-inspector');
 var runSequence = require('run-sequence');
 var nodemon = require('gulp-nodemon');
+var mocha = require('gulp-mocha');
 
 var tsProject = tsc.createProject('tsconfig.json');
 
@@ -78,6 +79,10 @@ gulp.task('watch', false,
     }
 );
 
+gulp.task('test', false, function() {
+    return gulp.src(['dist/**/spec/**/*.js'], {read: false})
+        .pipe(mocha({}));
+});
 
 
 gulp.task('default', function() {

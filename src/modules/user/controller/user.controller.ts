@@ -1,9 +1,8 @@
 import { Controller, Get, Post } from 'inversify-express-utils';
 import { injectable, inject  } from 'inversify';
 import * as express from 'express';
-import isLoggedIn = require('../../authenticate/middleware/request.authenticater');
-import BaseController from '../../base/base.controller';
-import {ILogger} from '../../logging/interfaces/logger.interface';
+import BaseController from '../../commons/base/base.controller';
+import {ILogger} from '../../commons/logging/interfaces/logger.interface';
 import TYPES from '../../../constant/services.tags';
 import UserService from '../services/user.service';
 import {User} from '../models/user.model';

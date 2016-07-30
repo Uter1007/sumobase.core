@@ -1,9 +1,9 @@
 // load everything needed to the kernel
 
 import 'reflect-metadata';
-import {LogRepository} from './modules/logging/repository/log.repository';
-import {WinstonLoggerFactory} from './modules/logging/factory/winston.logger.factory';
-import {ILogger} from './modules/logging/interfaces/logger.interface';
+import {LogRepository} from './modules/commons/logging/repository/log.repository';
+import {WinstonLoggerFactory} from './modules/commons/logging/factory/winston.logger.factory';
+import {ILogger} from './modules/commons/logging/interfaces/logger.interface';
 import {Controller} from 'inversify-express-utils';
 import {UserController} from './modules/user/controller/user.controller';
 
