@@ -1,7 +1,8 @@
 import { injectable } from 'inversify';
 
-import * as config from '../../../config/config.json';
-import * as localConfig from '../../../config/config.local.json';
+const config = require('../../../config/config.json');
+const localConfig = require ('../../../config/config.local.json');
+
 import * as lodash from 'lodash';
 
 @injectable()

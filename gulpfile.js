@@ -22,7 +22,7 @@ nodemonConfiguration = {
 };
 
 gulp.task("clean", function() {
-    del(['dist/**']);
+    return del(['dist/**']);
 });
 
 gulp.task("lint", function() {
@@ -38,7 +38,6 @@ gulp.task("lint", function() {
 gulp.task('ts-compile', function() {
     return gulp.src([
         "src/**/**.ts",
-        "src/**/**.json",
         "typings/index.d.ts",
         "node_modules/inversify-dts/inversify-binding-decorators/inversify-binding-decorators.d.ts",
         "node_modules/inversify-dts/inversify-express-utils/inversify-express-utils.d.ts",
@@ -47,7 +46,7 @@ gulp.task('ts-compile', function() {
     ])
         .pipe(sourcemaps.init())
         .pipe(tsc(tsProject))
-        .js.pipe(sourcemaps.write('./src/ts'))
+        .js.pipe(sourcemaps.write('./ts'))
         .pipe(gulp.dest('dist'));
 });
 
@@ -91,7 +90,7 @@ gulp.task('test', false, function() {
 });
 
 gulp.task('copyConfigurations', function() {
-    gulp.src('src/**/*.json')
+    return gulp.src('src/**/*.json')
         .pipe(gulp.dest('dist'));
 });
 
