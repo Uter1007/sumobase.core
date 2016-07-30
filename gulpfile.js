@@ -30,7 +30,7 @@ gulp.task("lint", function() {
     .pipe(tslint.report());
 });
 
-gulp.task("compile", function() {
+gulp.task("compile", ["copy"], function() {
     return gulp.src([
         "src/**/**.ts",
         "typings/index.d.ts",
@@ -82,6 +82,11 @@ gulp.task('watch', false,
 gulp.task('test', false, function() {
     return gulp.src(['dist/**/spec/**/*.js'], {read: false})
         .pipe(mocha({}));
+});
+
+gulp.task('copy', function() {
+    gulp.src('src/**/*.json')
+        .pipe(gulp.dest('dist'));
 });
 
 

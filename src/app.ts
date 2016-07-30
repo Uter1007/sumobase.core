@@ -6,7 +6,6 @@ import * as helmet from 'helmet';
 import * as passport from 'passport';
 /* tslint:disable */
 require('./modules/authenticate/strategy/passport');
-import * as testConfigFile from './config/env/testconfig';
 /* tslint:enable */
 
 import session = require('express-session');
