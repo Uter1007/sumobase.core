@@ -10,31 +10,39 @@ describe('User Service', () => {
     let loggerMock;
     let repoMock;
 
+    let loggingObj = {
+        error: function(message, errorObject) {
+            // please fill in, also got created TestLogger if you want to use console.log!
+            console.log('was called');
+        }
+    };
+
+    let repoObj = {
+        findOne: function(data) {
+            // please fill in
+            console.log('was called 2');
+        }
+    };
+
     beforeEach(function() {
-        loggerMock = sinon.mock({
-            error: function(message, errorObject) {
-                // please fill in, also got created TestLogger if you want to use console.log!
-            }
-        });
-        repoMock = sinon.mock({
-            findOne: function(data) {
-                // please fill in
-            }
-        });
+        loggerMock = sinon.mock(loggingObj);
+        repoMock = sinon.mock(repoObj);
     });
 
     it('findUserByNameAsync @unit', async () => {
 
+        let error = new Error('The Error');
+
         loggerMock
             .expects('error')
+            .withArgs('An error occured:', error)
             .once();
-            // .withArgs('An error occurred:', 'TheError');
 
         repoMock
             .expects('findOne')
-            .once()
             .withArgs({'username': 'abc'})
-            .throws('TheError');
+            .once()
+            .throws(error);
 
         let userService = new UserService(loggerMock.object, repoMock.object);
 
