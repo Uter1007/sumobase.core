@@ -84,7 +84,7 @@ export class UserService {
     public async activateUser(id: string) {
         try {
             const user: IUserDBSchema = await this._userRepository.findById(id);
-            user.userState = UserState.ACTIVE;
+            user.state = UserState.ACTIVE;
 
             return await this._userRepository.update(user.id, user);
         } catch (err) {

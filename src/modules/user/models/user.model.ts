@@ -18,10 +18,13 @@ export class User extends BaseModel implements IUser {
     public firstName: string;
 
     @autoserialize
+    public imaget: string;
+
+    @autoserialize
     public lastName: string;
 
     @autoserialize
-    public userState: UserState;
+    public state: UserState;
 
     @autoserialize
     public createdOn: string;
@@ -33,7 +36,7 @@ export class User extends BaseModel implements IUser {
         return new User(userModel.email,
             userModel.firstName,
             userModel.lastName,
-            userModel.userState,
+            userModel.state,
             userModel.modifiedOn,
             userModel.createdOn,
             userModel.id);
@@ -45,7 +48,7 @@ export class User extends BaseModel implements IUser {
             firstName: this.firstName,
             id: this.id,
             lastName: this.lastName,
-            userState: this.userState,
+            state: this.state,
 
         });
 
@@ -58,7 +61,7 @@ export class User extends BaseModel implements IUser {
         this.email = email;
         this.firstName = firstname;
         this.lastName = lastname;
-        this.userState = userState;
+        this.state = userState;
         this.modifiedOn = modifiedOn;
         this.createdOn = createdOn;
     }

@@ -8,17 +8,18 @@ export interface IUserDBSchema extends mongoose.Document {
     lastName?: string;
     modifiedOn?: string;
     password?: string;
-    userState?: UserState;
+    state?: UserState;
 }
 
 let userSchema = new mongoose.Schema({
     createdOn: {required: false, type: Date},
     email: {required: false, type: String},
     firstName: {required: false, type: String},
+    imgage: { data: Buffer, contentType: String },
     lastName: {required: false, type: String},
     modifiedOn: {default: Date.now, required: false, type: Date},
     password: {required: true, type: String},
-    userState: {default: <any>UserState.PENDING,
+    state: {default: <any>UserState.PENDING,
         enum: [<any>UserState.PENDING, <any>UserState.ACTIVE, <any>UserState.DISABLED ],
         required: true,
         type: String, },
