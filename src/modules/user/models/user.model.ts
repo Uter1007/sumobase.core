@@ -5,6 +5,9 @@ import {IUserDBSchema, userDBModel} from './user.db.model';
 import { UserState } from './userstate.model';
 import {BaseModel} from '../../commons/base/base.model';
 
+import {IsLength, IsEmail} from "validator.ts/decorator/Validation";
+
+
 @injectable()
 export class User extends BaseModel implements IUser {
 
@@ -12,15 +15,18 @@ export class User extends BaseModel implements IUser {
     public id: string;
 
     @autoserialize
+    @IsEmail()
     public email: string;
 
     @autoserialize
+    @IsLength(1, 100)
     public firstName: string;
 
     @autoserialize
-    public imaget: string;
+    public image: string;
 
     @autoserialize
+    @IsLength(1, 100)
     public lastName: string;
 
     @autoserialize
@@ -39,6 +45,7 @@ export class User extends BaseModel implements IUser {
             userModel.state,
             userModel.modifiedOn,
             userModel.createdOn,
+            userModel.image,
             userModel.id);
     }
 
@@ -55,9 +62,10 @@ export class User extends BaseModel implements IUser {
         return userdb;
     }
 
-    constructor(email, firstname, lastname, userState, modifiedOn?, createdOn?, id?) {
+    constructor(email, firstname, lastname, userState, modifiedOn?, createdOn?, image?, id?) {
         super();
         this.id = id;
+        this.image = image;
         this.email = email;
         this.firstName = firstname;
         this.lastName = lastname;

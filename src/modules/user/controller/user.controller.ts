@@ -11,6 +11,10 @@ import { Deserialize } from 'cerialize';
 import { UserService } from '../services/user.service';
 
 import TYPES from '../../../constant/services.tags';
+import {UserAlreadyInUseException} from '../../commons/error/models/user.alreadyinuse.exception';
+import {UserValidator} from '../services/user.validator.service';
+import {RegisterParametersNotValid} from '../../commons/error/models/register.parameter.notvalid.exception';
+import {PasswordValidator} from '../services/password.validator.service';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
@@ -33,16 +37,27 @@ export class UserController extends BaseController {
     @Post('/register')
     public async register(request: express.Request): Promise<User> {
 
-        let user: IUser =  Deserialize(request.body, User);
+        let user: IUser = Deserialize(request.body, User);
 
         let founduser = await this._userService.findUserByName(user.email);
 
         if (!founduser) {
             let clearTextPassword: string = request.body.password;
-            return await this._userService.create(user, clearTextPassword);
+            let clearTextConfirmPassword: string = request.body.confirmPassword;
+
+            if (PasswordValidator.validatePassword(clearTextPassword, clearTextConfirmPassword)) {
+
+                try {
+                    UserValidator.validateUser(user);
+                } catch (error) {
+                    throw new RegisterParametersNotValid('Validation error');
+                }
+
+                return await this._userService.create(user, clearTextPassword);
+            }
         }
 
-        throw new Error('Error on register');
+        throw new UserAlreadyInUseException('Error on register');
 
     }
 

@@ -2,22 +2,23 @@
 
 import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
-// import {LogLevel} from '../logging/models/loglevel.model';
 import { injectable } from 'inversify';
+import {ILogger} from '../logging/interfaces/logger.interface';
 
 @injectable()
 class BaseRepository<T extends mongoose.Document> {
 
     protected _model: mongoose.Model<mongoose.Document>;
+    protected _log: ILogger;
 
     public create: ((item: T) => Promise<any>) = (item: T) => {
         return new Promise( (resolve: any, reject: any) => {
             this._model.create(item, (error: any, result: any): void => {
                 if (error) {
-                    // this.log(LogLevel.ERROR, 'model.create error: ' + error);
+                    this._log.error('model.create error: ', error);
                     return reject(error);
                 } else {
-                    // this.log(LogLevel.DEBUG, 'model.create success');
+                    this._log.debug('model.create success');
                     return resolve(result);
                 }
             });
@@ -28,10 +29,10 @@ class BaseRepository<T extends mongoose.Document> {
         return new Promise( (resolve: any, reject: any) => {
             this._model.find({}, (error: any, result: any): void => {
                 if (error) {
-                    // this.log(LogLevel.ERROR, 'model.retrieveAll error: ' + error);
+                    this._log.error('model.retrieveAll error: ', error);
                     return reject(error);
                 } else {
-                    // this.log(LogLevel.DEBUG, 'model.retrieveAll success');
+                    this._log.debug('model.retrieveAll success');
                     return resolve(result);
                 }
             });
@@ -42,10 +43,10 @@ class BaseRepository<T extends mongoose.Document> {
         return new Promise( (resolve: any, reject: any) => {
             this._model.findOne(query, (error: any, result: any): void => {
                 if (error) {
-                    // this.log(LogLevel.ERROR, 'model.findOne error: ' + error);
+                    this._log.error('model.findOne error: ', error);
                     return reject(error);
                 } else {
-                    // this.log(LogLevel.DEBUG, 'model.findOne success');
+                    this._log.debug('model.findOne success');
                     return resolve(result);
                 }
             });
@@ -56,10 +57,10 @@ class BaseRepository<T extends mongoose.Document> {
         return new Promise( (resolve: any, reject: any) => {
             this._model.find(query, (error: any, result: any): void => {
                 if (error) {
-                   //  this.log(LogLevel.ERROR, 'model.find error: ' + error);
+                    this._log.error('model.find error: ', error);
                     return reject(error);
                 } else {
-                    // this.log(LogLevel.DEBUG, 'model.find success');
+                    this._log.debug('model.find success');
                     return resolve(result);
                 }
             });
@@ -70,10 +71,10 @@ class BaseRepository<T extends mongoose.Document> {
         return new Promise( (resolve: any, reject: any) => {
             this._model.update({_id: this.toObjectId(_id)}, item, (error: any, result: any): void => {
                 if (error) {
-                    // this.log(LogLevel.ERROR, 'model.update error: ' + error);
+                    this._log.error('model.find error: ', error);
                     return reject(error);
                 } else {
-                    // this.log(LogLevel.DEBUG, 'model.update success for ' + _id);
+                    this._log.debug('model.update success for ' + _id);
                     return resolve(result);
                 }
             });
@@ -84,10 +85,10 @@ class BaseRepository<T extends mongoose.Document> {
         return new Promise( (resolve: any, reject: any) => {
             this._model.remove({_id: this.toObjectId(_id)}, (error: any) => {
                 if (error) {
-                    // this.log(LogLevel.ERROR, 'model.delete error: ' + error);
+                    this._log.error('model.delete error: ', error);
                     return reject(error);
                 } else {
-                    // this.log(LogLevel.DEBUG, 'model.delete success');
+                    this._log.debug('model.delete success');
                     return resolve(null);
                 }
             });
@@ -98,10 +99,10 @@ class BaseRepository<T extends mongoose.Document> {
         return new Promise( (resolve: any, reject: any) => {
             this._model.findById(_id, (error: any, result: any): void => {
                 if (error) {
-                    // this.log(LogLevel.ERROR, 'model.findById error: ' + error);
+                    this._log.error('model.findById error: ', error);
                     return reject(error);
                 } else {
-                    // this.log(LogLevel.DEBUG, 'model.findById success');
+                    this._log.debug('model.findById success');
                     return resolve(result);
                 }
             });
