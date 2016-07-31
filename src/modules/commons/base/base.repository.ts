@@ -2,14 +2,19 @@
 
 import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import {ILogger} from '../logging/interfaces/logger.interface';
+import SVC_TAGS from '../../../constant/services.tags';
 
 @injectable()
 class BaseRepository<T extends mongoose.Document> {
 
     protected _model: mongoose.Model<mongoose.Document>;
     protected _log: ILogger;
+
+    constructor(@inject(SVC_TAGS.Logger) log: ILogger) {
+        this._log = log;
+    }
 
     public create: ((item: T) => Promise<any>) = (item: T) => {
         return new Promise( (resolve: any, reject: any) => {

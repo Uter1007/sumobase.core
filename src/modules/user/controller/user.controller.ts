@@ -12,9 +12,9 @@ import { UserService } from '../services/user.service';
 
 import TYPES from '../../../constant/services.tags';
 import {UserAlreadyInUseException} from '../../commons/error/models/user.alreadyinuse.exception';
-import {UserValidator} from '../services/user.validator.service';
+import {UserValidator} from '../services/validator/user.validator.service';
 import {RegisterParametersNotValid} from '../../commons/error/models/register.parameter.notvalid.exception';
-import {PasswordValidator} from '../services/password.validator.service';
+import {PasswordValidator} from '../services/validator/password.validator.service';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');

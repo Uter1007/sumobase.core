@@ -1,5 +1,5 @@
-import {PasswordsNotEqualException} from '../../commons/error/models/password.notequal.exception';
-import {PasswordNotComplexException} from '../../commons/error/models/password.notcomplex.exception';
+import {PasswordsNotEqualException} from '../../../commons/error/models/password.notequal.exception';
+import {PasswordNotComplexException} from '../../../commons/error/models/password.notcomplex.exception';
 export class PasswordValidator {
 
     public static validatePassword(password: string, confirmPassword: string): boolean {

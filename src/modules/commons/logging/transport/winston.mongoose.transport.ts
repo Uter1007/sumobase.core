@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import {LogLevel} from '../models/loglevel.model';
 import {LogRepository} from '../repository/log.repository';
 import {ILogModel} from '../models/logmodel.db.model';
+import {TestLogger} from '../factory/test.logger';
 
 class MongooseTransport extends winston.Transport {
 
@@ -10,7 +11,7 @@ class MongooseTransport extends winston.Transport {
 
     constructor(options) {
         super(options);
-        this._logRepository = new LogRepository();
+        this._logRepository = new LogRepository(new TestLogger());
     }
 
     public log(level: LogLevel, message: string, metadata: any, callback: any) {
