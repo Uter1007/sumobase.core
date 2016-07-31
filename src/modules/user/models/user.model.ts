@@ -5,7 +5,7 @@ import {IUserDBSchema, userDBModel} from './user.db.model';
 import { UserState } from './userstate.model';
 import {BaseModel} from '../../commons/base/base.model';
 
-import {IsLength, IsEmail} from "validator.ts/decorator/Validation";
+import {IsLength, IsEmail} from 'validator.ts/decorator/Validation';
 
 
 @injectable()

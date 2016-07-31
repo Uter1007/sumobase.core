@@ -17,10 +17,10 @@ export class MailService implements IMailService {
         const data = { 'foobar': 'foobar'};
 
         return await this._mailFacade.send({
-            to: 'CleanSumoDev <cleansumodev@mailinator.com>',
+            data: data,
             subject: 'Hello World',
             template: template,
-            data: data
+            to: 'CleanSumoDev <cleansumodev@mailinator.com>'
         });
     }
 
@@ -29,15 +29,15 @@ export class MailService implements IMailService {
             '<a href="{{link}}">{{link}}</a></p>';
 
         const data = {
-            name: name,
             link: 'http://cleansumo.at/#/confirm?c=' + activationToken,
+            name: name
         };
 
         return await this._mailFacade.send({
-            to: name + '<' + email + '>',
+            data: data,
             subject: 'Hello World',
             template: template,
-            data: data
+            to: name + '<' + email + '>'
         });
     }
 }

@@ -2,8 +2,11 @@ import ConfigLoader from '../../configLoader/configLoader.service';
 import {IRawMailDataModel, IMailResponse} from '../models/maildata.model';
 
 const mailConfig = ConfigLoader.getConfig().mail;
+
+/* tslint:disable */
 const mailgun = require('mailgun-js')({apiKey: mailConfig.apiKey, domain: mailConfig.domain});
 // const handlebars = require('handlebars');
+/* tslint:enable */
 
 import * as Promise from 'bluebird';
 
@@ -25,9 +28,9 @@ export class MailFacade {
             mailgun.messages().send(
                 {
                     from: this._from,
-                    to: mailData.to,
+                    html: html,
                     subject: mailData.subject,
-                    html: html
+                    to: mailData.to
                 },
                 function (error, body) {
                     if (!error) {

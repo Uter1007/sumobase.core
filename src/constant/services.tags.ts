@@ -1,7 +1,7 @@
 const SVC_TAGS = {
     Logger: Symbol('ILogger'),
-    UserService: Symbol('UserService'),
-    MailService: Symbol('MailService')
+    MailService: Symbol('MailService'),
+    UserService: Symbol('UserService')
 };
 
 export default SVC_TAGS;

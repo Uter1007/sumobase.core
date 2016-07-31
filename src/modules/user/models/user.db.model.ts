@@ -16,7 +16,7 @@ let userSchema = new mongoose.Schema({
     createdOn: {required: false, type: Date},
     email: {required: false, type: String},
     firstName: {required: false, type: String},
-    imgage: { data: Buffer, contentType: String },
+    imgage: { contentType: String, data: Buffer },
     lastName: {required: false, type: String},
     modifiedOn: {default: Date.now, required: false, type: Date},
     password: {required: true, type: String},

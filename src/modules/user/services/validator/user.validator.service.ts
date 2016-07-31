@@ -1,5 +1,4 @@
-import {User} from '../../models/user.model';
-import {Validator} from "validator.ts/Validator";
+import {Validator} from 'validator.ts/Validator';
 import {IUser} from '../../interfaces/user.interface';
 
 export class UserValidator {
