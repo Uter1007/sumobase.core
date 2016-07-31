@@ -7,7 +7,7 @@ import { Controller, Get, Post } from 'inversify-express-utils';
 import { ILogger } from '../../commons/logging/interfaces/logger.interface';
 import { User } from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
-import { Deserialize } from 'cerialize';
+
 import { UserService } from '../services/user.service';
 
 import TYPES from '../../../constant/services.tags';
@@ -37,7 +37,7 @@ export class UserController extends BaseController {
     @Post('/register')
     public async register(request: express.Request): Promise<User> {
 
-        let user: IUser = Deserialize(request.body, User);
+        let user: IUser = User.createFromJSON(request.body);
 
         let founduser = await this._userService.findUserByName(user.email);
 
@@ -46,10 +46,9 @@ export class UserController extends BaseController {
             let clearTextConfirmPassword: string = request.body.confirmPassword;
 
             if (PasswordValidator.validatePassword(clearTextPassword, clearTextConfirmPassword)) {
+                let validateErrors = UserValidator.validateUser(user);
 
-                try {
-                    UserValidator.validateUser(user);
-                } catch (error) {
+                if (validateErrors.length > 0) {
                     throw new RegisterParametersNotValid('Validation error');
                 }
 

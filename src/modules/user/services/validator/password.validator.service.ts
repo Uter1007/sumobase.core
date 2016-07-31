@@ -7,12 +7,20 @@ export class PasswordValidator {
             throw new PasswordsNotEqualException('Passwords not equal');
         }
 
-        let pwRule: RegExp = new RegExp('^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#\$%\^&*])(?=.{8,})');
+        let upperCase = new RegExp('[A-Z]');
+        let lowerCase = new RegExp('[a-z]');
+        let numbers = new RegExp('[0-9]');
+        let specialchars = new RegExp('([!,%,&,@,#,$,^,*,?,_,~])');
 
-        if (pwRule.test(password)) {
+        if (password.length > 8 &&
+            password.match(upperCase) &&
+            password.match(lowerCase) &&
+            password.match(numbers) &&
+            password.match(specialchars)
+        ) {
             return true;
+        } else {
+            throw new PasswordNotComplexException('Password not complex enough');
         }
-
-        throw new PasswordNotComplexException('Password not complex enough');
     }
 }
