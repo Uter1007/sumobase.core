@@ -29,7 +29,7 @@ export class UserService {
     public async findUserByUserNameAndPassword(userName: string, password: string) {
         try {
 
-            let user =  await this._userRepository.findOne({ 'username': userName });
+            let user =  await this._userRepository.findOne({ 'email': userName });
 
             return new Promise( (resolve: any, reject: any) => {
                 bcrypt.compare(password, user.password, function(err, res) {
@@ -53,7 +53,7 @@ export class UserService {
 
     public async findUserByName(userName: string) {
         try {
-            return await this._userRepository.findOne({'username': userName, });
+            return await this._userRepository.findOne({'email': userName, });
         } catch (err) {
             this._log.error('An error occured:', err);
             return err;
