@@ -36,33 +36,26 @@ export class UserController extends BaseController {
 
     @Post('/register')
     public async register(request: express.Request): Promise<User> {
-
         let user: IUser = User.createFromJSON(request.body);
-
         let founduser = await this._userService.findUserByName(user.email);
-
         if (!founduser) {
             let clearTextPassword: string = request.body.password;
             let clearTextConfirmPassword: string = request.body.confirmPassword;
-
             if (PasswordValidator.validatePassword(clearTextPassword, clearTextConfirmPassword)) {
                 let validateErrors = UserValidator.validateUser(user);
-
                 if (validateErrors.length > 0) {
                     throw new RegisterParametersNotValid('Validation error');
                 }
-
                 return await this._userService.create(user, clearTextPassword);
             }
         }
-
         throw new UserAlreadyInUseException('Error on register');
-
     }
 
-    @Post('logout')
-    public async logout(): Promise<void> {
-        // todo: implement here
+    @Get('logout')
+    public logout(request: express.Request, response: express.Response) {
+        request.logout();
+        response.redirect('/');
     }
 
     @Get('/settings', isLoggedIn)
