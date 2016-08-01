@@ -6,12 +6,13 @@ import * as helmet from 'helmet';
 import * as passport from 'passport';
 import * as mongoose from 'mongoose';
 
+import session = require('express-session');
+
 /* tslint:disable */
 import kernel from './bootstrap';
 require('./modules/commons/authenticate/strategy/passport');
+let MongoStore = require('connect-mongo')(session);
 /* tslint:enable */
-
-import session = require('express-session');
 
 import errorHandler = require('./modules/commons/error/middleware/error.handler.logic');
 import notFoundHandler = require('./modules/commons/error/middleware/notfound.handler.logic');
@@ -33,7 +34,11 @@ server.setConfig((app) => {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(helmet());
 
-    app.use(session({ resave: false, saveUninitialized: true, secret: 'utersfirsttry' }));
+    app.use(session({ resave: false,
+                      saveUninitialized: true,
+                      secret: 'utersfirsttry',
+                      store: new MongoStore( {mongooseConnection: mongoose.connection})
+                    }));
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
 
