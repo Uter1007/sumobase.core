@@ -53,9 +53,9 @@ export class UserController extends BaseController {
     }
 
     @Get('logout')
-    public logout(request: express.Request, response: express.Response) {
+    public logout(request: express.Request) {
         request.logout();
-        response.redirect('/');
+        return true;
     }
 
     @Get('/settings', isLoggedIn)
