@@ -60,6 +60,11 @@ export class UserController extends BaseController {
 
     }
 
+    @Post('logout')
+    public async logout(): Promise<void> {
+        // todo: implement here
+    }
+
     @Get('/settings', isLoggedIn)
     public async settings(): Promise<string> {
         return 'Home sweet home';

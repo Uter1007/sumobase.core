@@ -17,33 +17,27 @@ import CTRL_TAGS from './constant/controller.tags';
 import SVC_TAGS from './constant/services.tags';
 import REPO_TAGS from './constant/repositories.tags';
 
-export class Bootstrap {
+let kernel = new Kernel();
 
-    public getKernel() {
+// put all your dependencies here
+kernel.bind<Controller>(TYPE.Controller)
+    .to(UserController)
+    .whenTargetNamed(CTRL_TAGS.UserController);
 
-        let kernel = new Kernel();
+kernel.bind<ILogger>(SVC_TAGS.Logger)
+    .to(WinstonLoggerFactory());
 
-        // put all your dependencies here
-        kernel.bind<Controller>(TYPE.Controller)
-            .to(UserController)
-            .whenTargetNamed(CTRL_TAGS.UserController);
+kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
+    .to(LogRepository);
 
-        kernel.bind<ILogger>(SVC_TAGS.Logger)
-            .to(WinstonLoggerFactory());
+kernel.bind<UserRepository>(REPO_TAGS.UserRepository)
+    .to(UserRepository);
 
-        kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
-            .to(LogRepository);
+kernel.bind<UserService>(SVC_TAGS.UserService)
+    .to(UserService);
 
-        kernel.bind<UserRepository>(REPO_TAGS.UserRepository)
-            .to(UserRepository);
-
-        kernel.bind<UserService>(SVC_TAGS.UserService)
-            .to(UserService);
-
-        kernel.bind<MailService>(SVC_TAGS.MailService)
-            .to(MailService);
+kernel.bind<MailService>(SVC_TAGS.MailService)
+    .to(MailService);
 
 
-        return kernel;
-    }
-}
+export default kernel;

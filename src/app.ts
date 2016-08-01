@@ -1,5 +1,4 @@
 import {InversifyExpressServer} from 'inversify-express-utils';
-import {Bootstrap} from './bootstrap';
 
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
@@ -8,6 +7,7 @@ import * as passport from 'passport';
 import * as mongoose from 'mongoose';
 
 /* tslint:disable */
+import kernel from './bootstrap';
 require('./modules/commons/authenticate/strategy/passport');
 /* tslint:enable */
 
@@ -25,8 +25,6 @@ mongoose.connect(config.db.uri, {
     user: config.db.username,
 });
 
-let kernel = new Bootstrap().getKernel();
-
 // start the server
 let server = new InversifyExpressServer(kernel);
 server.setConfig((app) => {
@@ -39,9 +37,9 @@ server.setConfig((app) => {
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
 
-    app.post('/login', passport.authenticate('local', {
-        failureRedirect : '/login2',
-        successRedirect : '/api/v1.0/user/settings'
+    app.post('/api/v1.0/user/login', passport.authenticate('local', {
+        failureRedirect : '/login',
+        successRedirect : '/home'
     }));
 });
 

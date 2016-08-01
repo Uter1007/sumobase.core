@@ -18,6 +18,7 @@
     "express": "^4.14.0",
     "express-session": "^1.14.0",
     "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.0.0",
     "gulp-node-inspector": "^0.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^6.0.2",

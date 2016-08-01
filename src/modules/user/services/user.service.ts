@@ -8,6 +8,7 @@ import {User} from '../models/user.model';
 
 import REPO_TAGS from '../../../constant/repositories.tags';
 import SVC_TAGS from '../../../constant/services.tags';
+import {PasswordsNotEqualException} from '../../commons/error/models/password.notequal.exception';
 
 /* tslint:disable */
 let bcrypt = require('bcrypt');
@@ -38,7 +39,7 @@ export class UserService {
                         if (res) {
                             return resolve(user);
                         } else {
-                            return reject( new Error('Not in my House !'));
+                            return reject( new PasswordsNotEqualException('Not in my House !'));
                         }
                     }
                 });
