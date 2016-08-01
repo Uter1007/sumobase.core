@@ -39,7 +39,7 @@ server.setConfig((app) => {
 
     app.post('/api/v1.0/user/login', passport.authenticate('local', {
         failureRedirect : '/login',
-        successRedirect : '/home'
+        successRedirect : '/api/v1.0/user/me'
     }));
 });
 

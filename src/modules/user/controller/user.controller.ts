@@ -63,6 +63,11 @@ export class UserController extends BaseController {
         return 'Home sweet home';
     }
 
+    @Get('/me', isLoggedIn)
+    public async me(request: express.Request): Promise<string> {
+        return request.user;
+    }
+
     @Get('/')
     public async get(): Promise<string> {
         this._log.debug('This is a Test');
