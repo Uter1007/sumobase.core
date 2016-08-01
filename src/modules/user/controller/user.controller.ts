@@ -52,7 +52,7 @@ export class UserController extends BaseController {
         throw new UserAlreadyInUseException('Error on register');
     }
 
-    @Get('logout')
+    @Get('/logout')
     public logout(request: express.Request) {
         request.logout();
         return true;
