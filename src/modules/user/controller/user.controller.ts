@@ -17,6 +17,7 @@ import {RegisterParametersNotValid} from '../../commons/error/models/register.pa
 import {PasswordValidator} from '../services/validator/password.validator.service';
 
 import * as moment from 'moment';
+import {Head} from 'inversify-express-utils';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
@@ -62,10 +63,19 @@ export class UserController extends BaseController {
     }
 
     @Get('/notfound')
-    public notfound(request: express.Request, response: express.Response) {
+    public notfound(response: express.Response) {
         response.status(404);
     }
 
+    @Head('/check')
+    public async checkUserName(request: express.Request, response: express.Response) {
+        let founduser = await this._userService.findUserByName(request.body.email);
+        if (founduser) {
+            response.status(404);
+        } else {
+            response.status(200);
+        }
+    }
 
     @Get('/settings', isLoggedIn)
     public async settings(): Promise<string> {
