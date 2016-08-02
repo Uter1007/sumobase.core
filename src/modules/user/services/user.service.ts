@@ -46,7 +46,7 @@ export class UserService {
             });
 
         } catch (err) {
-            this._log.error('An error occured:', err);
+            this._log.error('An error occurred:', err);
             return err;
         }
     }
@@ -55,7 +55,7 @@ export class UserService {
         try {
             return await this._userRepository.findOne({'email': userName, });
         } catch (err) {
-            this._log.error('An error occured:', err);
+            this._log.error('An error occurred:', err);
             return err;
         }
     }
@@ -64,7 +64,7 @@ export class UserService {
         try {
             return await this._userRepository.findById(userId);
         } catch (err) {
-            this._log.error('An error occured:', err);
+            this._log.error('An error occurred:', err);
             return err;
         }
     }
@@ -77,7 +77,7 @@ export class UserService {
             let dbmodel = await this._userRepository.create(toDbModel);
             return User.createFromDB(dbmodel);
         } catch (err) {
-            this._log.error('An error occured:', err);
+            this._log.error('An error occurred:', err);
             return err;
         }
     }
@@ -89,7 +89,7 @@ export class UserService {
 
             return await this._userRepository.update(user.id, user);
         } catch (err) {
-            this._log.error('An error occured:', err);
+            this._log.error('An error occurred:', err);
             return err;
         }
     }
