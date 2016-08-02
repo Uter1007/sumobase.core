@@ -18,6 +18,7 @@ import {PasswordValidator} from '../services/validator/password.validator.servic
 
 import * as moment from 'moment';
 import {Head} from 'inversify-express-utils';
+import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
@@ -65,16 +66,20 @@ export class UserController extends BaseController {
     @Get('/notfound')
     public notfound(response: express.Response) {
         response.status(404);
+        throw new UserNotFoundException('user can\'t be found');
     }
 
     @Head('/check')
-    public async checkUserName(request: express.Request, response: express.Response) {
-        let founduser = await this._userService.findUserByName(request.body.email);
+    public async checkUserName(request: express.Request, response: express.Response, next) {
+        let founduser = await this._userService.findUserByName(request.header('email'));
         if (founduser) {
             response.status(404);
         } else {
             response.status(200);
         }
+
+        next();
+
     }
 
     @Get('/settings', isLoggedIn)
