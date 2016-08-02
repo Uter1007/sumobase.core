@@ -38,13 +38,13 @@ describe('User Service', () => {
 
         repoMock
             .expects('findOne')
-            .withArgs({'email': 'abc'})
+            .withArgs({'email': 'some@email.address'})
             .once()
             .throws(error);
 
         let userService = new UserService(loggerMock.object, repoMock.object);
 
-        await userService.findUserByName('abc');
+        await userService.findUserByName('some@email.address');
 
         loggerMock.verify();
         repoMock.verify();
@@ -59,12 +59,12 @@ describe('User Service', () => {
 
         repoMock
             .expects('findOne')
-            .withArgs({'email': 'abc'})
+            .withArgs({'email': 'some@email.address'})
             .once();
 
         let userService = new UserService(loggerMock.object, repoMock.object);
 
-        await userService.findUserByName('abc');
+        await userService.findUserByName('some@email.address');
 
         loggerMock.verify();
         repoMock.verify();
