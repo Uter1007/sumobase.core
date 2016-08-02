@@ -61,6 +61,10 @@ export class UserController extends BaseController {
         return true;
     }
 
+    @Get('/notfound')
+    public notfound(request: express.Request, response: express.Response) {
+        response.status(404);
+    }
 
 
     @Get('/settings', isLoggedIn)

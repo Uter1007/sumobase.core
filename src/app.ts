@@ -43,7 +43,7 @@ server.setConfig((app) => {
     app.use(passport.session()); // persistent login sessions
 
     app.post('/api/v1.0/user/login', passport.authenticate('local', {
-        failureRedirect : '/login',
+        failureRedirect : '/api/v1.0/user/notfound',
         successRedirect : '/api/v1.0/user/me'
     }));
 });

@@ -5,6 +5,7 @@ import {UserService} from '../../../user/services/user.service';
 import SVC_TAGS from '../../../../constant/services.tags';
 import {UserCantLoginException} from '../../error/models/user.cant.login.exception';
 import {User} from '../../../user/models/user.model';
+import {AuthenticationError} from '../../error/models/authentication.error';
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -17,7 +18,10 @@ passport.deserializeUser(async function(id, done) {
 });
 
 passport.use(new Strategy(
-    async function(email, password, done) {
+    { usernameField: 'email' ,
+      passReqToCallback: true
+    },
+    async function(req, email, password, done) {
         try {
             let userService = kernel.get<UserService>(SVC_TAGS.UserService);
             let user = await userService.findUserByUserNameAndPassword(email, password);
@@ -26,7 +30,7 @@ passport.use(new Strategy(
             }
             done(null, User.createFromDB(user));
         } catch ( exception ) {
-            return done(exception);
+            return done(new AuthenticationError('Email or Password was wrong'));
         }
     }
 ));
