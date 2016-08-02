@@ -12,15 +12,13 @@ describe('User Service', () => {
 
     let loggingObj = {
         error: function(message, errorObject) {
-            // please fill in, also got created TestLogger if you want to use console.log!
-            console.log('was called');
+            // empty block - just a mock
         }
     };
 
     let repoObj = {
         findOne: function(data) {
-            // please fill in
-            console.log('was called 2');
+            // empty block - just a mock
         }
     };
 

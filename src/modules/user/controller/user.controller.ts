@@ -16,6 +16,8 @@ import {UserValidator} from '../services/validator/user.validator.service';
 import {RegisterParametersNotValid} from '../../commons/error/models/register.parameter.notvalid.exception';
 import {PasswordValidator} from '../services/validator/password.validator.service';
 
+import * as moment from 'moment';
+
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
 /* tslint:enable */
@@ -46,6 +48,7 @@ export class UserController extends BaseController {
                 if (validateErrors.length > 0) {
                     throw new RegisterParametersNotValid('Validation error');
                 }
+                user.createdOn = moment().utc().toString();
                 return await this._userService.create(user, clearTextPassword);
             }
         }
@@ -57,6 +60,8 @@ export class UserController extends BaseController {
         request.logout();
         return true;
     }
+
+
 
     @Get('/settings', isLoggedIn)
     public async settings(): Promise<string> {
