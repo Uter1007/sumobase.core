@@ -92,8 +92,6 @@ describe('User Service', () => {
 
         loggerMock.verify();
         repoMock.verify();
-
-
-    })
+    });
 
 });

@@ -18,8 +18,9 @@ passport.deserializeUser(async function(id, done) {
 });
 
 passport.use(new Strategy(
-    { usernameField: 'email' ,
-      passReqToCallback: true
+    {
+        passReqToCallback: true,
+        usernameField: 'email'
     },
     async function(req, email, password, done) {
         try {
