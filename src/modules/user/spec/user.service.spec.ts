@@ -33,7 +33,7 @@ describe('User Service', () => {
 
         loggerMock
             .expects('error')
-            .withArgs('An error occured:', error)
+            .withArgs('An error occurred:', error)
             .once();
 
         repoMock
