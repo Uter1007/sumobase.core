@@ -27,7 +27,7 @@ describe('User Service', () => {
         repoMock = sinon.mock(repoObj);
     });
 
-    it('findUserByNameAsync @unit', async () => {
+    it('findUserByName findOne fails @unit', async () => {
 
         let error = new Error('The Error');
 
@@ -50,5 +50,26 @@ describe('User Service', () => {
         repoMock.verify();
 
     });
+
+    it('findUserByName findOne succeeds @unit', async () => {
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('findOne')
+            .withArgs({'email': 'abc'})
+            .once();
+
+        let userService = new UserService(loggerMock.object, repoMock.object);
+
+        await userService.findUserByName('abc');
+
+        loggerMock.verify();
+        repoMock.verify();
+
+
+    })
 
 });
