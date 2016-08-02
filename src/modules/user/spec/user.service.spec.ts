@@ -40,7 +40,7 @@ describe('User Service', () => {
 
         repoMock
             .expects('findOne')
-            .withArgs({'username': 'abc'})
+            .withArgs({'email': 'abc'})
             .once()
             .throws(error);
 
