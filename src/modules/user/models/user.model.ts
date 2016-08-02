@@ -55,12 +55,12 @@ export class User extends BaseModel implements IUser {
 
     public toDBmodel(): IUserDBSchema {
         let userdb: IUserDBSchema = new userDBModel({
+            createdOn: this.createdOn,
             email: this.email,
             firstName: this.firstName,
             id: this.id,
             lastName: this.lastName,
             state: this.state,
-
         });
 
         return userdb;

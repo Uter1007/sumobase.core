@@ -17,10 +17,10 @@ passport.deserializeUser(async function(id, done) {
 });
 
 passport.use(new Strategy(
-    async function(username, password, done) {
+    async function(email, password, done) {
         try {
             let userService = kernel.get<UserService>(SVC_TAGS.UserService);
-            let user = await userService.findUserByUserNameAndPassword(username, password);
+            let user = await userService.findUserByUserNameAndPassword(email, password);
             if (!user) {
                 return done(null, false, new UserCantLoginException('Can\'t login User'));
             }
