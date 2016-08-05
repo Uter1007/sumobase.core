@@ -3,7 +3,7 @@ import * as express from 'express';
 import BaseController from '../../commons/base/base.controller';
 
 import { injectable, inject  } from 'inversify';
-import { Controller, Get, Post } from 'inversify-express-utils';
+import { Controller, Get, Post, Head } from 'inversify-express-utils';
 import { ILogger } from '../../commons/logging/interfaces/logger.interface';
 import { User } from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
@@ -17,7 +17,6 @@ import {RegisterParametersNotValid} from '../../commons/error/models/register.pa
 import {PasswordValidator} from '../services/validator/password.validator.service';
 
 import * as moment from 'moment';
-import {Head} from 'inversify-express-utils';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
 
 /* tslint:disable */
