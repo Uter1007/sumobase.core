@@ -39,6 +39,9 @@ build/
 # local configuration file (which may contain secret information)
 src/config/**/*.local.*
 
+# documentation
+src/public/documentation/api
+
 #VSCODE
 .vscode
 

@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 import {UserService} from '../services/user.service';
+import {IUser} from '../interfaces/user.interface';
+import {IUserDBSchema} from '../models/user.db.model';
 
 /* tslint:disable */
 let expect = require('chai').expect;
@@ -83,6 +85,7 @@ describe('User Service', () => {
     });
 
     it('findUserByUserNameAndPassword findOne succeeds @unit', async () => {
+
         let passwordHash = await hashPassword('the password');
 
         loggerMock
@@ -133,6 +136,7 @@ describe('User Service', () => {
     });
 
     it('findUserByName findOne succeeds @unit', async () => {
+
         loggerMock
             .expects('error')
             .never();
@@ -166,10 +170,87 @@ describe('User Service', () => {
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
-        await userService.findUserByName('some@email.address');
+        let result = await userService.findUserById('the user id');
+        expect(result).to.equal(error);
 
         loggerMock.verify();
         repoMock.verify();
+
+    });
+
+    it('findUserById findById succeeds @unit', async () => {
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('findById')
+            .withArgs('the user id')
+            .once()
+            .returns({
+                email: 'the username'
+            });
+
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+
+        let user = await userService.findUserById('the user id');
+        expect(user.email).to.equal('the username');
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('create create fails @unit', async() => {
+
+        let userModel = <IUser>{};
+
+        let error = new Error('The Error');
+
+        loggerMock
+            .expects('error')
+            .withArgs('An error occurred:', error)
+            .once();
+
+        repoMock
+            .expects('create')
+            .once()
+            .throws(error);
+
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+
+        let result = await userService.create(userModel, 'the password');
+        expect(result).to.equal(error);
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('create create succeeds @unit', async() => {
+
+        let userModel = <IUser>{};
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('create')
+            .once()
+            .returns(<IUserDBSchema>{
+               email: 'the username'
+            });
+
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+
+        let user = await userService.create(userModel, 'the password');
+        expect(user.email).to.equal('the username');
+
+        loggerMock.verify();
+        repoMock.verify();
+
     });
 
 });
