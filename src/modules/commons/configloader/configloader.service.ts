@@ -2,7 +2,8 @@ import { injectable } from 'inversify';
 
 /* tslint:disable */
 const config = require('../../../config/config.json');
-const localConfig = require ('../../../config/config.local.json');
+let fs = require('fs');
+let path = require('path');
 /* tslint:enable */
 
 import * as lodash from 'lodash';
@@ -21,7 +22,8 @@ class ConfigLoader {
 
     private static initConfig() {
         console.log('initConfig');
-        this.mergedConfig = lodash.merge(config, localConfig);
+        const filePath = path.join(process.cwd(), 'config/config.local.json');
+        this.mergedConfig = lodash.merge(config, (fs.existsSync(filePath)) && require(filePath) || {});
     }
 
 }

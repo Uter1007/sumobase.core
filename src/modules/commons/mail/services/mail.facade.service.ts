@@ -10,7 +10,7 @@ const mailgun = require('mailgun-js')({apiKey: mailConfig.apiKey, domain: mailCo
 
 import * as Promise from 'bluebird';
 
-class MailFacade {
+export class MailFacade {
 
     private _from: string;
 
