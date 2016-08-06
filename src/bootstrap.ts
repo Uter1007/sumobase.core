@@ -8,6 +8,7 @@ import { LogRepository } from './modules/commons/logging/repository/log.reposito
 import { WinstonLoggerFactory } from './modules/commons/logging/factory/winston.logger.factory';
 import { ILogger } from './modules/commons/logging/interfaces/logger.interface';
 import { Controller } from 'inversify-express-utils';
+import { PasswordService } from './modules/user/services/password.service';
 import { UserController } from './modules/user/controller/user.controller';
 import { UserRepository } from './modules/user/repository/user.repository';
 import { UserService } from './modules/user/services/user.service';
@@ -34,6 +35,9 @@ kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
 
 kernel.bind<UserRepository>(REPO_TAGS.UserRepository)
     .to(UserRepository);
+
+kernel.bind<PasswordService>(SVC_TAGS.PasswordService)
+    .to(PasswordService);
 
 kernel.bind<UserService>(SVC_TAGS.UserService)
     .to(UserService);

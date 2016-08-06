@@ -1,5 +1,5 @@
 const MAPPER_TAGS = {
-    UserMapper: 'UserMapper'
+    UserMapper: Symbol('UserMapper')
 };
 
 export default MAPPER_TAGS;
