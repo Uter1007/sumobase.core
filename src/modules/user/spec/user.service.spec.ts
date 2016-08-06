@@ -38,7 +38,7 @@ describe('User Service', () => {
     let userMapperObj = {
         toDBmodel: function(data) {
             return {password: '123'};
-        }  ,
+        },
         toUser: function (data){
             return {email: 'the username'};
         }
