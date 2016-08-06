@@ -44,18 +44,6 @@ describe('User Service', () => {
         }
     };
 
-    function hashPassword(pw: string): Promise<any> {
-        return new Promise( (resolve: any, reject: any) => {
-            bcrypt.hash(pw, 12, function (err, hash) {
-                if (err) {
-                    return reject(err);
-                } else {
-                    return resolve(hash);
-                }
-            });
-        });
-    }
-
     beforeEach(function() {
         loggerMock = sinon.mock(loggingObj);
         repoMock = sinon.mock(repoObj);
@@ -88,7 +76,7 @@ describe('User Service', () => {
 
     it('findUserByUserNameAndPassword findOne succeeds @unit', async () => {
 
-        let passwordHash = await hashPassword('the password');
+        let passwordHash = '$2a$12$Fj/BvUyf.9fZuh9JUk.C7eNIDuSmo1GBJpqJidgEgSgCitaGg6CN.';
 
         loggerMock
             .expects('error')
