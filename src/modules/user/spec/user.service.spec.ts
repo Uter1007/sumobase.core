@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import {UserService} from '../services/user.service';
 import {IUser} from '../interfaces/user.interface';
+import {IUserDBSchema} from "../models/user.db.model";
 
 /* tslint:disable */
 let expect = require('chai').expect;
@@ -212,12 +213,41 @@ describe('User Service', () => {
 
         repoMock
             .expects('create')
-            .once();
+            .once()
+            .throws(error);
 
         let userService = new UserService(loggerMock.object, repoMock.object);
 
-        // let user =
-        await userService.create(userModel, 'the password');
+        let result = await userService.create(userModel, 'the password');
+        expect(result).to.equal(error);
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('create create succeeds @unit', async() => {
+
+        let userModel = <IUser>{};
+        userModel.toDBmodel = sinon.stub().returns({
+            password: hashPassword('the password')
+        });
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('create')
+            .once()
+            .returns(<IUserDBSchema>{
+               email: 'the username'
+            });
+
+        let userService = new UserService(loggerMock.object, repoMock.object);
+
+        let user = await userService.create(userModel, 'the password');
+        expect(user.email).to.equal('the username');
 
         loggerMock.verify();
         repoMock.verify();
