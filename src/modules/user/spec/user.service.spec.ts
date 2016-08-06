@@ -226,7 +226,7 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);;
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         let result = await userService.create(userModel, 'the password');
         expect(result).to.equal(error);
