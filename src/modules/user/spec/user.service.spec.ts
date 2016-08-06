@@ -241,7 +241,7 @@ describe('User Service', () => {
             .expects('create')
             .once()
             .returns(<IUserDBSchema>{
-               email: 'the username'
+                email: 'the username'
             });
 
         let userService = new UserService(loggerMock.object, repoMock.object);
