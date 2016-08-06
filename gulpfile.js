@@ -70,10 +70,20 @@ gulp.task('debug', function() {
         }));
 });
 
-gulp.task('serve', function () {
+gulp.task('serve debug', function () {
     var cfg = JSON.parse(JSON.stringify(nodemonConfiguration));
 
     cfg.exec = 'node --debug';
+
+    nodemon(cfg).on('restart', function () {
+        console.log('restarted!')
+    });
+});
+
+gulp.task('serve', function () {
+    var cfg = JSON.parse(JSON.stringify(nodemonConfiguration));
+
+    cfg.exec = 'node';
 
     nodemon(cfg).on('restart', function () {
         console.log('restarted!')
@@ -104,6 +114,14 @@ gulp.task('compile', function(callback) {
 });
 
 gulp.task('default', function() {
+    runSequence(
+        'compile',
+        'serve',
+        'debug'
+    );
+});
+
+gulp.task('debug', function() {
     runSequence(
         'compile',
         'serve',
