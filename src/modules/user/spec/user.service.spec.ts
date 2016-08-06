@@ -98,10 +98,10 @@ describe('User Service', () => {
             .expects('findOne')
             .withArgs({'email': 'the username'})
             .once()
-            .returns({
+            .returns(Promise.resolve(<any>{
                 email: 'the username',
                 password: passwordHash
-            });
+            }));
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
@@ -147,9 +147,9 @@ describe('User Service', () => {
             .expects('findOne')
             .withArgs({'email': 'some@email.address'})
             .once()
-            .returns({
+            .returns(Promise.resolve(<any>{
                 email: 'the username'
-            });
+            }));
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
@@ -196,9 +196,9 @@ describe('User Service', () => {
             .expects('findById')
             .withArgs('the user id')
             .once()
-            .returns({
+            .returns(Promise.resolve(<any>{
                 email: 'the username'
-            });
+            }));
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
@@ -247,9 +247,9 @@ describe('User Service', () => {
         repoMock
             .expects('create')
             .once()
-            .returns(<any>{
+            .returns(Promise.resolve(<any>{
                email: 'the username'
-            });
+            }));
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
@@ -274,9 +274,9 @@ describe('User Service', () => {
             .expects('findById')
             .withArgs('the user id')
             .once()
-            .returns(<any>{
+            .returns(Promise.resolve(<any>{
                 email: 'the username'
-            });
+            }));
 
         repoMock
             .expects('update')
@@ -303,16 +303,16 @@ describe('User Service', () => {
             .expects('findById')
             .withArgs('the user id')
             .once()
-            .returns(<any>{
+            .returns(Promise.resolve(<any>{
                 email: 'the username'
-            });
+            }));
 
         repoMock
             .expects('update')
             .once()
-            .returns(<any>{
+            .returns(Promise.resolve(<any>{
                 email: 'the username'
-            });
+            }));
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
