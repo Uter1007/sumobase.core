@@ -20,6 +20,12 @@ describe('User Service', () => {
     };
 
     let repoObj = {
+        create: function(data) {
+            // empty block - just a mock
+        },
+        findById: function(id) {
+            // empty block - just a mock
+        },
         findOne: function(data) {
             // empty block - just a mock
         }
@@ -67,7 +73,7 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object);
 
         await userService.findUserByUserNameAndPassword('the username', 'the password');
 
@@ -135,9 +141,31 @@ describe('User Service', () => {
         repoMock
             .expects('findOne')
             .withArgs({'email': 'some@email.address'})
-            .once();
+            .once()
+            .returns({
+                email: 'the username'
+            });
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+
+        let user = await userService.findUserByName('some@email.address');
+        expect(user.email).to.equal('the username');
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('findUserById findById fails @unit', async () => {
+
+        let error = new Error('The Error');
+
+        loggerMock
+            .expects('error')
+            .withArgs('An error occurred:', error)
+            .once();
+
+        let userService = new UserService(loggerMock.object, repoMock.object);
 
         await userService.findUserByName('some@email.address');
 
