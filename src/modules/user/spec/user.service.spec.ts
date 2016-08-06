@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import {UserService} from '../services/user.service';
 import {IUser} from '../interfaces/user.interface';
-import * as mongoose from 'mongoose';
 
 /* tslint:disable */
 let expect = require('chai').expect;
@@ -29,6 +28,9 @@ describe('User Service', () => {
             // empty block - just a mock
         },
         findOne: function(data) {
+            // empty block - just a mock
+        },
+        update: function(id, data) {
             // empty block - just a mock
         }
     };
@@ -224,7 +226,7 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);;
 
         let result = await userService.create(userModel, 'the password');
         expect(result).to.equal(error);
@@ -242,18 +244,79 @@ describe('User Service', () => {
             .expects('error')
             .never();
 
-        let userDbModel: any = {
-            email: 'the username'
-        } ;
-
         repoMock
             .expects('create')
             .once()
-            .returns(userDbModel);
+            .returns(<any>{
+               email: 'the username'
+            });
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         let user = await userService.create(userModel, 'the password');
+        expect(user.email).to.equal('the username');
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('activateUser update fails @unit', async() => {
+
+        let error = new Error('The Error');
+
+        loggerMock
+            .expects('error')
+            .withArgs('An error occurred:', error)
+            .once();
+
+        repoMock
+            .expects('findById')
+            .withArgs('the user id')
+            .once()
+            .returns(<any>{
+                email: 'the username'
+            });
+
+        repoMock
+            .expects('update')
+            .once()
+            .throws(error);
+
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+
+        let result = await userService.activateUser('the user id');
+        expect(result).to.equal(error);
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('activateUser update succeeds @unit', async() => {
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('findById')
+            .withArgs('the user id')
+            .once()
+            .returns(<any>{
+                email: 'the username'
+            });
+
+        repoMock
+            .expects('update')
+            .once()
+            .returns(<any>{
+                email: 'the username'
+            });
+
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
+
+        let user = await userService.activateUser('the user id');
         expect(user.email).to.equal('the username');
 
         loggerMock.verify();
