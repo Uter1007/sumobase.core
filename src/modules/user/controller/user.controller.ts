@@ -3,7 +3,7 @@ import * as express from 'express';
 import BaseController from '../../commons/base/base.controller';
 
 import { injectable, inject  } from 'inversify';
-import { Controller, Get, Post, Head } from 'inversify-express-utils';
+import { Controller, Get, Post, Head, Put } from 'inversify-express-utils';
 import { ILogger } from '../../commons/logging/interfaces/logger.interface';
 import { User } from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
@@ -37,6 +37,29 @@ export class UserController extends BaseController {
         this._userService = userService;
     }
 
+    /**
+     * @api {post} /api/v1.0/user/register Register User
+     * @apiName userRegister
+     * @apiGroup User
+     *
+     * @apiParam {Object} registerRequest Express Body Request
+     * @apiParam {String} registerRequest.firstName Firstname of the User
+     * @apiParam {String} registerRequest.lastName Lastname of the User
+     * @apiParam {String} registerRequest.email Email of the User
+     * @apiParam {String} registerRequest.password Password of the User
+     * @apiParam {String} registerRequest.confirmPassword Password Confirmation of the User
+     *
+     * @apiSuccess {Object} registerResponse Express Body Response
+     * @apiSuccess {String} registerResponse.id Id of the User.
+     * @apiSuccess {String} registerResponse.firstName Firstname of the User.
+     * @apiSuccess {String} registerResponse.lastName  Lastname of the User.
+     * @apiSuccess {String} registerResponse.email Email of the User.
+     * @apiSuccess {String} registerResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
+     * @apiSuccess {String} registerResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     *
+     * @apiError RegisterParametersNotValid register parameters are not valid
+     * @apiError UserAlreadyInUseException user already registered
+     */
     @Post('/register')
     public async register(request: express.Request): Promise<User> {
         let user: IUser = User.createFromJSON(request.body);
@@ -56,10 +79,42 @@ export class UserController extends BaseController {
         throw new UserAlreadyInUseException('Error on register');
     }
 
+    /**
+     * @api {get} /api/v1.0/user/logout User Logout
+     * @apiName userLogout
+     * @apiGroup User
+     *
+     * @apiSuccess {Boolean} Success
+     */
     @Get('/logout')
     public logout(request: express.Request) {
         request.logout();
         return true;
+    }
+
+    /**
+     * @api {put} /api/v1.0/user/edit Edit User
+     * @apiName userEdit
+     * @apiGroup User
+     *
+     * @apiParam {Object} editRequest Express Body Request
+     * @apiParam {String} editRequest.firstName Firstname of the User
+     * @apiParam {String} editRequest.lastName Lastname of the User
+     *
+     * @apiSuccess {Object} editResponse Express Body Response
+     * @apiSuccess {String} editResponse.id Id of the User.
+     * @apiSuccess {String} editResponse.firstName Firstname of the User.
+     * @apiSuccess {String} editResponse.lastName  Lastname of the User.
+     * @apiSuccess {String} editResponse.email Email of the User.
+     * @apiSuccess {String} editResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
+     * @apiSuccess {String} editResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     *
+     * @apiError RegisterParametersNotValid register parameters are not valid
+     * @apiError UserAlreadyInUseException user already registered
+     */
+    @Put('/edit')
+    public edit(request: express.Request) {
+
     }
 
     @Get('/notfound')
@@ -89,12 +144,5 @@ export class UserController extends BaseController {
     @Get('/me', isLoggedIn)
     public async me(request: express.Request): Promise<string> {
         return request.user;
-    }
-
-    @Get('/')
-    public async get(): Promise<string> {
-        this._log.debug('This is a Test');
-        this._log.info('This is a Test2');
-        return 'Home';
     }
 }
