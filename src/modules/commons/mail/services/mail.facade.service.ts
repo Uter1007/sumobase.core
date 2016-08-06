@@ -1,4 +1,4 @@
-import ConfigLoader from '../../configloader/configLoader.service';
+import ConfigLoader from '../../configloader/configloader.service';
 import {IRawMailDataModel, IMailResponse} from '../models/maildata.model';
 
 const mailConfig = ConfigLoader.getConfig().mail;
