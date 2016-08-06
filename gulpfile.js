@@ -53,7 +53,7 @@ gulp.task('ts-compile', function() {
 });
 
 
-gulp.task('debug', function() {
+gulp.task('node-inspector', function() {
 
     gulp.src([])
         .pipe(nodeInspector({
@@ -70,20 +70,20 @@ gulp.task('debug', function() {
         }));
 });
 
-gulp.task('serve debug', function () {
+gulp.task('serve', function () {
     var cfg = JSON.parse(JSON.stringify(nodemonConfiguration));
 
-    cfg.exec = 'node --debug';
+    cfg.exec = 'node';
 
     nodemon(cfg).on('restart', function () {
         console.log('restarted!')
     });
 });
 
-gulp.task('serve', function () {
+gulp.task('serve debug', function () {
     var cfg = JSON.parse(JSON.stringify(nodemonConfiguration));
 
-    cfg.exec = 'node';
+    cfg.exec = 'node --debug';
 
     nodemon(cfg).on('restart', function () {
         console.log('restarted!')
@@ -116,18 +116,18 @@ gulp.task('compile', function(callback) {
 gulp.task('default', function() {
     runSequence(
         'compile',
-        'serve',
-        'debug'
+        'serve debug',
+        'node-inspector'
     );
 });
 
-gulp.task('debug', function() {
+gulp.task('prod', function() {
     runSequence(
         'compile',
-        'serve debug',
-        'debug'
+        'serve'
     );
 });
+
 
 gulp.task('apidoc', function(done) {
     apidoc({
