@@ -8,6 +8,7 @@ var runSequence = require('run-sequence');
 var nodemon = require('gulp-nodemon');
 var mocha = require('gulp-mocha');
 var del = require('del');
+var apidoc = require('gulp-apidoc');
 
 var tsProject = tsc.createProject('tsconfig.json');
 
@@ -93,6 +94,9 @@ gulp.task('test', false, function() {
 gulp.task('copyConfigurations', function() {
     gulp.src('src/**/*.json')
         .pipe(gulp.dest('dist'));
+
+    gulp.src('src/public/**/*.*')
+        .pipe(gulp.dest('dist/public'));
 });
 
 gulp.task('compile', function(callback) {
@@ -105,4 +109,11 @@ gulp.task('default', function() {
         'serve',
         'debug'
     );
+});
+
+gulp.task('apidoc', function(done) {
+    apidoc({
+        src: "src/",
+        dest: "src/public/documentation/api"
+    },done);
 });

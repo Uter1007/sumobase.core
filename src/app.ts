@@ -5,6 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
 import * as passport from 'passport';
 import * as mongoose from 'mongoose';
+import * as express from 'express';
 
 import session = require('express-session');
 
@@ -42,10 +43,6 @@ server.setConfig((app) => {
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
 
-    app.post('/api/v1.0/user/login', passport.authenticate('local', {
-        failureRedirect : '/api/v1.0/user/notfound',
-        successRedirect : '/api/v1.0/user/me'
-    }));
 });
 
 // generic Error Handler
@@ -54,6 +51,8 @@ server.setErrorConfig((app) => {
 });
 
 let app = server.build();
+
+app.use('/documentation', express.static(__dirname + '/public/documentation/api'));
 
 // 404 Error Handler
 app.use(notFoundHandler);

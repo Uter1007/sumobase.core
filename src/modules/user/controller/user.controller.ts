@@ -15,16 +15,17 @@ import {UserAlreadyInUseException} from '../../commons/error/models/user.already
 import {UserValidator} from '../services/validator/user.validator.service';
 import {RegisterParametersNotValid} from '../../commons/error/models/register.parameter.notvalid.exception';
 import {PasswordValidator} from '../services/validator/password.validator.service';
-
 import * as moment from 'moment';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
+
+import * as passport from 'passport';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
 /* tslint:enable */
 
 @injectable()
-@Controller('/api/v1.0/user')
+@Controller('/api/user')
 export class UserController extends BaseController {
 
     private _log: ILogger;
@@ -38,7 +39,8 @@ export class UserController extends BaseController {
     }
 
     /**
-     * @api {post} /api/v1.0/user/register Register User
+     * @api {post} /api/user/register Register User
+     * @apiVersion 1.0.0
      * @apiName userRegister
      * @apiGroup User
      *
@@ -80,7 +82,22 @@ export class UserController extends BaseController {
     }
 
     /**
-     * @api {get} /api/v1.0/user/logout User Logout
+     * @api {post} /api/user/login User Login
+     * @apiVersion 1.0.0
+     * @apiName userLogin
+     * @apiGroup User
+     *
+     * @apiSuccess Redirect to /api/user/me
+     * @apiError Redirect to /api/user/notfound
+     */
+    @Post('/login', passport.authenticate('local', {
+        failureRedirect : '/api/user/notfound',
+        successRedirect : '/api/user/me'
+    }))
+
+    /**
+     * @api {get} /api/user/logout User Logout
+     * @apiVersion 1.0.0
      * @apiName userLogout
      * @apiGroup User
      *
@@ -93,7 +110,8 @@ export class UserController extends BaseController {
     }
 
     /**
-     * @api {put} /api/v1.0/user/edit Edit User
+     * @api {put} /api/user/edit Edit User
+     * @apiVersion 1.0.0
      * @apiName userEdit
      * @apiGroup User
      *
@@ -118,11 +136,19 @@ export class UserController extends BaseController {
     }
 
     @Get('/notfound')
-    public notfound(response: express.Response) {
-        response.status(404);
+    public notfound() {
         throw new UserNotFoundException('user can\'t be found');
     }
 
+    /**
+     * @api {head} /api/user/check Check if Email is already in use
+     * @apiVersion 1.0.0
+     * @apiName checkUserName
+     * @apiGroup User
+     *
+     * @apiSuccess (200) UserName doesn't exist
+     * @apiSuccess (404) UserName already in use
+     */
     @Head('/check')
     public async checkUserName(request: express.Request, response: express.Response, next) {
         let founduser = await this._userService.findUserByName(request.header('email'));
