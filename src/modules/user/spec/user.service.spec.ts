@@ -73,7 +73,7 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         await userService.findUserByUserNameAndPassword('the username', 'the password');
 
@@ -133,7 +133,6 @@ describe('User Service', () => {
     });
 
     it('findUserByName findOne succeeds @unit', async () => {
-
         loggerMock
             .expects('error')
             .never();
@@ -165,7 +164,7 @@ describe('User Service', () => {
             .withArgs('An error occurred:', error)
             .once();
 
-        let userService = new UserService(loggerMock.object, repoMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         await userService.findUserByName('some@email.address');
 
