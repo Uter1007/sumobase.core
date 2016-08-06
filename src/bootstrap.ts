@@ -16,6 +16,8 @@ import { MailService } from './modules/commons/mail/services/mail.service';
 import CTRL_TAGS from './constant/controller.tags';
 import SVC_TAGS from './constant/services.tags';
 import REPO_TAGS from './constant/repositories.tags';
+import MAPPER_TAGS from './constant/mapper.tags';
+import {UserMapper} from './modules/user/mapper/user.mapper';
 
 let kernel = new Kernel();
 
@@ -38,6 +40,9 @@ kernel.bind<UserService>(SVC_TAGS.UserService)
 
 kernel.bind<MailService>(SVC_TAGS.MailService)
     .to(MailService);
+
+kernel.bind<UserMapper>(MAPPER_TAGS.UserMapper)
+    .to(UserMapper);
 
 
 export default kernel;

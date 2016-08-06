@@ -11,6 +11,7 @@ import {UserValidator} from '../services/validator/user.validator.service';
 
 /* tslint:disable */
 import chai = require('chai');
+import {UserMapper} from '../mapper/user.mapper';
 const expect = chai.expect;
 /* tslint:enable */
 
@@ -21,6 +22,7 @@ describe('User Tests', () => {
         let validUserJson: any;
         let userModel: User;
         let dbUser: IUserDBSchema;
+        let userMapper: UserMapper;
 
         beforeEach(() => {
             validUserJson = {
@@ -48,6 +50,8 @@ describe('User Tests', () => {
                 password: '#1233kewrwerRTwewerOP',
                 state: 'active'
             });
+
+            userMapper = new UserMapper();
         });
 
         describe('Json Request Tests', () => {
@@ -76,7 +80,7 @@ describe('User Tests', () => {
 
         describe('Model Mapping Tests', () => {
             it('Map Model to DB Model', () => {
-                let user = userModel.toDBmodel();
+                let user = userMapper.toDBmodel(userModel);
                 expect(user).to.be.an.instanceof(userDBModel);
                 expect(user.firstName).to.be.eq('firstname');
                 expect(user.lastName).to.be.eq('lastname');
@@ -85,7 +89,7 @@ describe('User Tests', () => {
             });
 
             it('Map DB Model to Model', () => {
-                let user: IUser = User.createFromDB(dbUser);
+                let user: IUser = userMapper.toUser(dbUser);
                 expect(user).to.be.an.instanceof(User);
                 expect(user.firstName).to.be.eq('dbTest');
                 expect(user.lastName).to.be.eq('dbLTest');

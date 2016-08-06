@@ -4,11 +4,12 @@ import { ILogger } from '../../commons/logging/interfaces/logger.interface';
 import { IUser } from '../interfaces/user.interface';
 import { IUserDBSchema } from '../models/user.db.model';
 import { UserState } from '../models/userstate.model';
-import {User} from '../models/user.model';
 
 import REPO_TAGS from '../../../constant/repositories.tags';
 import SVC_TAGS from '../../../constant/services.tags';
 import {PasswordsNotEqualException} from '../../commons/error/models/password.notequal.exception';
+import MAPPER_TAGS from '../../../constant/mapper.tags';
+import {UserMapper} from '../mapper/user.mapper';
 
 /* tslint:disable */
 let bcrypt = require('bcrypt');
@@ -19,11 +20,14 @@ export class UserService {
 
     private _userRepository: UserRepository;
     private _log: ILogger;
+    private _userMapper: UserMapper;
 
     constructor(@inject(SVC_TAGS.Logger) log: ILogger,
-                @inject(REPO_TAGS.UserRepository) userRepository: UserRepository) {
+                @inject(REPO_TAGS.UserRepository)  userRepository: UserRepository,
+                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
         this._userRepository = userRepository;
         this._log = log;
+        this._userMapper = userMapper;
     }
 
     public async findUserByUserNameAndPassword(userName: string, password: string) {
@@ -72,10 +76,10 @@ export class UserService {
     public async create(userModel: IUser, password: string) {
         try {
             let hashpw = await this.hashPassword(password);
-            let toDbModel = userModel.toDBmodel();
+            let toDbModel = this._userMapper.toDBmodel(userModel);
             toDbModel.password = hashpw;
             let dbmodel = await this._userRepository.create(toDbModel);
-            return User.createFromDB(dbmodel);
+            return this._userMapper.toUser(dbmodel);
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;

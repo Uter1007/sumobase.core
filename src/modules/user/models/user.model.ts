@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 import { autoserialize } from 'cerialize';
 import { IUser } from '../interfaces/user.interface';
-import {IUserDBSchema, userDBModel} from './user.db.model';
 import { UserState } from './userstate.model';
 import {BaseModel} from '../../commons/base/base.model';
 import { Deserialize } from 'cerialize';
@@ -40,30 +39,6 @@ export class User extends BaseModel implements IUser {
 
     public static createFromJSON(json: any) {
         return Deserialize(json, User);
-    }
-
-    public static createFromDB(userModel: IUserDBSchema) {
-        return new User(userModel.email,
-            userModel.firstName,
-            userModel.lastName,
-            userModel.state,
-            userModel.modifiedOn,
-            userModel.createdOn,
-            userModel.image,
-            userModel.id);
-    }
-
-    public toDBmodel(): IUserDBSchema {
-        let userdb: IUserDBSchema = new userDBModel({
-            createdOn: this.createdOn,
-            email: this.email,
-            firstName: this.firstName,
-            id: this.id,
-            lastName: this.lastName,
-            state: this.state,
-        });
-
-        return userdb;
     }
 
     constructor(email, firstname, lastname, userState, modifiedOn?, createdOn?, image?, id?) {

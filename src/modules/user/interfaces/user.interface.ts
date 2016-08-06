@@ -1,5 +1,4 @@
 import { UserState } from '../models/userstate.model';
-import { IUserDBSchema } from '../models/user.db.model';
 
 export interface IUser {
     id?: string;
@@ -10,6 +9,4 @@ export interface IUser {
     lastName: string;
     modifiedOn: string;
     state: UserState;
-
-    toDBmodel(): IUserDBSchema;
 }

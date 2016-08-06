@@ -11,6 +11,7 @@ describe('User Service', () => {
 
     let loggerMock;
     let repoMock;
+    let mapperMock;
 
     let loggingObj = {
         error: function(message, errorObject) {
@@ -20,6 +21,15 @@ describe('User Service', () => {
 
     let repoObj = {
         findOne: function(data) {
+            // empty block - just a mock
+        }
+    };
+
+    let userMapperObj = {
+        toDBmodel: function(data) {
+            // empty block - just a mock
+        }  ,
+        toUser: function (data){
             // empty block - just a mock
         }
     };
@@ -39,6 +49,7 @@ describe('User Service', () => {
     beforeEach(function() {
         loggerMock = sinon.mock(loggingObj);
         repoMock = sinon.mock(repoObj);
+        mapperMock = sinon.mock(userMapperObj);
     });
 
     it('findUserByUserNameAndPassword findOne fails @unit', async () => {
@@ -56,7 +67,7 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         await userService.findUserByUserNameAndPassword('the username', 'the password');
 
@@ -66,8 +77,6 @@ describe('User Service', () => {
     });
 
     it('findUserByUserNameAndPassword findOne succeeds @unit', async () => {
-
-        let error = new Error('The Error');
         let passwordHash = await hashPassword('the password');
 
         loggerMock
@@ -83,7 +92,7 @@ describe('User Service', () => {
                 password: passwordHash
             });
 
-        let userService = new UserService(loggerMock.object, repoMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         let user = await userService.findUserByUserNameAndPassword('the username', 'the password');
         expect(user.email).to.equal('the username');
@@ -108,7 +117,7 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         await userService.findUserByName('some@email.address');
 
@@ -128,7 +137,7 @@ describe('User Service', () => {
             .withArgs({'email': 'some@email.address'})
             .once();
 
-        let userService = new UserService(loggerMock.object, repoMock.object);
+        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         await userService.findUserByName('some@email.address');
 
