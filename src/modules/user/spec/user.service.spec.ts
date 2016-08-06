@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import {UserService} from '../services/user.service';
 import {IUser} from '../interfaces/user.interface';
-import {IUserDBSchema} from '../models/user.db.model';
+import * as mongoose from 'mongoose';
 
 /* tslint:disable */
 let expect = require('chai').expect;
@@ -35,10 +35,10 @@ describe('User Service', () => {
 
     let userMapperObj = {
         toDBmodel: function(data) {
-            // empty block - just a mock
+            return {password: '123'};
         }  ,
         toUser: function (data){
-            // empty block - just a mock
+            return {email: 'the username'};
         }
     };
 
@@ -168,6 +168,12 @@ describe('User Service', () => {
             .withArgs('An error occurred:', error)
             .once();
 
+        repoMock
+            .expects('findById')
+            .withArgs('the user id')
+            .once()
+            .throws(error);
+
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
         let result = await userService.findUserById('the user id');
@@ -236,12 +242,14 @@ describe('User Service', () => {
             .expects('error')
             .never();
 
+        let userDbModel: any = {
+            email: 'the username'
+        } ;
+
         repoMock
             .expects('create')
             .once()
-            .returns(<IUserDBSchema>{
-               email: 'the username'
-            });
+            .returns(userDbModel);
 
         let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object);
 
