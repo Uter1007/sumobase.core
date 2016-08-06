@@ -5,7 +5,6 @@ import {IUser} from '../interfaces/user.interface';
 /* tslint:disable */
 let expect = require('chai').expect;
 let sinon = require('sinon');
-let bcrypt = require('bcrypt');
 /* tslint:enable */
 
 describe('User Service', () => {
