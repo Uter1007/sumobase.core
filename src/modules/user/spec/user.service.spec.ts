@@ -29,6 +29,9 @@ describe('User Service', () => {
         },
         findOne: function(data) {
             // empty block - just a mock
+        },
+        update: function(id, data) {
+            // empty block - just a mock
         }
     };
 
@@ -247,6 +250,69 @@ describe('User Service', () => {
         let userService = new UserService(loggerMock.object, repoMock.object);
 
         let user = await userService.create(userModel, 'the password');
+        expect(user.email).to.equal('the username');
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('activateUser update fails @unit', async() => {
+
+        let error = new Error('The Error');
+
+        loggerMock
+            .expects('error')
+            .withArgs('An error occurred:', error)
+            .once();
+
+        repoMock
+            .expects('findById')
+            .withArgs('the user id')
+            .once()
+            .returns(<IUserDBSchema>{
+                email: 'the username'
+            });
+
+        repoMock
+            .expects('update')
+            .once()
+            .throws(error);
+
+        let userService = new UserService(loggerMock.object, repoMock.object);
+
+        let result = await userService.activateUser('the user id');
+        expect(result).to.equal(error);
+
+        loggerMock.verify();
+        repoMock.verify();
+
+    });
+
+    it('activateUser update succeeds @unit', async() => {
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('findById')
+            .withArgs('the user id')
+            .once()
+            .returns(<IUserDBSchema>{
+                email: 'the username'
+            });
+
+        repoMock
+            .expects('update')
+            .once()
+            .returns(<IUserDBSchema>{
+                email: 'the username'
+            });
+
+        let userService = new UserService(loggerMock.object, repoMock.object);
+
+        let user = await userService.activateUser('the user id');
         expect(user.email).to.equal('the username');
 
         loggerMock.verify();
