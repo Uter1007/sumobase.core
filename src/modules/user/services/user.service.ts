@@ -10,10 +10,7 @@ import SVC_TAGS from '../../../constant/services.tags';
 import {PasswordsNotEqualException} from '../../commons/error/models/password.notequal.exception';
 import MAPPER_TAGS from '../../../constant/mapper.tags';
 import {UserMapper} from '../mapper/user.mapper';
-
-/* tslint:disable */
-let bcrypt = require('bcrypt');
-/* tslint:enable */
+import {PasswordService} from './password.service';
 
 @injectable()
 export class UserService {
@@ -21,32 +18,28 @@ export class UserService {
     private _userRepository: UserRepository;
     private _log: ILogger;
     private _userMapper: UserMapper;
+    private _pw: PasswordService;
 
     constructor(@inject(SVC_TAGS.Logger) log: ILogger,
                 @inject(REPO_TAGS.UserRepository)  userRepository: UserRepository,
-                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
+                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper,
+                @inject(SVC_TAGS.PasswordService) pw: PasswordService) {
         this._userRepository = userRepository;
         this._log = log;
         this._userMapper = userMapper;
+        this._pw = pw;
     }
 
     public async findUserByUserNameAndPassword(userName: string, password: string) {
         try {
 
             let user =  await this._userRepository.findOne({ 'email': userName });
-
-            return new Promise( (resolve: any, reject: any) => {
-                bcrypt.compare(password, user.password, function(err, res) {
-                    if (err) {
-                        return reject(err);
-                    } else {
-                        if (res) {
-                            return resolve(user);
-                        } else {
-                            return reject( new PasswordsNotEqualException('Not in my House !'));
-                        }
-                    }
-                });
+            return this._pw.compare(password, user.password).then(result => {
+                if(result) {
+                    return user;
+                } else {
+                    throw new PasswordsNotEqualException('Not in my House !');
+                }
             });
 
         } catch (err) {
@@ -98,16 +91,8 @@ export class UserService {
         }
     }
 
-    private hashPassword(pw: string): Promise<any> {
-        return new Promise( (resolve: any, reject: any) => {
-            bcrypt.hash(pw, 12, function (err, hash) {
-                if (err) {
-                    return reject(err);
-                } else {
-                    return resolve(hash);
-                }
-            });
-        });
+    private async hashPassword(pw: string): Promise<any> {
+        return this._pw.hash(pw, 12);
     }
 }
 
