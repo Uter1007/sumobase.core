@@ -124,7 +124,7 @@ gulp.task('default', function() {
 gulp.task('debug', function() {
     runSequence(
         'compile',
-        'serve',
+        'serve debug',
         'debug'
     );
 });
