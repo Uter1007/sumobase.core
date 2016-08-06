@@ -9,6 +9,7 @@ var nodemon = require('gulp-nodemon');
 var mocha = require('gulp-mocha');
 var del = require('del');
 var apidoc = require('gulp-apidoc');
+var istanbul = require('gulp-istanbul');
 
 var tsProject = tsc.createProject('tsconfig.json');
 
@@ -96,9 +97,17 @@ gulp.task('watch', false,
     }
 );
 
-gulp.task('test', false, function() {
+gulp.task('pre-test', function () {
+    return gulp.src(['dist/**/*.js'])
+    // Covering files
+        .pipe(istanbul())
+        .pipe(istanbul.hookRequire());
+});
+
+gulp.task('test', ['pre-test'], function() {
     return gulp.src(['dist/**/spec/**/*.js'], {read: false})
-        .pipe(mocha({}));
+        .pipe(mocha({}))
+        .pipe(istanbul.writeReports());
 });
 
 gulp.task('copyConfigurations', function() {
