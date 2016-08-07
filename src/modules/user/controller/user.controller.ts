@@ -199,7 +199,7 @@ export class UserController extends BaseController {
     }
 
     /**
-     * @api {get} /api/user/me Register User
+     * @api {get} /api/user/me User Information
      * @apiVersion 1.0.0
      * @apiName userMe
      * @apiGroup User
