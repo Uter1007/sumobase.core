@@ -11,6 +11,8 @@ import {PasswordsNotEqualException} from '../../commons/error/models/password.no
 import MAPPER_TAGS from '../../../constant/mapper.tags';
 import {UserMapper} from '../mapper/user.mapper';
 import {PasswordService} from './password.service';
+import {UnknownException} from '../../commons/error/models/unknown.exception';
+import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
 
 @injectable()
 export class UserService {
@@ -35,7 +37,7 @@ export class UserService {
 
             let user =  await this._userRepository.findOne({ 'email': userName });
             return this._pw.compare(password, user.password).then(result => {
-                if(result) {
+                if (result) {
                     return user;
                 } else {
                     throw new PasswordsNotEqualException('Not in my House !');
@@ -60,6 +62,46 @@ export class UserService {
     public async findUserById(userId) {
         try {
             return await this._userRepository.findById(userId);
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
+    // todo: maybe change baseRepo update to use find and update on its own
+    public async update(userModel: IUser) {
+        try {
+            let finduser = await this.findUserById(userModel.id);
+            if (finduser) {
+                finduser.firstName = userModel.firstName;
+                finduser.lastName = userModel.lastName;
+                let updateSuccess = await this._userRepository.update(finduser.id, finduser);
+                if (updateSuccess) {
+                    return this._userMapper.toUser(finduser);
+                }
+                throw new UnknownException('User can not be updated');
+            }
+            throw new UserNotFoundException('User can not be found');
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
+    public async updatePassword(id: string, password: string) {
+        try {
+            let finduser = await this.findUserById(id);
+            if (finduser) {
+                let hashpw = await this.hashPassword(password);
+                finduser.password = hashpw;
+                let updateSuccess = await this._userRepository.update(finduser.id, finduser);
+                if (updateSuccess) {
+                    return true;
+                }
+                throw new UnknownException('User can not be updated');
+            }
+
+            throw new UserNotFoundException('User can not be found');
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;

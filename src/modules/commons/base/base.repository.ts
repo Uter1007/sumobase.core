@@ -5,6 +5,7 @@ import * as Promise from 'bluebird';
 import { injectable, inject } from 'inversify';
 import {ILogger} from '../logging/interfaces/logger.interface';
 import SVC_TAGS from '../../../constant/services.tags';
+import {IUserDBSchema} from '../../user/models/user.db.model';
 
 @injectable()
 class BaseRepository<T extends mongoose.Document> {
@@ -16,8 +17,8 @@ class BaseRepository<T extends mongoose.Document> {
         this._log = log;
     }
 
-    public create: ((item: T) => Promise<any>) = (item: T) => {
-        return new Promise( (resolve: any, reject: any) => {
+    public create: ((item: T) => Promise<IUserDBSchema>) = (item: T) => {
+        return new Promise<IUserDBSchema>( (resolve: any, reject: any) => {
             this._model.create(item, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.create error: ', error);
@@ -30,8 +31,8 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public retrieveAll: (() => Promise<any>) = () => {
-        return new Promise( (resolve: any, reject: any) => {
+    public retrieveAll: (() => Promise<IUserDBSchema[]>) = () => {
+        return new Promise<IUserDBSchema[]>( (resolve: any, reject: any) => {
             this._model.find({}, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.retrieveAll error: ', error);
@@ -44,8 +45,8 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public findOne: ((query: any) => Promise<any>) = (query: any) => {
-        return new Promise( (resolve: any, reject: any) => {
+    public findOne: ((query: any) => Promise<IUserDBSchema>) = (query: any) => {
+        return new Promise<IUserDBSchema>( (resolve: any, reject: any) => {
             this._model.findOne(query, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.findOne error: ', error);
@@ -58,8 +59,8 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public find: ((query: any) => Promise<any> ) = (query: any) => {
-        return new Promise( (resolve: any, reject: any) => {
+    public find: ((query: any) => Promise<IUserDBSchema[]> ) = (query: any) => {
+        return new Promise<IUserDBSchema[]>( (resolve: any, reject: any) => {
             this._model.find(query, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.find error: ', error);
@@ -72,36 +73,36 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public update: ((_id: string, item: T) =>  Promise<any>) = (_id: string, item: T)  => {
-        return new Promise( (resolve: any, reject: any) => {
+    public update: ((_id: string, item: T) =>  Promise<boolean>) = (_id: string, item: T)  => {
+        return new Promise<boolean>( (resolve: any, reject: any) => {
             this._model.update({_id: this.toObjectId(_id)}, item, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.find error: ', error);
                     return reject(error);
                 } else {
                     this._log.debug('model.update success for ' + _id);
-                    return resolve(result);
+                    return resolve(true);
                 }
             });
         });
     };
 
-    public delete: ((_id: string) => Promise<any>) = (_id: string) => {
-        return new Promise( (resolve: any, reject: any) => {
+    public delete: ((_id: string) => Promise<boolean>) = (_id: string) => {
+        return new Promise<boolean>( (resolve: any, reject: any) => {
             this._model.remove({_id: this.toObjectId(_id)}, (error: any) => {
                 if (error) {
                     this._log.error('model.delete error: ', error);
                     return reject(error);
                 } else {
                     this._log.debug('model.delete success');
-                    return resolve(null);
+                    return resolve(true);
                 }
             });
         });
     };
 
-    public findById: ((_id: string) => Promise<any>) = (_id: string) => {
-        return new Promise( (resolve: any, reject: any) => {
+    public findById: ((_id: string) => Promise<IUserDBSchema>) = (_id: string) => {
+        return new Promise<IUserDBSchema>( (resolve: any, reject: any) => {
             this._model.findById(_id, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.findById error: ', error);

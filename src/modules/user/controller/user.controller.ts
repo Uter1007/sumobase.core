@@ -13,7 +13,7 @@ import { UserService } from '../services/user.service';
 import TYPES from '../../../constant/services.tags';
 import {UserAlreadyInUseException} from '../../commons/error/models/user.alreadyinuse.exception';
 import {UserValidator} from '../services/validator/user.validator.service';
-import {RegisterParametersNotValid} from '../../commons/error/models/register.parameter.notvalid.exception';
+import {ValidationException} from '../../commons/error/models/validition.exception';
 import {PasswordValidator} from '../services/validator/password.validator.service';
 import * as moment from 'moment';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
@@ -59,7 +59,7 @@ export class UserController extends BaseController {
      * @apiSuccess {String} registerResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
      * @apiSuccess {String} registerResponse.createdOn CreatedOn Date (UTC specified) of the User.
      *
-     * @apiError RegisterParametersNotValid register parameters are not valid
+     * @apiError ValidationException register parameters are not valid
      * @apiError UserAlreadyInUseException user already registered
      */
     @Post('/register')
@@ -72,7 +72,7 @@ export class UserController extends BaseController {
             if (PasswordValidator.validatePassword(clearTextPassword, clearTextConfirmPassword)) {
                 let validateErrors = UserValidator.validateUser(user);
                 if (validateErrors.length > 0) {
-                    throw new RegisterParametersNotValid('Validation error');
+                    throw new ValidationException('User validation failed');
                 }
                 user.createdOn = moment().utc().toString();
                 return await this._userService.create(user, clearTextPassword);
@@ -103,7 +103,7 @@ export class UserController extends BaseController {
      *
      * @apiSuccess {Boolean} Success
      */
-    @Get('/logout')
+    @Get('/logout', isLoggedIn)
     public logout(request: express.Request) {
         request.logout();
         return true;
@@ -127,17 +127,53 @@ export class UserController extends BaseController {
      * @apiSuccess {String} editResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
      * @apiSuccess {String} editResponse.createdOn CreatedOn Date (UTC specified) of the User.
      *
-     * @apiError RegisterParametersNotValid register parameters are not valid
+     * @apiError ValidationException register parameters are not valid
      * @apiError UserAlreadyInUseException user already registered
      */
-    @Put('/edit')
-    public edit(request: express.Request) {
+    @Put('/edit', isLoggedIn)
+    public async edit(request: express.Request) {
+        let user = request.user;
 
+        if (request.body && request.body.firstName) {
+            user.firstName = request.body.firstName;
+        }
+
+        if (request.body && request.body.lastName) {
+            user.lastName = request.body.lastName;
+        }
+
+        let validateErrors = UserValidator.validateUser(user);
+        if (validateErrors.length > 0) {
+            throw new ValidationException('User validation failed');
+        }
+
+        let updateduser = await this._userService.update(user);
+        return updateduser;
     }
 
-    @Get('/notfound')
-    public notfound() {
-        throw new UserNotFoundException('user can\'t be found');
+    /**
+     * @api {put} /api/user/changepw Change Password
+     * @apiVersion 1.0.0
+     * @apiName changePassword
+     * @apiGroup User
+     *
+     * @apiParam {Object} changePasswordRequest Express Body Request
+     * @apiParam {String} changePasswordRequest.firstName Firstname of the User
+     * @apiParam {String} changePasswordRequest.lastName Lastname of the User
+     *
+     * @apiSuccess {Boolean} change Pw was ok
+     *
+     * @apiError ValidationException parameters are not valid
+     * @apiError UnkownException change Password failed
+     */
+    @Put('/changepw', isLoggedIn)
+    public async changepw(request: express.Request) {
+        let user = request.user;
+        let clearTextPassword: string = request.body.password;
+        let clearTextConfirmPassword: string = request.body.confirmPassword;
+        if (PasswordValidator.validatePassword(clearTextPassword, clearTextConfirmPassword)) {
+            return await this._userService.updatePassword(user.id, clearTextPassword);
+        }
     }
 
     /**
@@ -146,8 +182,8 @@ export class UserController extends BaseController {
      * @apiName checkUserName
      * @apiGroup User
      *
-     * @apiSuccess (200) UserName doesn't exist
-     * @apiSuccess (404) UserName already in use
+     * @apiSuccess (200)  UserName doesn't exist
+     * @apiSuccess (404)  UserName already in use
      */
     @Head('/check')
     public async checkUserName(request: express.Request, response: express.Response, next) {
@@ -162,13 +198,37 @@ export class UserController extends BaseController {
 
     }
 
+    /**
+     * @api {get} /api/user/me Register User
+     * @apiVersion 1.0.0
+     * @apiName userMe
+     * @apiGroup User
+     *
+     * @apiSuccess {Object} userResponse Express Body Response
+     * @apiSuccess {String} userResponse.id Id of the User.
+     * @apiSuccess {String} userResponse.firstName Firstname of the User.
+     * @apiSuccess {String} userResponse.lastName  Lastname of the User.
+     * @apiSuccess {String} userResponse.email Email of the User.
+     * @apiSuccess {String} userResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
+     * @apiSuccess {String} userResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     *
+     * @apiError ValidationException register parameters are not valid
+     * @apiError UserAlreadyInUseException user already registered
+     */
+    @Get('/me', isLoggedIn)
+    public async me(request: express.Request): Promise<string> {
+        return request.user;
+    }
+
+    // routes that may not be needed
+
     @Get('/settings', isLoggedIn)
     public async settings(): Promise<string> {
         return 'Home sweet home';
     }
 
-    @Get('/me', isLoggedIn)
-    public async me(request: express.Request): Promise<string> {
-        return request.user;
+    @Get('/notfound')
+    public notfound() {
+        throw new UserNotFoundException('user can\'t be found');
     }
 }

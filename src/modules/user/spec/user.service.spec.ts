@@ -45,11 +45,11 @@ describe('User Service', () => {
     };
 
     let pwObj = {
-        hash: function(data, rounds) {
-            return Promise.resolve('$2a$12$Fj/BvUyf.9fZuh9JUk.C7eNIDuSmo1GBJpqJidgEgSgCitaGg6CN.');
-        },
         compare: function(data, encrypted) {
             return Promise.resolve(true);
+        },
+        hash: function(data, rounds) {
+            return Promise.resolve('$2a$12$Fj/BvUyf.9fZuh9JUk.C7eNIDuSmo1GBJpqJidgEgSgCitaGg6CN.');
         }
     };
 
