@@ -322,4 +322,20 @@ describe('User Service', () => {
 
     });
 
+    it('update User succeeds @unit', async() => {
+        // todo: implement it
+    });
+
+    it('update User fail @unit', async() => {
+        // todo: implement it
+    });
+
+    it('update User password succeeds @unit', async() => {
+        // todo: implement it
+    });
+
+    it('update User password fail @unit', async() => {
+        // todo: implement it
+    });
+
 });
