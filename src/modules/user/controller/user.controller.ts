@@ -13,7 +13,7 @@ import { UserService } from '../services/user.service';
 import TYPES from '../../../constant/services.tags';
 import {UserAlreadyInUseException} from '../../commons/error/models/user.alreadyinuse.exception';
 import {UserValidator} from '../services/validator/user.validator.service';
-import {ValidationException} from '../../commons/error/models/validition.exception';
+import {ValidationException} from '../../commons/error/models/validation.exception';
 import {PasswordValidator} from '../services/validator/password.validator.service';
 import * as moment from 'moment';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
