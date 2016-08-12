@@ -14,6 +14,7 @@ import {PasswordService} from './password.service';
 import {UnknownException} from '../../commons/error/models/unknown.exception';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
 import {UserAvatarMapper} from '../mapper/user.avatar.mapper';
+import {IUserAvatar} from '../interfaces/user.avatar.interface';
 
 @injectable()
 export class UserService {
@@ -96,7 +97,7 @@ export class UserService {
         try{
             let foundUser = await this.findUserById(id);
             if (foundUser) {
-                foundUser.image = {data: image, contentType: contentType};
+                foundUser.avatar = {data: image, contentType: contentType};
                 let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
                 if (updateSuccess) {
                     return true;
@@ -110,12 +111,12 @@ export class UserService {
         }
     }
 
-    public async retrieveImage(id: string) {
+    public async retrieveImage(id: string): Promise<IUserAvatar> {
         try{
             let foundUser = await this.findUserById(id);
             if (foundUser) {
-                if (foundUser.image) {
-                    return this._userAvatarMapper.toUserAvatar(foundUser.image);
+                if (foundUser.avatar) {
+                    return this._userAvatarMapper.toUserAvatar(foundUser.avatar);
                 }
             }
             throw new UserNotFoundException('User can not be found');

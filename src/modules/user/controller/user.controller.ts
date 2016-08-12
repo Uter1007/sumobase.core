@@ -226,17 +226,20 @@ export class UserController extends BaseController {
 
     @Post('/avatar', isLoggedIn, multer({  limits: { fileSize: 512000 }, storage: storage}).single('avatar'))
     public async uploadAvatar(request: express.Request): Promise<boolean> {
+        let filecontent = fs.readFileSync(request.file.path);
         return await this._userService.updateImage(request.user.id,
-                                                   new Buffer(request.file.path, 'base64'),
+                                                   new Buffer(filecontent),
                                                    request.file.mimetype
         );
     }
 
     @Get('/avatar', isLoggedIn)
-    public async retrieveAvatar(request: express.Request): Promise<any> {
+    public async retrieveAvatar(request: express.Request, response: express.Response): Promise<any> {
         let userid = request.query.userid || request.user.id;
         if (userid) {
-            return await this._userService.retrieveImage(userid);
+             let userAvatar = await this._userService.retrieveImage(userid);
+             response.contentType(userAvatar.contentType);
+             response.send(userAvatar.data);
         }
 
         return undefined;
