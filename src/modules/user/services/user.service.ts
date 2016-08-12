@@ -13,6 +13,7 @@ import {UserMapper} from '../mapper/user.mapper';
 import {PasswordService} from './password.service';
 import {UnknownException} from '../../commons/error/models/unknown.exception';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
+import {UserAvatarMapper} from '../mapper/user.avatar.mapper';
 
 @injectable()
 export class UserService {
@@ -21,15 +22,18 @@ export class UserService {
     private _log: ILogger;
     private _userMapper: UserMapper;
     private _pw: PasswordService;
+    private _userAvatarMapper: UserAvatarMapper;
 
     constructor(@inject(SVC_TAGS.Logger) log: ILogger,
                 @inject(REPO_TAGS.UserRepository)  userRepository: UserRepository,
                 @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper,
-                @inject(SVC_TAGS.PasswordService) pw: PasswordService) {
+                @inject(SVC_TAGS.PasswordService) pw: PasswordService,
+                @inject(MAPPER_TAGS.UserAvatarMapper) userAvatarMapper: UserAvatarMapper) {
         this._userRepository = userRepository;
         this._log = log;
         this._userMapper = userMapper;
         this._pw = pw;
+        this._userAvatarMapper = userAvatarMapper;
     }
 
     public async findUserByUserNameAndPassword(userName: string, password: string) {
@@ -80,6 +84,39 @@ export class UserService {
                     return this._userMapper.toUser(finduser);
                 }
                 throw new UnknownException('User can not be updated');
+            }
+            throw new UserNotFoundException('User can not be found');
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
+    public async updateImage(id: string, image: Buffer, contentType: string): Promise<boolean> {
+        try{
+            let foundUser = await this.findUserById(id);
+            if (foundUser) {
+                foundUser.image = {data: image, contentType: contentType};
+                let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+                if (updateSuccess) {
+                    return true;
+                }
+                throw new UnknownException('User can not be updated');
+            }
+            throw new UserNotFoundException('User can not be found');
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
+    public async retrieveImage(id: string) {
+        try{
+            let foundUser = await this.findUserById(id);
+            if (foundUser) {
+                if (foundUser.image) {
+                    return this._userAvatarMapper.toUserAvatar(foundUser.image);
+                }
             }
             throw new UserNotFoundException('User can not be found');
         } catch (err) {

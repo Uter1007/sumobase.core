@@ -13,6 +13,7 @@ describe('User Service', () => {
     let repoMock;
     let mapperMock;
     let pwMock; // password service mock
+    let userAvatarMock;
 
     let loggingObj = {
         error: function(message, errorObject) {
@@ -53,11 +54,18 @@ describe('User Service', () => {
         }
     };
 
+    let userAvatarObj = {
+        toUserAvatar: function(data) {
+            return { data: new Buffer('', 'base64'), contentType: 'image' };
+        }
+    }
+
     beforeEach(function() {
         loggerMock = sinon.mock(loggingObj);
         repoMock = sinon.mock(repoObj);
         mapperMock = sinon.mock(userMapperObj);
         pwMock = sinon.mock(pwObj);
+        userAvatarMock = sinon.mock(userAvatarObj);
     });
 
     it('findUserByUserNameAndPassword findOne fails @unit', async () => {
@@ -75,7 +83,11 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
 
         await userService.findUserByUserNameAndPassword('the username', 'the password');
 
@@ -101,7 +113,11 @@ describe('User Service', () => {
                 password: passwordHash
             }));
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
 
         let user = await userService.findUserByUserNameAndPassword('the username', 'the password');
         expect(user.email).to.equal('the username');
@@ -126,7 +142,11 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
 
         await userService.findUserByName('some@email.address');
 
@@ -149,7 +169,12 @@ describe('User Service', () => {
                 email: 'the username'
             }));
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
 
         let user = await userService.findUserByName('some@email.address');
         expect(user.email).to.equal('the username');
@@ -174,7 +199,12 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
 
         let result = await userService.findUserById('the user id');
         expect(result).to.equal(error);
@@ -198,7 +228,12 @@ describe('User Service', () => {
                 email: 'the username'
             }));
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
 
         let user = await userService.findUserById('the user id');
         expect(user.email).to.equal('the username');
@@ -224,7 +259,12 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
 
         let result = await userService.create(userModel, 'the password');
         expect(result).to.equal(error);
@@ -249,7 +289,12 @@ describe('User Service', () => {
                email: 'the username'
             }));
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
 
         let user = await userService.create(userModel, 'the password');
         expect(user.email).to.equal('the username');
@@ -281,7 +326,12 @@ describe('User Service', () => {
             .once()
             .throws(error);
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
 
         let result = await userService.activateUser('the user id');
         expect(result).to.equal(error);
@@ -312,7 +362,12 @@ describe('User Service', () => {
                 email: 'the username'
             }));
 
-        let userService = new UserService(loggerMock.object, repoMock.object, mapperMock.object, pwMock.object);
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
 
         let user = await userService.activateUser('the user id');
         expect(user.email).to.equal('the username');

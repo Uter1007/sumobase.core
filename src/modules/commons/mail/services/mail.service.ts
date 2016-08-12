@@ -1,14 +1,15 @@
 import { injectable } from 'inversify';
-import { MailFacade } from './mail.facade.service';
+import { MailGunService } from './mail.gun.service';
 import { IMailService } from '../interfaces/mail.service.interface';
+import {IMailFacade} from '../interfaces/mailfacade.interface';
 
 @injectable()
 export class MailService implements IMailService {
 
-    private _mailFacade: any;
+    private _mailFacade: IMailFacade;
 
     constructor() {
-        this._mailFacade = new MailFacade();
+        this._mailFacade = new MailGunService();
     }
 
     public async sendHelloWorldPlain() {

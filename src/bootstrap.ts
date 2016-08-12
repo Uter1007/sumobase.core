@@ -19,6 +19,7 @@ import SVC_TAGS from './constant/services.tags';
 import REPO_TAGS from './constant/repositories.tags';
 import MAPPER_TAGS from './constant/mapper.tags';
 import {UserMapper} from './modules/user/mapper/user.mapper';
+import {UserAvatarMapper} from './modules/user/mapper/user.avatar.mapper';
 
 let kernel = new Kernel();
 
@@ -48,5 +49,7 @@ kernel.bind<MailService>(SVC_TAGS.MailService)
 kernel.bind<UserMapper>(MAPPER_TAGS.UserMapper)
     .to(UserMapper);
 
+kernel.bind<UserAvatarMapper>(MAPPER_TAGS.UserAvatarMapper)
+    .to(UserAvatarMapper);
 
 export default kernel;

@@ -22,9 +22,6 @@ export class User extends BaseModel implements IUser {
     public firstName: string;
 
     @autoserialize
-    public image: string;
-
-    @autoserialize
     @IsLength(1, 100)
     public lastName: string;
 
@@ -41,10 +38,9 @@ export class User extends BaseModel implements IUser {
         return Deserialize(json, User);
     }
 
-    constructor(email, firstname, lastname, userState, modifiedOn?, createdOn?, image?, id?) {
+    constructor(email, firstname, lastname, userState, modifiedOn?, createdOn?, id?) {
         super();
         this.id = id;
-        this.image = image;
         this.email = email;
         this.firstName = firstname;
         this.lastName = lastname;

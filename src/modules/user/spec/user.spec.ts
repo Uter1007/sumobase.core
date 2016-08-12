@@ -37,7 +37,6 @@ describe('User Tests', () => {
                 UserState.DISABLED,
                 undefined,
                 undefined,
-                undefined,
                 123);
 
             dbUser = new userDBModel({
@@ -115,7 +114,6 @@ describe('User Tests', () => {
                     UserState.ACTIVE,
                     undefined,
                     undefined,
-                    undefined,
                     123);
 
                 invalidUserNoEmail = new User('test',
@@ -124,14 +122,12 @@ describe('User Tests', () => {
                     UserState.ACTIVE,
                     undefined,
                     undefined,
-                    undefined,
                     undefined);
 
                 invalidUserNoLastName = new User('test',
                     '',
                     'lastname',
                     UserState.ACTIVE,
-                    undefined,
                     undefined,
                     undefined,
                     undefined);

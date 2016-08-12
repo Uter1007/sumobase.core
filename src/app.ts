@@ -43,6 +43,8 @@ server.setConfig((app) => {
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
 
+    app.use('/documentation', express.static(__dirname + '/public/documentation/api'));
+
 });
 
 // generic Error Handler
@@ -51,8 +53,6 @@ server.setErrorConfig((app) => {
 });
 
 let app = server.build();
-
-app.use('/documentation', express.static(__dirname + '/public/documentation/api'));
 
 // 404 Error Handler
 app.use(notFoundHandler);

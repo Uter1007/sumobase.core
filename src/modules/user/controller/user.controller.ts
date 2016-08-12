@@ -17,11 +17,13 @@ import {ValidationException} from '../../commons/error/models/validation.excepti
 import {PasswordValidator} from '../services/validator/password.validator.service';
 import * as moment from 'moment';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
-
 import * as passport from 'passport';
+import storage = require('../../commons/imageupload/middleware/image.storage.middleware');
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
+let multer = require('multer');
+let fs = require('fs');
 /* tslint:enable */
 
 @injectable()
@@ -86,7 +88,8 @@ export class UserController extends BaseController {
      * @apiVersion 1.0.0
      * @apiName userLogin
      * @apiGroup User
-     *
+     * @apiParam {String} email EMail of the User
+     * @apiParam {String} password clearText
      * @apiSuccess Redirect to /api/user/me
      * @apiError Redirect to /api/user/notfound
      */
@@ -218,6 +221,25 @@ export class UserController extends BaseController {
     @Get('/me', isLoggedIn)
     public async me(request: express.Request): Promise<string> {
         return request.user;
+    }
+
+
+    @Post('/avatar', isLoggedIn, multer({  limits: { fileSize: 512000 }, storage: storage}).single('avatar'))
+    public async uploadAvatar(request: express.Request): Promise<boolean> {
+        return await this._userService.updateImage(request.user.id,
+                                                   new Buffer(request.file.path, 'base64'),
+                                                   request.file.mimetype
+        );
+    }
+
+    @Get('/avatar', isLoggedIn)
+    public async retrieveAvatar(request: express.Request): Promise<any> {
+        let userid = request.query.userid || request.user.id;
+        if (userid) {
+            return await this._userService.retrieveImage(userid);
+        }
+
+        return undefined;
     }
 
     // routes that may not be needed

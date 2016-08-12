@@ -26,7 +26,6 @@ export class UserMapper {
             userModel.state,
             userModel.modifiedOn,
             userModel.createdOn,
-            userModel.image,
             userModel.id);
     }
 }

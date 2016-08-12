@@ -1,6 +1,6 @@
 import ConfigLoader from '../../configloader/configloader.service';
-import {IRawMailDataModel, IMailResponse} from '../models/maildata.model';
-
+import {IRawMailDataModel, IMailResponse} from '../interfaces/mail.service.interface';
+import { injectable } from 'inversify';
 const mailConfig = ConfigLoader.getConfig().mail;
 
 /* tslint:disable */
@@ -9,8 +9,10 @@ const mailgun = require('mailgun-js')({apiKey: mailConfig.apiKey, domain: mailCo
 /* tslint:enable */
 
 import * as Promise from 'bluebird';
+import {IMailFacade} from '../interfaces/mailfacade.interface';
 
-export class MailFacade {
+@injectable()
+export class MailGunService implements IMailFacade {
 
     private _from: string;
 
@@ -44,4 +46,4 @@ export class MailFacade {
     }
 }
 
-export default MailFacade;
+export default MailGunService;
