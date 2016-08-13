@@ -9,6 +9,7 @@
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160701212727",
     "express-session": "registry:dt/express-session#0.0.0+20160331200931",
     "helmet": "registry:dt/helmet#0.0.0+20160512043842",
+    "image-size": "registry:dt/image-size#0.0.0+20160223165602",
     "mocha": "registry:dt/mocha#2.2.5+20160720003353",
     "moment": "registry:dt/moment#2.8.0+20160316155526",
     "moment-node": "registry:dt/moment-node#2.11.1+20160511043338",

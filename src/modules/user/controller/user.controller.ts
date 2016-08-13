@@ -19,11 +19,15 @@ import * as moment from 'moment';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
 import * as passport from 'passport';
 import storage = require('../../commons/imageupload/middleware/image.storage.middleware');
+import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
+import {PhotoValidationException} from '../../commons/error/models/photo.validation.exception';
+import {UnknownException} from '../../commons/error/models/unknown.exception';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
 let multer = require('multer');
 let fs = require('fs');
+let sizeOf = require('image-size');
 /* tslint:enable */
 
 @injectable()
@@ -224,13 +228,18 @@ export class UserController extends BaseController {
     }
 
 
-    @Post('/avatar', isLoggedIn, multer({  limits: { fileSize: 512000 }, storage: storage}).single('avatar'))
+    @Post('/avatar', isLoggedIn, multer({ limits: { fileSize: 512000 }, storage: storage}).single('avatar'))
     public async uploadAvatar(request: express.Request): Promise<boolean> {
-        let filecontent = fs.readFileSync(request.file.path);
-        return await this._userService.updateImage(request.user.id,
-                                                   new Buffer(filecontent),
-                                                   request.file.mimetype
-        );
+
+        if (request.file && UserAvatarValidator.validateImage(request.file)) {
+            let filecontent = fs.readFileSync(request.file.path);
+            return await this._userService.updateImage(request.user.id,
+                new Buffer(filecontent),
+                request.file.mimetype
+            );
+        } else {
+            throw new UnknownException('Request not valid');
+        }
     }
 
     @Get('/avatar', isLoggedIn)
