@@ -27,6 +27,8 @@ mongoose.connect(config.db.uri, {
     user: config.db.username,
 });
 
+process.setMaxListeners(0);
+
 // start the server
 let server = new InversifyExpressServer(kernel);
 server.setConfig((app) => {
@@ -47,7 +49,7 @@ server.setConfig((app) => {
 
 });
 
-// generic Error Handler
+// generic Error Handler1
 server.setErrorConfig((app) => {
     app.use(errorHandler);
 });

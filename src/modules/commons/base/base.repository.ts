@@ -17,8 +17,8 @@ class BaseRepository<T extends mongoose.Document> {
         this._log = log;
     }
 
-    public create: ((item: T) => Promise<IUserDBSchema>) = (item: T) => {
-        return new Promise<IUserDBSchema>( (resolve: any, reject: any) => {
+    public create: ((item: T) => Promise<any>) = (item: T) => {
+        return new Promise<any>( (resolve: any, reject: any) => {
             this._model.create(item, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.create error: ', error);
@@ -31,8 +31,8 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public retrieveAll: (() => Promise<IUserDBSchema[]>) = () => {
-        return new Promise<IUserDBSchema[]>( (resolve: any, reject: any) => {
+    public retrieveAll: (() => Promise<any[]>) = () => {
+        return new Promise<any[]>( (resolve: any, reject: any) => {
             this._model.find({}, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.retrieveAll error: ', error);
@@ -45,7 +45,7 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public findOne: ((query: any) => Promise<IUserDBSchema>) = (query: any) => {
+    public findOne: ((query: any) => Promise<any>) = (query: any) => {
         return new Promise<IUserDBSchema>( (resolve: any, reject: any) => {
             this._model.findOne(query, (error: any, result: any): void => {
                 if (error) {
@@ -59,8 +59,8 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public find: ((query: any) => Promise<IUserDBSchema[]> ) = (query: any) => {
-        return new Promise<IUserDBSchema[]>( (resolve: any, reject: any) => {
+    public find: ((query: any) => Promise<any[]> ) = (query: any) => {
+        return new Promise<any[]>( (resolve: any, reject: any) => {
             this._model.find(query, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.find error: ', error);
@@ -101,8 +101,8 @@ class BaseRepository<T extends mongoose.Document> {
         });
     };
 
-    public findById: ((_id: string) => Promise<IUserDBSchema>) = (_id: string) => {
-        return new Promise<IUserDBSchema>( (resolve: any, reject: any) => {
+    public findById: ((_id: string) => Promise<any>) = (_id: string) => {
+        return new Promise<any>( (resolve: any, reject: any) => {
             this._model.findById(_id, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.findById error: ', error);

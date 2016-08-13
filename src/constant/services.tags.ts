@@ -3,7 +3,8 @@ const SVC_TAGS = {
     MailService: Symbol('MailService'),
     PasswordService: Symbol('PasswordService'),
     SessionService: Symbol('SessionService'),
-    UserService: Symbol('UserService')
+    UserService: Symbol('UserService'),
+    LogConfig: Symbol('LogConfig')
 };
 
 export default SVC_TAGS;

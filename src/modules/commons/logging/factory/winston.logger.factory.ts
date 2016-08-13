@@ -1,13 +1,22 @@
 import * as winston from 'winston';
 import {ILogger} from '../interfaces/logger.interface';
 import { injectable } from 'inversify';
+import kernel from '../../../../bootstrap';
 import {LogLevel} from '../models/loglevel.model';
+import SVC_TAGS from '../../../../constant/services.tags';
+import {LogConfig} from '../../../../config/log.config';
 
 export function WinstonLoggerFactory(cfg?: winston.LoggerOptions): new (...args) => ILogger {
     'use strict';
-    cfg = cfg || {
+
+    cfg = cfg ||  {
             transports: [
-                new winston.transports.Console()
+                new winston.transports.Console({
+                    colorize: true,
+                    handleExceptions: true,
+                    json: false,
+                    level: 'debug',
+                })
             ]
         };
 
@@ -21,20 +30,24 @@ export function WinstonLoggerFactory(cfg?: winston.LoggerOptions): new (...args)
             this.setLevel(LogLevel.DEBUG);
         }
 
+        public crit(msg: string, err: any): void {
+            this._logger.log('crit', `${msg} \n ${(err && err.toString()) || '?'}`);
+        }
+
         public warn(msg: string): void {
             this._logger.log('warning', msg);
         }
 
         public info(msg: string): void {
-            this._logger.info(msg);
+            this._logger.log('info', msg);
         }
 
         public error(msg: string, err: any): void {
-            this._logger.error(`${msg} \n ${(err && err.toString()) || '?'}`);
+            this._logger.log('error', `${msg} \n ${(err && err.toString()) || '?'}`);
         }
 
         public debug(msg: string): void {
-            this._logger.debug(msg);
+            this._logger.log('debug', msg);
         }
 
         public setLevel(level: LogLevel): ILogger {

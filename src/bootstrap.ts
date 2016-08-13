@@ -20,8 +20,9 @@ import REPO_TAGS from './constant/repositories.tags';
 import MAPPER_TAGS from './constant/mapper.tags';
 import {UserMapper} from './modules/user/mapper/user.mapper';
 import {UserAvatarMapper} from './modules/user/mapper/user.avatar.mapper';
+import {LogConfig} from './config/log.config';
 
-let kernel = new Kernel();
+const kernel = new Kernel();
 
 // put all your dependencies here
 kernel.bind<Controller>(TYPE.Controller)
@@ -29,7 +30,7 @@ kernel.bind<Controller>(TYPE.Controller)
     .whenTargetNamed(CTRL_TAGS.UserController);
 
 kernel.bind<ILogger>(SVC_TAGS.Logger)
-    .to(WinstonLoggerFactory());
+    .to(WinstonLoggerFactory(new LogConfig()));
 
 kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
     .to(LogRepository);
@@ -51,5 +52,8 @@ kernel.bind<UserMapper>(MAPPER_TAGS.UserMapper)
 
 kernel.bind<UserAvatarMapper>(MAPPER_TAGS.UserAvatarMapper)
     .to(UserAvatarMapper);
+
+kernel.bind<LogConfig>(SVC_TAGS.LogConfig)
+    .to(LogConfig);
 
 export default kernel;
