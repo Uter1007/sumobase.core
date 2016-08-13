@@ -94,10 +94,10 @@ export class UserService {
     }
 
     public async updateImage(id: string, image: Buffer, contentType: string): Promise<boolean> {
-        try{
+        try {
             let foundUser = await this.findUserById(id);
             if (foundUser) {
-                foundUser.avatar = {data: image, contentType: contentType};
+                foundUser.avatar = {contentType: contentType, data: image};
                 let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
                 if (updateSuccess) {
                     return true;
@@ -112,7 +112,7 @@ export class UserService {
     }
 
     public async retrieveImage(id: string): Promise<IUserAvatar> {
-        try{
+        try {
             let foundUser = await this.findUserById(id);
             if (foundUser) {
                 if (foundUser.avatar) {

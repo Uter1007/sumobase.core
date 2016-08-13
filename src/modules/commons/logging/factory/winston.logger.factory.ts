@@ -1,10 +1,7 @@
 import * as winston from 'winston';
 import {ILogger} from '../interfaces/logger.interface';
 import { injectable } from 'inversify';
-import kernel from '../../../../bootstrap';
 import {LogLevel} from '../models/loglevel.model';
-import SVC_TAGS from '../../../../constant/services.tags';
-import {LogConfig} from '../../../../config/log.config';
 
 export function WinstonLoggerFactory(cfg?: winston.LoggerOptions): new (...args) => ILogger {
     'use strict';

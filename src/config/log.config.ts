@@ -1,8 +1,4 @@
-import {ILogOptions} from '../modules/commons/logging/models/logmodel.db.model';
-import {LogLevel} from '../modules/commons/logging/models/loglevel.model';
-import {LoggerOptions} from 'winston';
 import {transports} from 'winston';
-import MongooseTransport from '../modules/commons/logging/transport/winston.mongoose.transport';
 import { injectable } from 'inversify';
 import * as winston from 'winston';
 import {TransportInstance} from 'winston';
@@ -10,7 +6,7 @@ import {TransportInstance} from 'winston';
 @injectable()
 export class LogConfig implements winston.LoggerOptions {
 
-    transports: TransportInstance[];
+    public transports: TransportInstance[];
 
     constructor() {
         this.transports = [

@@ -1,6 +1,8 @@
+/* tslint:disable */
 let multer = require('multer');
 let path = require('path');
 let crypto = require('crypto');
+/* tslint:enable */
 
 // image upload
 let storage = multer.diskStorage({

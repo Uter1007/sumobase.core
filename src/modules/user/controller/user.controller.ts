@@ -20,7 +20,6 @@ import {UserNotFoundException} from '../../commons/error/models/user.notfound.ex
 import * as passport from 'passport';
 import storage = require('../../commons/imageupload/middleware/image.storage.middleware');
 import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
-import {PhotoValidationException} from '../../commons/error/models/photo.validation.exception';
 import {UnknownException} from '../../commons/error/models/unknown.exception';
 
 /* tslint:disable */

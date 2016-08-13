@@ -2,11 +2,12 @@ import * as mongoose from 'mongoose';
 import { UserState } from './userstate.model';
 
 export interface IUserAvatarDBSchema extends mongoose.Document {
-    contentType: string,
-    data: Buffer,
+    contentType: string;
+    data: Buffer;
 }
 
 export interface IUserDBSchema extends mongoose.Document {
+    avatar?: IUserAvatarDBSchema;
     createdOn?: string;
     email?: string;
     firstName?: string;
@@ -15,7 +16,6 @@ export interface IUserDBSchema extends mongoose.Document {
     modifiedOn?: string;
     password?: string;
     state?: UserState;
-    avatar?: IUserAvatarDBSchema;
 }
 
 const userAvatarSchema = new mongoose.Schema({
@@ -24,10 +24,10 @@ const userAvatarSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
+    avatar: userAvatarSchema,
     createdOn: {required: false, type: Date},
     email: {required: false, type: String},
     firstName: {required: false, type: String},
-    avatar: userAvatarSchema,
     lastName: {required: false, type: String},
     modifiedOn: {default: Date.now, required: false, type: Date},
     password: {required: true, type: String},

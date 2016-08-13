@@ -56,9 +56,9 @@ describe('User Service', () => {
 
     let userAvatarObj = {
         toUserAvatar: function(data) {
-            return { data: new Buffer('', 'base64'), contentType: 'image' };
+            return { contentType: 'image', data: new Buffer('', 'base64') };
         }
-    }
+    };
 
     beforeEach(function() {
         loggerMock = sinon.mock(loggingObj);
