@@ -21,6 +21,7 @@ import * as passport from 'passport';
 import storage = require('../../commons/imageupload/middleware/image.storage.middleware');
 import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
 import {UnknownException} from '../../commons/error/models/unknown.exception';
+import {MailService} from '../../commons/mail/services/mail.service';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
@@ -35,12 +36,15 @@ export class UserController extends BaseController {
 
     private _log: ILogger;
     private _userService: UserService;
+    private _mailService: MailService;
 
     constructor(@inject(TYPES.Logger) log: ILogger,
-                @inject(TYPES.UserService) userService: UserService) {
+                @inject(TYPES.UserService) userService: UserService,
+                @inject(TYPES.MailService) mailService: MailService) {
         super();
         this._log = log;
         this._userService = userService;
+        this._mailService = mailService;
     }
 
     /**
@@ -80,7 +84,9 @@ export class UserController extends BaseController {
                     throw new ValidationException('User validation failed');
                 }
                 user.createdOn = moment().utc().toString();
-                return await this._userService.create(user, clearTextPassword);
+                let createdUser = await this._userService.create(user, clearTextPassword);
+                this._mailService.sendHelloWorldPlain();
+                return createdUser;
             }
         }
         throw new UserAlreadyInUseException('Error on register');
