@@ -119,7 +119,7 @@ export class UserService {
                     return this._userAvatarMapper.toUserAvatar(foundUser.avatar);
                 }
             }
-            throw new UserNotFoundException('User can not be found');
+            return undefined;
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;

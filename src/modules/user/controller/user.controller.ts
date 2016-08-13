@@ -27,7 +27,7 @@ import {UnknownException} from '../../commons/error/models/unknown.exception';
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
 let multer = require('multer');
 let fs = require('fs');
-let sizeOf = require('image-size');
+let path = require('path');
 /* tslint:enable */
 
 @injectable()
@@ -243,15 +243,22 @@ export class UserController extends BaseController {
     }
 
     @Get('/avatar', isLoggedIn)
-    public async retrieveAvatar(request: express.Request, response: express.Response): Promise<any> {
+    public async retrieveAvatar(request: express.Request, response: express.Response) {
         let userid = request.query.userid || request.user.id;
         if (userid) {
              let userAvatar = await this._userService.retrieveImage(userid);
-             response.contentType(userAvatar.contentType);
-             response.send(userAvatar.data);
+             if (userAvatar) {
+                 response.contentType(userAvatar.contentType);
+                 response.send(userAvatar.data);
+             } else {
+                 const filename =  path.join(process.cwd(), '/dist/public/images/sumohead.small.png');
+                 let filecontent = fs.readFileSync(filename);
+                 response.contentType('image/png');
+                 response.send(filecontent);
+             }
+        } else {
+            throw new UnknownException('No User was found');
         }
-
-        return undefined;
     }
 
     // routes that may not be needed
