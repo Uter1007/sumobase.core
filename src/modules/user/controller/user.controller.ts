@@ -233,6 +233,19 @@ export class UserController extends BaseController {
     }
 
 
+    /**
+     * @api {post} /api/user/avatar Upload Avatar Picture
+     * @apiVersion 1.0.0
+     * @apiName uploadAvatar
+     * @apiGroup User
+     *
+     * @apiParam {Object} uploadPicutre Express Body Form-Data
+     * @apiParam {String} avatar File, size <= 512kb, dimension (width, height) <= 512px, Filetypes: gif/png/jpeg
+     *
+     * @apiSuccess {Boolean} true if Upload was successful
+     * @apiError PhotoValidationException Validation failed
+     * @apiError UserAlreadyInUseException Request not valid
+     */
     @Post('/avatar', isLoggedIn, multer({ limits: { fileSize: 512000 }, storage: storage}).single('avatar'))
     public async uploadAvatar(request: express.Request): Promise<boolean> {
 
@@ -247,6 +260,14 @@ export class UserController extends BaseController {
         }
     }
 
+    /**
+     * @api {get} /api/user/avatar Retrieve Avatar Picture
+     * @apiVersion 1.0.0
+     * @apiName uploadAvatar
+     * @apiGroup User
+     *
+     * @apiSuccess {Object} Avatar Picture File
+     */
     @Get('/avatar', isLoggedIn)
     public async retrieveAvatar(request: express.Request, response: express.Response) {
         let userid = request.query.userid || request.user.id;
@@ -267,12 +288,6 @@ export class UserController extends BaseController {
     }
 
     // routes that may not be needed
-
-    @Get('/settings', isLoggedIn)
-    public async settings(): Promise<string> {
-        return 'Home sweet home';
-    }
-
     @Get('/notfound')
     public notfound() {
         throw new UserNotFoundException('user can\'t be found');
