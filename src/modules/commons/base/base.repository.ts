@@ -24,16 +24,15 @@ class BaseRepository<T extends mongoose.Document> {
     public create: ((item: T) => Promise<any>) = (item: T) => {
         return new Promise<any>( (resolve: any, reject: any) => {
 
+            if (item && item.hasOwnProperty('createdOn')) {
+                /* tslint:disable */
+                item['createdOn'] = moment.now();
+                /* tslint:enable */
+            }
 
             if (item && item.hasOwnProperty('modifiedOn')) {
                 /* tslint:disable */
                 item['modifiedOn'] = moment.now();
-                /* tslint:enable */
-            }
-
-            if (item && item.hasOwnProperty('createdOn')) {
-                /* tslint:disable */
-                item['createdOn'] = moment.now();
                 /* tslint:enable */
             }
 

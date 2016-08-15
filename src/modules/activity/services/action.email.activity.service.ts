@@ -16,6 +16,7 @@ import {IUser} from '../../user/interfaces/user.interface';
 /* tslint:disable */
 import moment = require('moment');
 import crypto = require('crypto');
+import {UserService} from '../../user/services/user.service';
 
 /* tslint:enable */
 
@@ -24,18 +25,24 @@ export class ActionEmailService {
     private _log: ILogger;
     private _actionEmailRepository: ActionEmailRepository;
     private _actionEmailMapper: ActionEmailMapper;
+    private _userService: UserService;
 
     constructor(@inject(SVC_TAGS.Logger) log: ILogger,
+                @inject(SVC_TAGS.UserService) userService: UserService,
                 @inject(REPO_TAGS.ActionEmailRepository) actionEmailRepository: ActionEmailRepository,
                 @inject(MAPPER_TAGS.ActionEmailMapper) actionEmailMapper: ActionEmailMapper) {
         this._log = log;
         this._actionEmailRepository = actionEmailRepository;
         this._actionEmailMapper = actionEmailMapper;
+        this._userService = userService;
     }
 
     public async findActionEmailbyHash(hash: string) {
         try {
-            return await this._actionEmailRepository.findOne({'hash': hash });
+            let actionEmail = await this._actionEmailRepository.findOne({'hash': hash });
+            let user = await this._userService.findUserById(actionEmail.user.id);
+            actionEmail.user = user;
+            return actionEmail;
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;

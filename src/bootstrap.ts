@@ -23,6 +23,7 @@ import {UserAvatarMapper} from './modules/user/mapper/user.avatar.mapper';
 import {LogConfig} from './config/log.config';
 import {ActionEmailRepository} from './modules/activity/repository/action.email.activity.repository';
 import {ActionEmailMapper} from './modules/activity/mapper/action.email.activity.mapper';
+import {ActionEmailService} from './modules/activity/services/action.email.activity.service';
 
 const kernel = new Kernel();
 
@@ -45,6 +46,9 @@ kernel.bind<ActionEmailRepository>(REPO_TAGS.ActionEmailRepository)
 
 kernel.bind<PasswordService>(SVC_TAGS.PasswordService)
     .to(PasswordService);
+
+kernel.bind<ActionEmailService>(SVC_TAGS.ActionEmailService)
+    .to(ActionEmailService);
 
 kernel.bind<UserService>(SVC_TAGS.UserService)
     .to(UserService);
