@@ -15,6 +15,7 @@ describe('User Controller', () => {
     let loggerMock;
     let serviceMock;
     let mailServiceMock;
+    let actionMailServiceMock;
     let resMock;
     let userSkeleton;
 
@@ -40,12 +41,16 @@ describe('User Controller', () => {
             // empty block - just a mock
         }
     };
+    let actionMailServiceObj = {
+        // empty object - just a mock
+    };
     let resObj = {};
 
     beforeEach(function() {
         loggerMock = sinon.mock(loggingObj);
         serviceMock = sinon.mock(serviceObj);
         mailServiceMock = sinon.mock(mailServiceObj);
+        actionMailServiceMock = sinon.mock(actionMailServiceMock);
         resMock = sinon.mock(resObj);
         userSkeleton = {
             email: 'the@email.address',
@@ -78,7 +83,7 @@ describe('User Controller', () => {
             .expects('sendHelloWorldPlain')
             .once();
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         let user = await userController.register(reqMock.object);
 
@@ -93,7 +98,7 @@ describe('User Controller', () => {
             body: userSkeleton
         });
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         let nowLower = moment().utc().unix();
         let user = await userController.register(reqMock.object);
@@ -123,7 +128,7 @@ describe('User Controller', () => {
             .expects('sendHelloWorldPlain')
             .never();
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         await expect(userController.register(reqMock.object)).to.be.rejectedWith('Error on register');
 
@@ -187,7 +192,7 @@ describe('User Controller', () => {
                 .expects('sendHelloWorldPlain')
                 .never();
 
-            let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+            let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
             let result = userController.register(invalidReqMock.object);
             await expect(result).to.be.rejectedWith(testCase.expected.message);
@@ -211,7 +216,7 @@ describe('User Controller', () => {
             .expects('logout')
             .once();
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         let result = userController.logout(reqMock.object);
         expect(result).to.be.true;
@@ -243,7 +248,7 @@ describe('User Controller', () => {
             .withArgs(expectedResult)
             .returns(expectedResult);
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         let result = await userController.edit(reqMock.object);
         expect(result).to.deep.equal(expectedResult);
@@ -266,7 +271,7 @@ describe('User Controller', () => {
             .expects('update')
             .never();
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         let result = userController.edit(reqMock.object);
         await expect(result).to.be.rejectedWith('User validation failed');
@@ -291,7 +296,7 @@ describe('User Controller', () => {
             .once()
             .returns(true);
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         let result = await userController.changepw(reqMock.object);
         expect(result).to.be.true;
@@ -315,7 +320,7 @@ describe('User Controller', () => {
             .expects('updatePassword')
             .never();
 
-        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object);
+        let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
         let result = userController.changepw(reqMock.object);
         await expect(result).to.be.rejectedWith('Passwords not equal');
