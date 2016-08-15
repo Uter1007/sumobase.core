@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import {User} from "../models/user.model";
 import {UserController} from '../controller/user.controller';
-import * as lodash from 'lodash';
 import * as moment from 'moment';
 
 /* tslint:disable */
