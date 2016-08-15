@@ -15,13 +15,14 @@ import {UserAlreadyInUseException} from '../../commons/error/models/user.already
 import {UserValidator} from '../services/validator/user.validator.service';
 import {ValidationException} from '../../commons/error/models/validation.exception';
 import {PasswordValidator} from '../services/validator/password.validator.service';
-import * as moment from 'moment';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
 import * as passport from 'passport';
 import storage = require('../../commons/imageupload/middleware/image.storage.middleware');
 import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
 import {UnknownException} from '../../commons/error/models/unknown.exception';
 import {MailService} from '../../commons/mail/services/mail.service';
+import {ActionEmailService} from '../../activity/services/action.email.activity.service';
+import SVC_TAGS from '../../../constant/services.tags';
 
 /* tslint:disable */
 let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
@@ -37,14 +38,17 @@ export class UserController extends BaseController {
     private _log: ILogger;
     private _userService: UserService;
     private _mailService: MailService;
+    private _actionEmailService: ActionEmailService;
 
     constructor(@inject(TYPES.Logger) log: ILogger,
                 @inject(TYPES.UserService) userService: UserService,
-                @inject(TYPES.MailService) mailService: MailService) {
+                @inject(TYPES.MailService) mailService: MailService,
+                @inject(SVC_TAGS.ActionEmailService) actionEmailService: ActionEmailService) {
         super();
         this._log = log;
         this._userService = userService;
         this._mailService = mailService;
+        this._actionEmailService = actionEmailService;
     }
 
     /**
@@ -83,9 +87,9 @@ export class UserController extends BaseController {
                 if (validateErrors.length > 0) {
                     throw new ValidationException('User validation failed');
                 }
-                user.createdOn = moment().utc().toString();
                 let createdUser = await this._userService.create(user, clearTextPassword);
-                this._mailService.sendHelloWorldPlain();
+                let activationLink = await this._actionEmailService.createActivationEmail(createdUser);
+                await this._mailService.sendActivationMail(createdUser.lastName, createdUser.email, activationLink.hash);
                 return createdUser;
             }
         }

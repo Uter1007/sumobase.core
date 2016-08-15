@@ -30,7 +30,7 @@ export class MailService implements IMailService {
             '<a href="{{link}}">{{link}}</a></p>';
 
         const data = {
-            link: 'http://cleansumo.at/#/confirm?c=' + activationToken,
+            link: 'http://sumowin.at/#/confirm?c=' + activationToken,
             name: name
         };
 

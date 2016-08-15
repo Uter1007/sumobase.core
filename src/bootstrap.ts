@@ -21,6 +21,8 @@ import MAPPER_TAGS from './constant/mapper.tags';
 import {UserMapper} from './modules/user/mapper/user.mapper';
 import {UserAvatarMapper} from './modules/user/mapper/user.avatar.mapper';
 import {LogConfig} from './config/log.config';
+import {ActionEmailRepository} from './modules/activity/repository/action.email.activity.repository';
+import {ActionEmailMapper} from './modules/activity/mapper/action.email.activity.mapper';
 
 const kernel = new Kernel();
 
@@ -38,6 +40,9 @@ kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
 kernel.bind<UserRepository>(REPO_TAGS.UserRepository)
     .to(UserRepository);
 
+kernel.bind<ActionEmailRepository>(REPO_TAGS.ActionEmailRepository)
+    .to(ActionEmailRepository);
+
 kernel.bind<PasswordService>(SVC_TAGS.PasswordService)
     .to(PasswordService);
 
@@ -52,6 +57,9 @@ kernel.bind<UserMapper>(MAPPER_TAGS.UserMapper)
 
 kernel.bind<UserAvatarMapper>(MAPPER_TAGS.UserAvatarMapper)
     .to(UserAvatarMapper);
+
+kernel.bind<ActionEmailMapper>(MAPPER_TAGS.ActionEmailMapper)
+    .to(ActionEmailMapper);
 
 kernel.bind<LogConfig>(SVC_TAGS.LogConfig)
     .to(LogConfig);

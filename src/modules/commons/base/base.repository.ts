@@ -7,6 +7,10 @@ import {ILogger} from '../logging/interfaces/logger.interface';
 import SVC_TAGS from '../../../constant/services.tags';
 import {IUserDBSchema} from '../../user/models/user.db.model';
 
+/* tslint:disable */
+import moment = require('moment');
+/* tslint:enable */
+
 @injectable()
 class BaseRepository<T extends mongoose.Document> {
 
@@ -19,6 +23,20 @@ class BaseRepository<T extends mongoose.Document> {
 
     public create: ((item: T) => Promise<any>) = (item: T) => {
         return new Promise<any>( (resolve: any, reject: any) => {
+
+
+            if (item && item.hasOwnProperty('modifiedOn')) {
+                /* tslint:disable */
+                item['modifiedOn'] = moment.now();
+                /* tslint:enable */
+            }
+
+            if (item && item.hasOwnProperty('createdOn')) {
+                /* tslint:disable */
+                item['createdOn'] = moment.now();
+                /* tslint:enable */
+            }
+
             this._model.create(item, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.create error: ', error);
@@ -75,6 +93,13 @@ class BaseRepository<T extends mongoose.Document> {
 
     public update: ((_id: string, item: T) =>  Promise<boolean>) = (_id: string, item: T)  => {
         return new Promise<boolean>( (resolve: any, reject: any) => {
+
+            if (item && item.hasOwnProperty('modifiedOn')) {
+                /* tslint:disable */
+                item['modifiedOn'] = moment.now();
+                /* tslint:enable */
+            }
+
             this._model.update({_id: this.toObjectId(_id)}, item, (error: any, result: any): void => {
                 if (error) {
                     this._log.error('model.find error: ', error);

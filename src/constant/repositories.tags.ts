@@ -1,7 +1,8 @@
 const REPO_TAGS = {
-    BaseRepository: 'BaseRepository',
+    ActionEmailRepository: Symbol('ActionEmailRepository'),
+    BaseRepository: Symbol('BaseRepository'),
     LogRepository: Symbol('LogRepository'),
-    UserRepository: 'UserRepository'
+    UserRepository: Symbol('UserRepository')
 };
 
 export default REPO_TAGS;
