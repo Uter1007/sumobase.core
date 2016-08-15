@@ -1,0 +1,6 @@
+{
+  apps : [{
+    name        : "SumoBase",
+    script      : "./dist/app.js"
+  }]
+}

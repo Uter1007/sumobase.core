@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "SumoBase API v1 Documentation",
   "title": "SumoBase Documentation",
-  "url" : "https://localhost:3000",
+  "url" : "https://sumowin.at",
   "template": {
     "withCompare": true,
     "withGenerator": true
