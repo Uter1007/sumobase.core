@@ -97,6 +97,27 @@ export class UserController extends BaseController {
     }
 
     /**
+     * @api {post} /api/user/activate User Activation Link
+     * @apiVersion 1.0.0
+     * @apiName userActivate
+     * @apiGroup User
+     * @apiParam {String} hash ActivationLinkId
+     * @apiSuccess {Object} userResponse Express Body Response
+     * @apiSuccess {String} userResponse.id Id of the User.
+     * @apiSuccess {String} userResponse.firstName Firstname of the User.
+     * @apiSuccess {String} userResponse.lastName  Lastname of the User.
+     * @apiSuccess {String} userResponse.email Email of the User.
+     * @apiSuccess {String} userResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
+     * @apiSuccess {String} userResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     * @apiError ActivationNotValid
+     */
+    @Post('/activate')
+    public async activate(request: express.Request): Promise<User> {
+        let hash = request.body.hash;
+        return await this._actionEmailService.updateActivationEmail(hash);
+    }
+
+    /**
      * @api {post} /api/user/login User Login
      * @apiVersion 1.0.0
      * @apiName userLogin

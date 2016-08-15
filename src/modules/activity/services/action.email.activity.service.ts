@@ -69,9 +69,9 @@ export class ActionEmailService {
         }
     }
 
-    public async updateActivationEmail(actionEmail: IActivityEmail) {
+    public async updateActivationEmail(hash: string) {
         try {
-            let foundActivity = await this.findActionEmailbyHash(actionEmail.hash);
+            let foundActivity = await this.findActionEmailbyHash(hash);
             if (foundActivity) {
                 if ( foundActivity.state === EntityState.ACTIVE) {
                     foundActivity.state = EntityState.DISABLED;
