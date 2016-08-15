@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var argv = require('yargs').argv;
 var tsc = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
 var path = require('path');
@@ -98,16 +99,22 @@ gulp.task('watch', false,
 );
 
 gulp.task('pre-test', function () {
-    return gulp.src(['dist/**/*.js'])
-    // Covering files
-        .pipe(istanbul())
-        .pipe(istanbul.hookRequire());
+    if(!argv.brief) {
+        return gulp.src(['dist/**/*.js'])
+        // Covering files
+            .pipe(istanbul())
+            .pipe(istanbul.hookRequire());
+    }
 });
 
 gulp.task('test', ['pre-test'], function() {
-    return gulp.src(['dist/**/spec/**/*.js'], {read: false})
-        .pipe(mocha({}))
-        .pipe(istanbul.writeReports());
+    var test = gulp.src(['dist/**/spec/**/*.js'], {read: false})
+        .pipe(mocha({}));
+    if(!argv.brief) {
+        return test.pipe(istanbul.writeReports());
+    } else {
+        return test;
+    }
 });
 
 gulp.task('copyConfigurations', function() {
