@@ -15,6 +15,7 @@ export class User extends BaseModel implements IUser {
 
     @autoserialize
     @IsEmail()
+    @IsLength(1, 200)
     public email: string;
 
     @autoserialize
