@@ -117,25 +117,6 @@ describe('User Controller', () => {
 
     });
 
-    it('register succeeds (verify timestamp) @unit', async () => {
-
-        let reqMock = sinon.mock({
-            body: userSkeleton
-        });
-
-        let userController = new UserController(loggerMock.object,
-                                                serviceMock.object,
-                                                mailServiceMock.object,
-                                                actionMailServiceMock.object);
-
-        let nowLower = moment().utc().unix();
-        let user = await userController.register(reqMock.object);
-        let nowUpper = moment().utc().unix();
-        expect(user.email).to.equal('the@email.address');
-        //expect(moment(new Date(user.createdOn)).unix()).to.be.within(nowLower, nowUpper);
-
-    });
-
     it('register fails (user exists) @unit', async () => {
 
         let reqMock = sinon.mock({
