@@ -68,6 +68,14 @@ describe('User Service', () => {
         userAvatarMock = sinon.mock(userAvatarObj);
     });
 
+    afterEach(function() {
+        loggerMock.restore();
+        repoMock.restore();
+        mapperMock.restore();
+        pwMock.restore();
+        userAvatarMock.restore();
+    });
+
     it('findUserByUserNameAndPassword findOne fails @unit', async () => {
 
         let error = new Error('The Error');
