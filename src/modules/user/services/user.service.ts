@@ -15,6 +15,7 @@ import {UnknownException} from '../../commons/error/models/unknown.exception';
 import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
 import {UserAvatarMapper} from '../mapper/user.avatar.mapper';
 import {IUserAvatar} from '../interfaces/user.avatar.interface';
+import * as moment from 'moment';
 
 @injectable()
 export class UserService {
@@ -76,17 +77,17 @@ export class UserService {
     // todo: maybe change baseRepo update to use find and update on its own
     public async update(userModel: IUser) {
         try {
-            let finduser = await this.findUserById(userModel.id);
-            if (finduser) {
-                finduser.firstName = userModel.firstName;
-                finduser.lastName = userModel.lastName;
-                let updateSuccess = await this._userRepository.update(finduser.id, finduser);
-                if (updateSuccess) {
-                    return this._userMapper.toUser(finduser);
-                }
-                throw new UnknownException('User can not be updated');
+            let foundUser = await this.findUserById(userModel.id);
+            if (!foundUser) {
+                throw new UserNotFoundException('User can not be found');
             }
-            throw new UserNotFoundException('User can not be found');
+            foundUser.firstName = userModel.firstName;
+            foundUser.lastName = userModel.lastName;
+            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            if (updateSuccess) {
+                return this._userMapper.toUser(foundUser);
+            }
+            throw new UnknownException('User can not be updated');
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;
@@ -96,15 +97,15 @@ export class UserService {
     public async updateImage(id: string, image: Buffer, contentType: string): Promise<boolean> {
         try {
             let foundUser = await this.findUserById(id);
-            if (foundUser) {
-                foundUser.avatar = {contentType: contentType, data: image};
-                let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
-                if (updateSuccess) {
-                    return true;
-                }
-                throw new UnknownException('User can not be updated');
+            if (!foundUser) {
+                throw new UserNotFoundException('User can not be found');
             }
-            throw new UserNotFoundException('User can not be found');
+            foundUser.avatar = {contentType: contentType, data: image};
+            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            if (updateSuccess) {
+                return true;
+            }
+            throw new UnknownException('User can not be updated');
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;
@@ -128,18 +129,17 @@ export class UserService {
 
     public async updatePassword(id: string, password: string) {
         try {
-            let finduser = await this.findUserById(id);
-            if (finduser) {
-                let hashpw = await this.hashPassword(password);
-                finduser.password = hashpw;
-                let updateSuccess = await this._userRepository.update(finduser.id, finduser);
-                if (updateSuccess) {
-                    return true;
-                }
-                throw new UnknownException('User can not be updated');
+            let foundUser = await this.findUserById(id);
+            if (!foundUser) {
+                throw new UserNotFoundException('User can not be found');
             }
-
-            throw new UserNotFoundException('User can not be found');
+            let hashpw = await this.hashPassword(password);
+            foundUser.password = hashpw;
+            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            if (updateSuccess) {
+                return true;
+            }
+            throw new UnknownException('User can not be updated');
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;
@@ -151,6 +151,7 @@ export class UserService {
             let hashpw = await this.hashPassword(password);
             let toDbModel = this._userMapper.toDBmodel(userModel);
             toDbModel.password = hashpw;
+            toDbModel.createdOn = moment().utc().toString();
             let dbmodel = await this._userRepository.create(toDbModel);
             return this._userMapper.toUser(dbmodel);
         } catch (err) {
@@ -159,12 +160,18 @@ export class UserService {
         }
     }
 
-    public async activateUser(id: string) {
+    public async activateUser(id: string): Promise<boolean> {
         try {
-            const user: IUserDBSchema = await this._userRepository.findById(id);
-            user.state = UserState.ACTIVE;
-
-            return await this._userRepository.update(user.id, user);
+            let foundUser: IUserDBSchema = await this._userRepository.findById(id);
+            if (!foundUser) {
+                throw new UserNotFoundException('User can not be found');
+            }
+            foundUser.state = UserState.ACTIVE;
+            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            if (updateSuccess) {
+                return true;
+            }
+            throw new UnknownException('User can not be updated');
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;

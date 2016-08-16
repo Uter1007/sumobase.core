@@ -370,7 +370,7 @@ describe('User Service', () => {
 
 
         let user = await userService.activateUser('the user id');
-        expect(user.email).to.equal('the username');
+        expect(user).to.be.true;
 
         loggerMock.verify();
         repoMock.verify();

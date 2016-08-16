@@ -4,6 +4,7 @@ import {IActivityEmailDBSchema, activityEmailDBModel} from '../models/action.ema
 import {ActionEmail} from '../models/action.email.activity.model';
 import {UserMapper} from '../../user/mapper/user.mapper';
 import MAPPER_TAGS from '../../../constant/mapper.tags';
+import {IUserDBSchema} from '../../user/models/user.db.model';
 
 @injectable()
 export class ActionEmailMapper {
@@ -21,20 +22,20 @@ export class ActionEmailMapper {
             id: model.id,
             state: model.state,
             type: model.type,
-            user: this._userMapper.toDBmodel(model.user),
+            user: model.user ? model.user.id : undefined,
         });
 
         return userdb;
     }
 
-    public toActivityEmail(userModel: IActivityEmailDBSchema): ActionEmail {
-        return new ActionEmail(userModel.hash,
-                               userModel.type,
-                               this._userMapper.toUser(userModel.user),
-                               userModel.id,
-                               userModel.state,
-                               userModel.createdOn,
-                               userModel.modifiedOn);
+    public toActivityEmail(activityModel: IActivityEmailDBSchema, userModel: IUserDBSchema): ActionEmail {
+        return new ActionEmail(activityModel.hash,
+                               activityModel.type,
+                               userModel ? this._userMapper.toUser(userModel) : undefined,
+                               activityModel.id,
+                               activityModel.state,
+                               activityModel.createdOn,
+                               activityModel.modifiedOn);
     }
 }
 

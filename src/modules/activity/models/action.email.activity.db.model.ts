@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import {ActivityType} from './activity.type.enum';
-import {IUserDBSchema} from '../../user/models/user.db.model';
 import {EntityState} from '../../commons/base/base.state.enum';
 
 export interface IActivityEmailDBSchema extends mongoose.Document {
@@ -10,7 +9,7 @@ export interface IActivityEmailDBSchema extends mongoose.Document {
     modifiedOn: string;
     state: EntityState;
     type: ActivityType;
-    user: IUserDBSchema;
+    user: string;
 }
 
 const activityEmailSchema = new mongoose.Schema({
@@ -27,7 +26,7 @@ const activityEmailSchema = new mongoose.Schema({
                    <any>ActivityType.RecoverdEmail ],
            required: true,
            type: String, },
-    user: { ref : 'user', type: mongoose.Schema.Types.ObjectId }
+    user: { required: true, type: String  }
 });
 
 export const activityEmailDBModel = mongoose.model<IActivityEmailDBSchema>('ActivityEmail', activityEmailSchema);

@@ -102,17 +102,11 @@ export class UserController extends BaseController {
      * @apiName userActivate
      * @apiGroup User
      * @apiParam {String} hash ActivationLinkId
-     * @apiSuccess {Object} userResponse Express Body Response
-     * @apiSuccess {String} userResponse.id Id of the User.
-     * @apiSuccess {String} userResponse.firstName Firstname of the User.
-     * @apiSuccess {String} userResponse.lastName  Lastname of the User.
-     * @apiSuccess {String} userResponse.email Email of the User.
-     * @apiSuccess {String} userResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
-     * @apiSuccess {String} userResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     * @apiSuccess {Boolean} true if update was successful
      * @apiError ActivationNotValid
      */
     @Post('/activate')
-    public async activate(request: express.Request): Promise<User> {
+    public async activate(request: express.Request): Promise<Boolean> {
         let hash = request.body.hash;
         return await this._actionEmailService.updateActivationEmail(hash);
     }
@@ -256,7 +250,6 @@ export class UserController extends BaseController {
     public async me(request: express.Request): Promise<string> {
         return request.user;
     }
-
 
     /**
      * @api {post} /api/user/avatar Upload Avatar Picture
