@@ -165,11 +165,11 @@ export class UserController extends BaseController {
     public async edit(request: express.Request) {
         let user = request.user;
 
-        if (request.body && request.body.firstName) {
+        if (request.body && typeof request.body.firstName === 'string') {
             user.firstName = request.body.firstName;
         }
 
-        if (request.body && request.body.lastName) {
+        if (request.body && typeof request.body.lastName === 'string') {
             user.lastName = request.body.lastName;
         }
 
