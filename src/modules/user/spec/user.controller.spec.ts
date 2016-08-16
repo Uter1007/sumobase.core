@@ -65,6 +65,14 @@ describe('User Controller', () => {
         };
     });
 
+    afterEach(function() {
+        loggerMock.restore();
+        serviceMock.restore();
+        mailServiceMock.restore();
+        actionMailServiceMock.restore();
+        resMock.restore();
+    });
+
     it('register succeeds (verify function calls) @unit', async () => {
 
         let reqMock = sinon.mock({
