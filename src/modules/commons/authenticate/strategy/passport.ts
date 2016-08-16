@@ -34,7 +34,7 @@ passport.use(new Strategy(
                 return done(null, false, new UserCantLoginException('Can\'t login User'));
             }
             let mappedUser = userMapper.toUser(user);
-            if (mappedUser.state === UserState.ACTIVE) {
+            if (mappedUser.state !== UserState.ACTIVE) {
                 return done(null, false, new UserCantLoginException('User has wrong User State'));
             }
             done(null, mappedUser);
