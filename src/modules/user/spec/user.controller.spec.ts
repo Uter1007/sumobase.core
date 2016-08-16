@@ -206,11 +206,11 @@ describe('User Controller', () => {
 
             actionMailServiceMock
                 .expects('createActivationEmail')
-                .once();
+                .never();
 
             mailServiceMock
                 .expects('sendActivationMail')
-                .once();
+                .never();
 
             let userController = new UserController(loggerMock.object,
                                                     serviceMock.object,
