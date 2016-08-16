@@ -7,6 +7,7 @@ import {UserCantLoginException} from '../../error/models/user.cant.login.excepti
 import {AuthenticationError} from '../../error/models/authentication.error';
 import {UserMapper} from '../../../user/mapper/user.mapper';
 import MAPPER_TAGS from '../../../../constant/mapper.tags';
+import {UserState} from '../../../user/models/userstate.model';
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -32,7 +33,11 @@ passport.use(new Strategy(
             if (!user) {
                 return done(null, false, new UserCantLoginException('Can\'t login User'));
             }
-            done(null, userMapper.toUser(user));
+            let mappedUser = userMapper.toUser(user);
+            if (mappedUser.state === UserState.ACTIVE) {
+                return done(null, false, new UserCantLoginException('User has wrong User State'));
+            }
+            done(null, mappedUser);
         } catch ( exception ) {
             return done(new AuthenticationError('Email or Password was wrong'));
         }
