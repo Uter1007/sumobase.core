@@ -37,12 +37,16 @@ describe('User Controller', () => {
         }
     };
     let mailServiceObj = {
-        sendHelloWorldPlain: () => {
+        sendActivationMail: () => {
             // empty block - just a mock
         }
     };
     let actionMailServiceObj = {
-        // empty object - just a mock
+        createActivationEmail: () => {
+            return {
+                hash: 'the hash'
+            }
+        }
     };
     let resObj = {};
 
@@ -50,7 +54,7 @@ describe('User Controller', () => {
         loggerMock = sinon.mock(loggingObj);
         serviceMock = sinon.mock(serviceObj);
         mailServiceMock = sinon.mock(mailServiceObj);
-        actionMailServiceMock = sinon.mock(actionMailServiceMock);
+        actionMailServiceMock = sinon.mock(actionMailServiceObj);
         resMock = sinon.mock(resObj);
         userSkeleton = {
             email: 'the@email.address',
@@ -75,13 +79,23 @@ describe('User Controller', () => {
         serviceMock
             .expects('create')
             .once()
-            .withArgs(sinon.match.any, 'the Password$123');
+            .withArgs(sinon.match.any, 'the Password$123')
                 // the first argument is an object containing an unknown timestamp (createdOn)
                 // and thus cannot be tested
+            .returns(userSkeleton);
+
+        actionMailServiceMock
+            .expects('createActivationEmail')
+            .once()
+            .withArgs(userSkeleton)
+            .returns({
+                hash: 'the hash'
+            });
 
         mailServiceMock
-            .expects('sendHelloWorldPlain')
-            .once();
+            .expects('sendActivationMail')
+            .once()
+            .withArgs(userSkeleton.lastName, userSkeleton.email, 'the hash');
 
         let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
@@ -92,7 +106,7 @@ describe('User Controller', () => {
 
     });
 
-    it('register succeeds (verify timestamp) @unit', async () => {
+    it.only('register succeeds (verify timestamp) @unit', async () => {
 
         let reqMock = sinon.mock({
             body: userSkeleton
@@ -104,7 +118,7 @@ describe('User Controller', () => {
         let user = await userController.register(reqMock.object);
         let nowUpper = moment().utc().unix();
         expect(user.email).to.equal('the@email.address');
-        expect(moment(new Date(user.createdOn)).unix()).to.be.within(nowLower, nowUpper);
+        //expect(moment(new Date(user.createdOn)).unix()).to.be.within(nowLower, nowUpper);
 
     });
 
@@ -124,8 +138,12 @@ describe('User Controller', () => {
             .expects('create')
             .never();
 
+        actionMailServiceMock
+            .expects('createActivationEmail')
+            .never();
+
         mailServiceMock
-            .expects('sendHelloWorldPlain')
+            .expects('sendActivationMail')
             .never();
 
         let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
@@ -188,9 +206,13 @@ describe('User Controller', () => {
                 .expects('create')
                 .never();
 
+            actionMailServiceMock
+                .expects('createActivationEmail')
+                .once();
+
             mailServiceMock
-                .expects('sendHelloWorldPlain')
-                .never();
+                .expects('sendActivationMail')
+                .once();
 
             let userController = new UserController(loggerMock.object, serviceMock.object, mailServiceMock.object, actionMailServiceMock.object);
 
