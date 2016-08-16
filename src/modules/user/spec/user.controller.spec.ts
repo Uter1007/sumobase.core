@@ -48,7 +48,9 @@ describe('User Controller', () => {
             };
         }
     };
-    let resObj = {};
+    let resObj = {
+        status: (code) => {}
+    };
 
     beforeEach(function() {
         loggerMock = sinon.mock(loggingObj);
@@ -365,6 +367,70 @@ describe('User Controller', () => {
         await expect(result).to.be.rejectedWith('Passwords not equal');
 
         serviceMock.verify();
+
+    });
+
+    it('checkUserName success @unit', async () => {
+
+        let reqObj = {
+            header: () => {
+                return 'the@email.address'
+            }
+        };
+        let reqMock = sinon.mock(reqObj);
+
+        serviceMock
+            .expects('findUserByName')
+            .once()
+            .returns(Promise.resolve(null));
+
+        resMock
+            .expects('status')
+            .once()
+            .withArgs(200);
+
+        let userController = new UserController(loggerMock.object,
+            serviceMock.object,
+            mailServiceMock.object,
+            actionMailServiceMock.object);
+
+        await userController.checkUserName(reqMock.object, resMock.object, () => {});
+
+        serviceMock.verify();
+        reqMock.verify();
+        resMock.verify();
+
+    });
+
+    it('checkUserName user name exists @unit', async () => {
+
+        let reqObj = {
+            header: () => {
+                return 'the@email.address'
+            }
+        };
+        let reqMock = sinon.mock(reqObj);
+
+        serviceMock
+            .expects('findUserByName')
+            .once()
+            .returns(Promise.resolve('some other user'));
+
+        resMock
+            .expects('status')
+            .once()
+            .withArgs(404);
+
+        let userController = new UserController(loggerMock.object,
+            serviceMock.object,
+            mailServiceMock.object,
+            actionMailServiceMock.object);
+
+        await userController.checkUserName(reqMock.object, resMock.object, () => {});
+
+        serviceMock.verify();
+        reqMock.verify();
+        resMock.verify();
 
     });
 
