@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import * as expressutils from 'inversify-express-utils';
 
 /* tslint:disable */
 let chai = require('chai');
@@ -12,9 +13,21 @@ let agent = require('superagent');
 
 describe('User Route Tests', () => {
 
+    let server: expressutils.interfaces.InversifyExpressServer;
+    let kernel: inversify.interfaces.Kernel;
+
+    beforeEach(function(){
+
+    });
+
+    afterEach(function(){
+
+    });
+
     describe('Restricted Routes Not LoggedIn', () => {
         it('/me Route Test', (done) => {
-            // https://github.com/inversify/inversify-express-utils/blob/35241bb5e17bc372e64b491ce3bcd64fa4105303/test/framework.test.ts
+
+            server = new expressutils.InversifyExpressServer(kernel);
         });
     });
 });
