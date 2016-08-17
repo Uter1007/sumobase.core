@@ -20,6 +20,8 @@
     "passport": "registry:dt/passport#0.2.0+20160720063208",
     "passport-local": "registry:dt/passport-local#0.0.0+20160316155526",
     "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
+    "superagent": "registry:dt/superagent#2.0.0+20160811085415",
+    "supertest": "registry:dt/supertest#1.1.0+20160724070541",
     "winston": "registry:dt/winston#0.0.0+20160417152829"
   },
   "dependencies": {

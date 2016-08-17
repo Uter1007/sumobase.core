@@ -1,7 +1,6 @@
 import 'reflect-metadata';
-import {User} from "../models/user.model";
+import {User} from '../models/user.model';
 import {UserController} from '../controller/user.controller';
-import * as moment from 'moment';
 
 /* tslint:disable */
 let chai = require('chai');
@@ -49,7 +48,9 @@ describe('User Controller', () => {
         }
     };
     let resObj = {
-        status: (code) => {}
+        status: (code) => {
+            // empty block - just a mock
+        }
     };
 
     beforeEach(function() {
