@@ -18,6 +18,7 @@ export class MailService implements IMailService {
     private _mailFacade: IMailFacade;
     private _domain: string;
     private _activationUrl: string;
+    private _companyName: string;
     private _templateConfig: {
         path: string,
         subject: string
@@ -28,13 +29,15 @@ export class MailService implements IMailService {
 
         this._domain = config.domain;
         this._activationUrl = config.urls.activation;
+        this._companyName = config.mail.companyName;
         this._templateConfig = config.mail.templates.activation;
     }
 
     public async sendActivationMail(name: string, email: string, activationToken: string) {
         const templateData = {
             name: name,
-            link: this._domain + this._activationUrl + '?c='+activationToken
+            actionLink: this._domain + this._activationUrl + '?c='+activationToken,
+            companyName: this._companyName
         };
 
         const html = this._compileTemplate(this._templateConfig.path, templateData);

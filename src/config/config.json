@@ -6,6 +6,7 @@
   },
   "mail": {
     "sender": "CleanSumo <office@cleansumo.at>",
+    "companyName": "CleanSumo",
     "domain": "sandbox19446.mailgun.org",
     "templates": {
       "activation": {
