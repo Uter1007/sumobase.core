@@ -1,9 +1,20 @@
 {
+  "domain": "http://sumowin.at/",
   "db": {
     "debug": false,
     "uri": "//mydbUrl"
   },
   "mail": {
-    "domain": "sandbox19446.mailgun.org"
+    "sender": "CleanSumo <office@cleansumo.at>",
+    "domain": "sandbox19446.mailgun.org",
+    "templates": {
+      "activation": {
+        "path": "dist/modules/commons/mail/templates/activation.hbs",
+        "subject": "Account Aktivierung"
+      }
+    }
+  },
+  "urls": {
+    "activation": "#/confirm"
   }
 }

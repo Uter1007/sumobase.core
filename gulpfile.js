@@ -121,6 +121,9 @@ gulp.task('copyConfigurations', function() {
     gulp.src('src/**/*.json')
         .pipe(gulp.dest('dist'));
 
+    gulp.src('src/**/*.hbs')
+        .pipe(gulp.dest('dist'));
+
     gulp.src('src/public/**/*.*')
         .pipe(gulp.dest('dist/public'));
 });
