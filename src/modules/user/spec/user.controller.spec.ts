@@ -4,7 +4,8 @@ import {UserController} from '../controller/user.controller';
 
 /* tslint:disable */
 let chai = require('chai');
-chai.use(require('chai-as-promised'));
+let chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
 let expect = chai.expect;
 let sinon = require('sinon');
 /* tslint:enable */

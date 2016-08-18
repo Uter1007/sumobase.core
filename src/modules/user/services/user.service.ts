@@ -1,5 +1,4 @@
 import { injectable, inject } from 'inversify';
-import { UserRepository } from '../repository/user.repository';
 import { ILogger } from '../../commons/logging/interfaces/logger.interface';
 import { IUser } from '../interfaces/user.interface';
 import { IUserDBSchema } from '../models/user.db.model';
@@ -16,18 +15,19 @@ import {UserNotFoundException} from '../../commons/error/models/user.notfound.ex
 import {UserAvatarMapper} from '../mapper/user.avatar.mapper';
 import {IUserAvatar} from '../interfaces/user.avatar.interface';
 import * as moment from 'moment';
+import {IUserRepository} from '../interfaces/user.repository.interface';
 
 @injectable()
 export class UserService {
 
-    private _userRepository: UserRepository;
+    private _userRepository: IUserRepository;
     private _log: ILogger;
     private _userMapper: UserMapper;
     private _pw: PasswordService;
     private _userAvatarMapper: UserAvatarMapper;
 
     constructor(@inject(SVC_TAGS.Logger) log: ILogger,
-                @inject(REPO_TAGS.UserRepository)  userRepository: UserRepository,
+                @inject(REPO_TAGS.UserRepository) userRepository: IUserRepository,
                 @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper,
                 @inject(SVC_TAGS.PasswordService) pw: PasswordService,
                 @inject(MAPPER_TAGS.UserAvatarMapper) userAvatarMapper: UserAvatarMapper) {

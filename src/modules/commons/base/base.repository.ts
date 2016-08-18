@@ -9,10 +9,11 @@ import {IUserDBSchema} from '../../user/models/user.db.model';
 
 /* tslint:disable */
 import moment = require('moment');
+import {IBaseRepository} from './base.repository.interface';
 /* tslint:enable */
 
 @injectable()
-class BaseRepository<T extends mongoose.Document> {
+class BaseRepository<T extends mongoose.Document> implements IBaseRepository{
 
     protected _model: mongoose.Model<mongoose.Document>;
     protected _log: ILogger;

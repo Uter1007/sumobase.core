@@ -24,6 +24,8 @@ import {LogConfig} from './config/log.config';
 import {ActionEmailRepository} from './modules/activity/repository/action.email.activity.repository';
 import {ActionEmailMapper} from './modules/activity/mapper/action.email.activity.mapper';
 import {ActionEmailService} from './modules/activity/services/action.email.activity.service';
+import {IUserRepository} from './modules/user/interfaces/user.repository.interface';
+import {IActionEmailRepository} from './modules/activity/interfaces/action.email.repository.interface';
 
 const kernel = new Kernel();
 
@@ -38,10 +40,10 @@ kernel.bind<ILogger>(SVC_TAGS.Logger)
 kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
     .to(LogRepository);
 
-kernel.bind<UserRepository>(REPO_TAGS.UserRepository)
+kernel.bind<IUserRepository>(REPO_TAGS.UserRepository)
     .to(UserRepository);
 
-kernel.bind<ActionEmailRepository>(REPO_TAGS.ActionEmailRepository)
+kernel.bind<IActionEmailRepository>(REPO_TAGS.ActionEmailRepository)
     .to(ActionEmailRepository);
 
 kernel.bind<PasswordService>(SVC_TAGS.PasswordService)
