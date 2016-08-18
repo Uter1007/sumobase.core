@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import {UserService} from '../services/user.service';
 import {IUser} from '../interfaces/user.interface';
+import {User} from "../models/user.model";
 
 /* tslint:disable */
 let expect = require('chai').expect;
@@ -385,8 +386,44 @@ describe('User Service', () => {
 
     });
 
-    it('update User succeeds @unit', async() => {
-        // todo: implement it
+    it.only('update User succeeds @unit', async() => {
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('findById')
+            .once()
+            .withArgs('the id')
+            .returns(Promise.resolve({
+                id: 'the id'
+            }));
+
+        repoMock
+            .expects('update')
+            .once();
+            // .returns(Promise.resolve(true));
+            // .withArgs('the id', {
+            //     id: 'the id',
+            //     firstName: 'Max',
+            //     lastName: 'Power'
+            // });
+
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+        userService.update(<User>{
+            id: 'the id',
+            firstName: 'Max',
+            lastName: 'Power'
+        });
+
+        loggerMock.verify();
+        repoMock.verify();
+
     });
 
     it('update User fail @unit', async() => {
