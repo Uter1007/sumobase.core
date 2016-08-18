@@ -8,18 +8,27 @@ let errorHandler = (
     next: express.NextFunction
 ) => {
 
+    let code: number = (<any>err).statusCode;
+    let message: string = (<any>err).message;
     let errorcode = (<any>err).statusCode;
+    response.contentType('application/json');
     if (err instanceof BaseException) {
-        response.sendStatus(errorcode || 555);
+        code = errorcode || 555;
+        message = err.message || 'Unknown Exception';
     } else if (errorcode === 413) {
         response.send(err);
     } else if (response.statusCode === 404) {
-        response.sendStatus(404);
+        code = 404;
+        message = 'Not Found';
     } else if (err.name === 'UnauthorizedError') {
-        response.sendStatus(401);
+        code = 401;
+        message = 'Unauthorized';
     } else {
-        response.sendStatus(555);
+        code = 555;
+        message = 'Unknown Exception';
     }
+
+    response.send(code, JSON.stringify(message));
 };
 
 export = errorHandler;

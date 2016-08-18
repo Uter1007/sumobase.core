@@ -43,6 +43,10 @@ import {ActionEmailFakeRepository} from '../../activity/spec/fakes/action.email.
 import {IActionEmailRepository} from '../../activity/interfaces/action.email.repository.interface';
 import { Kernel } from 'inversify';
 
+import errorHandler = require('../../../modules/commons/error/middleware/error.handler.logic');
+import notFoundHandler = require('../../../modules/commons/error/middleware/notfound.handler.logic');
+
+
 /* tslint:enable */
 
 
@@ -56,6 +60,8 @@ describe('User Route Tests', () => {
             json: false,
             level: 'debug',
         });
+
+    let app: Express.Application;
 
     beforeEach(function(){
 
@@ -103,37 +109,51 @@ describe('User Route Tests', () => {
         kernel.bind<LogConfig>(SVC_TAGS.LogConfig)
             .to(LogConfig);
 
+        server = new expressutils.InversifyExpressServer(kernel);
 
+        server.setConfig((exApp) => {
+            exApp.use(cookieParser());
+            exApp.use(bodyParser.json());
+            exApp.use(bodyParser.urlencoded({extended: true}));
+            exApp.use(helmet());
+
+            exApp.use(session({
+                resave: false,
+                saveUninitialized: true,
+                secret: 'testing',
+            }));
+            exApp.use(passport.initialize());
+            exApp.use(passport.session()); // persistent login sessions
+
+        });
+
+        // generic Error Handler1
+        server.setErrorConfig((exApp) => {
+            exApp.use(errorHandler);
+        });
+
+        app = server.build();
     });
 
     afterEach(function(){
-
+        // add here if needed
     });
 
     describe('Restricted Routes Not LoggedIn', () => {
         it('/me Route Test', (done) => {
 
-            server = new expressutils.InversifyExpressServer(kernel);
-
-            server.setConfig((app) => {
-                app.use(cookieParser());
-                app.use(bodyParser.json());
-                app.use(bodyParser.urlencoded({extended: true}));
-                app.use(helmet());
-
-                app.use(session({
-                    resave: false,
-                    saveUninitialized: true,
-                    secret: 'testing',
-                }));
-                app.use(passport.initialize());
-                app.use(passport.session()); // persistent login sessions
-
-            });
-
-            server.build();
-
-            done();
+            // noinspection TypeScriptValidateTypes
+            request(app)
+                .get('/api/user/me')
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) {
+                        done();
+                        throw err;
+                    } else {
+                        done();
+                    }
+                });
         });
     });
 });

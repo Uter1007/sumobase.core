@@ -121,10 +121,7 @@ export class UserController extends BaseController {
      * @apiSuccess Redirect to /api/user/me
      * @apiError Redirect to /api/user/notfound
      */
-    @Post('/login', passport.authenticate('local', {
-        failureRedirect : '/api/user/notfound',
-        successRedirect : '/api/user/me'
-    }))
+    @Post('/login', passport.authenticate('local'))
 
     /**
      * @api {get} /api/user/logout User Logout

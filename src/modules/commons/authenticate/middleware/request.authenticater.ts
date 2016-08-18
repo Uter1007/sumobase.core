@@ -1,4 +1,5 @@
 import express = require('express');
+import {AuthenticationError} from '../../error/models/authentication.error';
 
 let requestAuthenticater: express.RequestHandler = (
     request: express.Request,
@@ -8,8 +9,8 @@ let requestAuthenticater: express.RequestHandler = (
     if (request.isAuthenticated()) {
         return next();
     }
-    // in any other case, redirect to the home
-    response.redirect('/login');
+
+    next(new AuthenticationError('Not LoggedIn'));
 };
 
 export = requestAuthenticater;
