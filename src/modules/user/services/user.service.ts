@@ -4,10 +4,10 @@ import { IUser } from '../interfaces/user.interface';
 import { IUserDBSchema } from '../models/user.db.model';
 import { UserState } from '../models/userstate.model';
 
-import REPO_TAGS from '../../../constant/repositories.tags';
-import SVC_TAGS from '../../../constant/services.tags';
+import REPO_TAGS from '../../../constants/repositories.tags';
+import SVC_TAGS from '../../../constants/services.tags';
 import {PasswordsNotEqualException} from '../../commons/error/models/password.notequal.exception';
-import MAPPER_TAGS from '../../../constant/mapper.tags';
+import MAPPER_TAGS from '../../../constants/mapper.tags';
 import {UserMapper} from '../mapper/user.mapper';
 import {PasswordService} from './password.service';
 import {UnknownException} from '../../commons/error/models/unknown.exception';
@@ -42,12 +42,13 @@ export class UserService {
         try {
 
             let user =  await this._userRepository.findOne({ 'email': userName });
-            return this._pw.compare(password, user.password).then(result => {
-                if (result) {
-                    return user;
-                } else {
-                    throw new PasswordsNotEqualException('Not in my House !');
-                }
+            return this._pw.compare(password, user.password)
+                .then((result) => {
+                    if (result) {
+                        return user;
+                    } else {
+                        throw new PasswordsNotEqualException('Not in my House !');
+                    }
             });
 
         } catch (err) {
@@ -179,7 +180,7 @@ export class UserService {
     }
 
     private async hashPassword(pw: string): Promise<any> {
-        return this._pw.hash(pw, 12);
+        return this._pw.hash(pw);
     }
 }
 

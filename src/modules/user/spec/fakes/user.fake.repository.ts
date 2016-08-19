@@ -1,14 +1,27 @@
 import {IUserDBSchema} from '../../models/user.db.model';
 import {IUserRepository} from '../../interfaces/user.repository.interface';
 import {injectable} from 'inversify';
+import * as moment from 'moment';
+import kernel from '../helper/user.kernel.test.helper';
+import {PasswordService} from '../../services/password.service';
+import SVC_TAGS from '../../../../constants/services.tags';
 
 @injectable()
 export class UserFakeRepository implements IUserRepository {
 
     private _testuser: IUserDBSchema;
 
-    public setTestUser(testuser: IUserDBSchema) {
-        this._testuser = testuser;
+    constructor() {
+
+        this._testuser = <any> {
+            createdOn: moment().utc(),
+            email : 'christoph.ott@lean-coders.at',
+            firstName : 'christoph',
+            id : '57af7a9d77257f6c0a3af0b7',
+            lastName: 'ott',
+            modifiedOn : moment().utc(),
+            state : 'active',
+        };
     }
 
     public create: ((item: IUserDBSchema) => Promise<any>) = (item: IUserDBSchema) =>  {
@@ -20,7 +33,11 @@ export class UserFakeRepository implements IUserRepository {
     }
 
     public findOne: ((query: any) => Promise<any>) = (query: any) => {
-        return Promise.resolve(this._testuser);
+        let pwService = kernel.get<PasswordService>(SVC_TAGS.PasswordService);
+        return pwService.hash('123appTest$!').then((result) => {
+            this._testuser.password = result;
+            return Promise.resolve(this._testuser);
+        });
     }
 
     public find: ((query: any) => Promise<any[]> ) = (query: any) => {

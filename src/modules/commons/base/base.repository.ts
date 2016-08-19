@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
 import { injectable, inject } from 'inversify';
 import {ILogger} from '../logging/interfaces/logger.interface';
-import SVC_TAGS from '../../../constant/services.tags';
+import SVC_TAGS from '../../../constants/services.tags';
 import {IUserDBSchema} from '../../user/models/user.db.model';
 
 /* tslint:disable */
@@ -13,7 +13,7 @@ import {IBaseRepository} from './base.repository.interface';
 /* tslint:enable */
 
 @injectable()
-class BaseRepository<T extends mongoose.Document> implements IBaseRepository{
+class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
 
     protected _model: mongoose.Model<mongoose.Document>;
     protected _log: ILogger;

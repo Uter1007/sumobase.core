@@ -110,11 +110,11 @@ describe('User Controller', () => {
             .withArgs(userSkeleton.lastName, userSkeleton.email, 'the hash');
 
         let userController = new UserController(loggerMock.object,
-                                                serviceMock.object,
-                                                mailServiceMock.object,
-                                                actionMailServiceMock.object);
+            serviceMock.object,
+            mailServiceMock.object,
+            actionMailServiceMock.object);
 
-        let user = await userController.register(reqMock.object);
+        await userController.register(reqMock.object);
 
         serviceMock.verify();
         mailServiceMock.verify();
@@ -146,9 +146,9 @@ describe('User Controller', () => {
             .never();
 
         let userController = new UserController(loggerMock.object,
-                                                serviceMock.object,
-                                                mailServiceMock.object,
-                                                actionMailServiceMock.object);
+            serviceMock.object,
+            mailServiceMock.object,
+            actionMailServiceMock.object);
 
         await expect(userController.register(reqMock.object)).to.be.rejectedWith('Error on register');
 
@@ -160,29 +160,29 @@ describe('User Controller', () => {
     let register = {
         validationTestCases: [
             {
-                description: 'password validation: bad password',
                 corrupt: (body) => {
                     body.password = 'the password';
                     body.confirmPassword = 'the password';
                 },
+                description: 'password validation: bad password',
                 expected: {
                     message: 'Password not complex enough'
                 }
             },
             {
-                description: 'password confirmation: passwords differ',
                 corrupt: (body) => {
                     body.confirmPassword = 'the Password$12';
                 },
+                description: 'password confirmation: passwords differ',
                 expected: {
                     message: 'Passwords not equal'
                 }
             },
             {
-                description: 'user data validation: last name too short',
                 corrupt: (body) => {
                     body.lastName = '';
                 },
+                description: 'user data validation: last name too short',
                 expected: {
                     message: 'User validation failed'
                 }
@@ -217,9 +217,9 @@ describe('User Controller', () => {
                 .never();
 
             let userController = new UserController(loggerMock.object,
-                                                    serviceMock.object,
-                                                    mailServiceMock.object,
-                                                    actionMailServiceMock.object);
+                serviceMock.object,
+                mailServiceMock.object,
+                actionMailServiceMock.object);
 
             let result = userController.register(invalidReqMock.object);
             await expect(result).to.be.rejectedWith(testCase.expected.message);
@@ -244,9 +244,9 @@ describe('User Controller', () => {
             .once();
 
         let userController = new UserController(loggerMock.object,
-                                                serviceMock.object,
-                                                mailServiceMock.object,
-                                                actionMailServiceMock.object);
+            serviceMock.object,
+            mailServiceMock.object,
+            actionMailServiceMock.object);
 
         let result = userController.logout(reqMock.object);
         expect(result).to.be.true;
@@ -376,7 +376,7 @@ describe('User Controller', () => {
 
         let reqObj = {
             header: () => {
-                return 'the@email.address'
+                return 'the@email.address';
             }
         };
         let reqMock = sinon.mock(reqObj);
@@ -392,11 +392,13 @@ describe('User Controller', () => {
             .withArgs(200);
 
         let userController = new UserController(loggerMock.object,
-            serviceMock.object,
-            mailServiceMock.object,
-            actionMailServiceMock.object);
+                                                serviceMock.object,
+                                                mailServiceMock.object,
+                                                actionMailServiceMock.object);
 
-        await userController.checkUserName(reqMock.object, resMock.object, () => {});
+        await userController.checkUserName(reqMock.object, resMock.object, () => {
+            // empty block
+        });
 
         serviceMock.verify();
         reqMock.verify();
@@ -408,7 +410,7 @@ describe('User Controller', () => {
 
         let reqObj = {
             header: () => {
-                return 'the@email.address'
+                return 'the@email.address';
             }
         };
         let reqMock = sinon.mock(reqObj);
@@ -424,16 +426,17 @@ describe('User Controller', () => {
             .withArgs(404);
 
         let userController = new UserController(loggerMock.object,
-            serviceMock.object,
-            mailServiceMock.object,
-            actionMailServiceMock.object);
+                                                serviceMock.object,
+                                                mailServiceMock.object,
+                                                actionMailServiceMock.object);
 
-        await userController.checkUserName(reqMock.object, resMock.object, () => {});
+        await userController.checkUserName(reqMock.object, resMock.object, () => {
+            // empty block
+        });
 
         serviceMock.verify();
         reqMock.verify();
         resMock.verify();
 
     });
-
 });

@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import {UserService} from '../services/user.service';
 import {IUser} from '../interfaces/user.interface';
-import {User} from '../models/user.model';
 
 /* tslint:disable */
 let expect = require('chai').expect;

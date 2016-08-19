@@ -35,16 +35,16 @@ export class MailService implements IMailService {
 
     public async sendActivationMail(name: string, email: string, activationToken: string) {
         const templateData = {
-            name: name,
-            actionLink: this._domain + this._activationUrl + '?c='+activationToken,
-            companyName: this._companyName
+            actionLink: this._domain + this._activationUrl + '?c=' + activationToken,
+            companyName: this._companyName,
+            name: name
         };
 
         const html = this._compileTemplate(this._templateConfig.path, templateData);
 
         return await this._mailFacade.send({
-            subject: this._templateConfig.subject,
             html: html,
+            subject: this._templateConfig.subject,
             to: name + '<' + email + '>'
         });
     }

@@ -1,14 +1,13 @@
 import * as passport from 'passport';
-import { Strategy } from 'passport-local';
-import kernel from '../../../../bootstrap';
-import {UserService} from '../../../user/services/user.service';
-import SVC_TAGS from '../../../../constant/services.tags';
-import {UserCantLoginException} from '../../error/models/user.cant.login.exception';
-import {AuthenticationError} from '../../error/models/authentication.error';
-import {UserMapper} from '../../../user/mapper/user.mapper';
-import MAPPER_TAGS from '../../../../constant/mapper.tags';
-import {UserState} from '../../../user/models/userstate.model';
-
+import {Strategy} from 'passport-local';
+import kernel from '../helper/user.kernel.test.helper';
+import {UserService} from '../../services/user.service';
+import {UserMapper} from '../../mapper/user.mapper';
+import SVC_TAGS from '../../../../constants/services.tags';
+import MAPPER_TAGS from '../../../../constants/mapper.tags';
+import {UserCantLoginException} from '../../../commons/error/models/user.cant.login.exception';
+import {UserState} from '../../models/userstate.model';
+import {AuthenticationError} from '../../../commons/error/models/authentication.error';
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });

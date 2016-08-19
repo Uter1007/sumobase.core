@@ -10,7 +10,7 @@ import { IUser } from '../interfaces/user.interface';
 
 import { UserService } from '../services/user.service';
 
-import TYPES from '../../../constant/services.tags';
+import TYPES from '../../../constants/services.tags';
 import {UserAlreadyInUseException} from '../../commons/error/models/user.alreadyinuse.exception';
 import {UserValidator} from '../services/validator/user.validator.service';
 import {ValidationException} from '../../commons/error/models/validation.exception';
@@ -22,10 +22,11 @@ import {UserAvatarValidator} from '../services/validator/user.avatar.validator.s
 import {UnknownException} from '../../commons/error/models/unknown.exception';
 import {MailService} from '../../commons/mail/services/mail.service';
 import {ActionEmailService} from '../../activity/services/action.email.activity.service';
-import SVC_TAGS from '../../../constant/services.tags';
+import SVC_TAGS from '../../../constants/services.tags';
 
 /* tslint:disable */
-let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater');
+import {AuthenticatorMiddleware} from '../../commons/authenticate/middleware/request.authenticater.middleware';
+let isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 let multer = require('multer');
 let fs = require('fs');
 let path = require('path');
@@ -111,16 +112,16 @@ export class UserController extends BaseController {
         return await this._actionEmailService.updateActivationEmail(hash);
     }
 
-    /**
-     * @api {post} /api/user/login User Login
-     * @apiVersion 1.0.0
-     * @apiName userLogin
-     * @apiGroup User
-     * @apiParam {String} email EMail of the User
-     * @apiParam {String} password clearText
-     * @apiSuccess Redirect to /api/user/me
-     * @apiError Redirect to /api/user/notfound
-     */
+    // /**
+    //  * @api {post} /api/user/login User Login
+    //  * @apiVersion 1.0.0
+    //  * @apiName userLogin
+    //  * @apiGroup User
+    //  * @apiParam {String} email EMail of the User
+    //  * @apiParam {String} password clearText
+    //  * @apiSuccess Redirect to /api/user/me
+    //  * @apiError Redirect to /api/user/notfound
+    //  */
     @Post('/login', passport.authenticate('local'))
 
     /**

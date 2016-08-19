@@ -7,9 +7,15 @@ let bcrypt = require('bcrypt');
 @injectable()
 export class PasswordService {
 
-    public async hash(data: any, rounds: number): Promise<string> {
+    private _rounds: number;
+
+    constructor(rounds: number) {
+        this._rounds = rounds;
+    }
+
+    public async hash(data: any): Promise<string> {
         return new Promise<string>( (resolve: any, reject: any) => {
-            bcrypt.hash(data, rounds, function (err, hash) {
+            bcrypt.hash(data, this._rounds, function (err, hash) {
                 if (err) {
                     return reject(err);
                 } else {

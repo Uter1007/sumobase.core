@@ -82,7 +82,7 @@ gulp.task('serve', function () {
     });
 });
 
-gulp.task('serve debug', function () {
+gulp.task('serve-debug', function () {
     var cfg = JSON.parse(JSON.stringify(nodemonConfiguration));
 
     cfg.exec = 'node --debug';
@@ -135,7 +135,7 @@ gulp.task('compile', function(callback) {
 gulp.task('default', function() {
     runSequence(
         'compile',
-        'serve debug',
+        'serve-debug',
         'node-inspector'
     );
 });

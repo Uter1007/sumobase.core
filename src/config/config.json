@@ -17,5 +17,9 @@
   },
   "urls": {
     "activation": "#/confirm"
+  },
+  "passwordHandler": {
+    "sessionPw": "utersfirsttry",
+    "saltingRounds": 12
   }
 }

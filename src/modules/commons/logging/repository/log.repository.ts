@@ -2,7 +2,7 @@ import {ILogModel, logDAO} from '../models/logmodel.db.model';
 import {BaseRepository} from '../../base/base.repository';
 import { injectable, inject } from 'inversify';
 import {ILogger} from '../interfaces/logger.interface';
-import SVC_TAGS from '../../../../constant/services.tags';
+import SVC_TAGS from '../../../../constants/services.tags';
 
 @injectable()
 export class LogRepository extends BaseRepository<ILogModel> {
