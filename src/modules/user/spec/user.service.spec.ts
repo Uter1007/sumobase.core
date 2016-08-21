@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import {UserService} from '../services/user.service';
 import {IUser} from '../interfaces/user.interface';
+import {UnknownException} from '../../commons/error/models/unknown.exception';
 
 /* tslint:disable */
 let expect = require('chai').expect;
@@ -383,56 +384,193 @@ describe('User Service', () => {
 
     });
 
-    // it('update User succeeds @unit', async() => {
-    //
-    //     loggerMock
-    //         .expects('error')
-    //         .never();
-    //
-    //     repoMock
-    //         .expects('findById')
-    //         .once()
-    //         .withArgs('the id')
-    //         .returns(Promise.resolve({
-    //             id: 'the id'
-    //         }));
-    //
-    //     repoMock
-    //         .expects('update')
-    //         .once();
-    //
-    //         // .withArgs('the id', {
-    //         //     id: 'the id',
-    //         //     firstName: 'Max',
-    //         //     lastName: 'Power'
-    //         // });
-    //
-    //     let userService = new UserService(loggerMock.object,
-    //                                       repoMock.object,
-    //                                       mapperMock.object,
-    //                                       pwMock.object,
-    //                                       userAvatarMock.object);
-    //     await userService.update(<User>{
-    //         id: 'the id',
-    //         firstName: 'Max',
-    //         lastName: 'Power'
-    //     });
-    //
-    //     loggerMock.verify();
-    //     repoMock.verify();
-    //
-    // });
+    it('update User succeeds @unit', async() => {
 
-    it('update User fail @unit', async() => {
-        // todo: implement it
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('findById')
+            .once()
+            .withArgs('the id')
+            .returns(Promise.resolve({
+                id: 'the id'
+            }));
+
+        repoMock
+            .expects('update')
+            .once()
+            .withArgs('the id', {
+                id: 'the id',
+                firstName: 'Max',
+                lastName: 'Power'
+            })
+            .returns(Promise.resolve(true));
+
+        mapperMock
+            .expects('toUser')
+            .once()
+            .withArgs({
+                id: 'the id',
+                firstName: 'Max', // stems from UserService.update
+                lastName: 'Power' // stems from UserService.update
+            });
+
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+        let user = <IUser>{};
+        user.id = 'the id';
+        user.firstName = 'Max';
+        user.lastName = 'Power';
+
+        await userService.update(user);
+
+        loggerMock.verify();
+        repoMock.verify();
+        mapperMock.verify();
+
+    });
+
+    it('update User fails @unit', async() => {
+
+        loggerMock
+            .expects('error')
+            .once()
+            .withArgs(
+                'An error occurred:',
+                new UnknownException('User can not be updated'));
+
+        repoMock
+            .expects('findById')
+            .once()
+            .withArgs('the id')
+            .returns(Promise.resolve({
+                id: 'the id'
+            }));
+
+        repoMock
+            .expects('update')
+            .once()
+            .withArgs('the id', {
+                id: 'the id',
+                firstName: 'Max',
+                lastName: 'Power'
+            })
+            .returns(Promise.resolve(false));
+
+        mapperMock
+            .expects('toUser')
+            .never();
+
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+        let user = <IUser>{};
+        user.id = 'the id';
+        user.firstName = 'Max';
+        user.lastName = 'Power';
+
+        await userService.update(user);
+
+        loggerMock.verify();
+        repoMock.verify();
+        mapperMock.verify();
+
     });
 
     it('update User password succeeds @unit', async() => {
-        // todo: implement it
+
+        loggerMock
+            .expects('error')
+            .never();
+
+        repoMock
+            .expects('findById')
+            .once()
+            .withArgs('the id')
+            .returns(Promise.resolve({
+                id: 'the id'
+            }));
+
+        pwMock
+            .expects('hash')
+            .once()
+            .withArgs('the password')
+            .returns('the password\'s hash');
+
+        repoMock
+            .expects('update')
+            .once()
+            .withArgs('the id', {
+                id: 'the id',
+                password: 'the password\'s hash'
+            })
+            .returns(Promise.resolve(true));
+
+        let userService = new UserService(loggerMock.object,
+                                          repoMock.object,
+                                          mapperMock.object,
+                                          pwMock.object,
+                                          userAvatarMock.object);
+
+        await userService.updatePassword('the id', 'the password');
+
+        loggerMock.verify();
+        repoMock.verify();
+        pwMock.verify();
+
     });
 
-    it('update User password fail @unit', async() => {
-        // todo: implement it
+    it('update User password fails @unit', async() => {
+
+        loggerMock
+            .expects('error')
+            .once()
+            .withArgs(
+                'An error occurred:',
+                new UnknownException('User can not be updated'));
+
+        repoMock
+            .expects('findById')
+            .once()
+            .withArgs('the id')
+            .returns(Promise.resolve({
+                id: 'the id'
+            }));
+
+        pwMock
+            .expects('hash')
+            .once()
+            .withArgs('the password')
+            .returns('the password\'s hash');
+
+        repoMock
+            .expects('update')
+            .once()
+            .withArgs('the id', {
+                id: 'the id',
+                password: 'the password\'s hash'
+            })
+            .returns(Promise.resolve(false));
+
+        let userService = new UserService(loggerMock.object,
+            repoMock.object,
+            mapperMock.object,
+            pwMock.object,
+            userAvatarMock.object);
+
+        await userService.updatePassword('the id', 'the password');
+
+        loggerMock.verify();
+        repoMock.verify();
+        pwMock.verify();
+
     });
 
 });
