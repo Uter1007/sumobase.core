@@ -252,7 +252,7 @@ describe('User Service', () => {
 
     });
 
-    it('create create fails @unit', async() => {
+    it('create create fails @unit', async () => {
 
         let userModel = <IUser>{};
 
@@ -283,7 +283,7 @@ describe('User Service', () => {
 
     });
 
-    it('create create succeeds @unit', async() => {
+    it('create create succeeds @unit', async () => {
 
         let userModel = <IUser>{};
 
@@ -313,7 +313,7 @@ describe('User Service', () => {
 
     });
 
-    it('activateUser update fails @unit', async() => {
+    it('activateUser update fails @unit', async () => {
 
         let error = new Error('The Error');
 
@@ -350,7 +350,7 @@ describe('User Service', () => {
 
     });
 
-    it('activateUser update succeeds @unit', async() => {
+    it('activateUser update succeeds @unit', async () => {
 
         loggerMock
             .expects('error')
@@ -384,7 +384,7 @@ describe('User Service', () => {
 
     });
 
-    it('update User succeeds @unit', async() => {
+    it('update User succeeds @unit', async () => {
 
         loggerMock
             .expects('error')
@@ -435,7 +435,7 @@ describe('User Service', () => {
 
     });
 
-    it('update User fails @unit', async() => {
+    it('update User fails @unit', async () => {
 
         loggerMock
             .expects('error')
@@ -484,7 +484,7 @@ describe('User Service', () => {
 
     });
 
-    it('update User password succeeds @unit', async() => {
+    it('update User password succeeds @unit', async () => {
 
         loggerMock
             .expects('error')
@@ -527,7 +527,7 @@ describe('User Service', () => {
 
     });
 
-    it('update User password fails @unit', async() => {
+    it('update User password fails @unit', async () => {
 
         loggerMock
             .expects('error')
