@@ -1,12 +1,9 @@
 /* tslint:disable */
-import {transports} from 'winston';
 let chai = require('chai');
 chai.use(require('chai-as-promised'));
 let expect = chai.expect;
 let sinon = require('sinon');
 let request = require('supertest');
-let promisedRequest = require('supertest-as-promised');
-let promisedAgent = promisedRequest.agent;
 import kernel from './helper/user.kernel.test.helper';
 import 'reflect-metadata';
 import * as expressutils from 'inversify-express-utils';
@@ -18,14 +15,12 @@ import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
 import * as passport from 'passport';
 
-
 import errorHandler = require('../../../modules/commons/error/middleware/error.handler.logic');
 import notFoundHandler = require('../../../modules/commons/error/middleware/notfound.handler.logic');
-import {PasswordService} from '../services/password.service';
-import SVC_TAGS from '../../../constants/services.tags';
 import supertest = require('supertest');
 
 require('./fakes/passport.fake.strategy');
+
 /* tslint:enable */
 
 
@@ -33,38 +28,31 @@ describe('User Route Tests', () => {
 
     let server: expressutils.interfaces.InversifyExpressServer;
     let app: Express.Application;
+    server = new expressutils.InversifyExpressServer(kernel);
 
-    beforeEach(function(){
+    server.setConfig((exApp) => {
+        exApp.use(cookieParser());
+        exApp.use(bodyParser.json());
+        exApp.use(bodyParser.urlencoded({extended: true}));
+        exApp.use(helmet());
 
-        server = new expressutils.InversifyExpressServer(kernel);
+        exApp.use(session({
+            resave: false,
+            saveUninitialized: true,
+            secret: 'testing',
+        }));
+        exApp.use(passport.initialize());
+        exApp.use(passport.session()); // persistent login sessions
 
-        server.setConfig((exApp) => {
-            exApp.use(cookieParser());
-            exApp.use(bodyParser.json());
-            exApp.use(bodyParser.urlencoded({extended: true}));
-            exApp.use(helmet());
-
-            exApp.use(session({
-                resave: false,
-                saveUninitialized: true,
-                secret: 'testing',
-            }));
-            exApp.use(passport.initialize());
-            exApp.use(passport.session()); // persistent login sessions
-
-        });
-
-        // generic Error Handler1
-        server.setErrorConfig((exApp) => {
-            exApp.use(errorHandler);
-        });
-
-        app = server.build();
     });
 
-    afterEach(function(){
-        // add here if needed
+
+    // generic Error Handler1
+    server.setErrorConfig((exApp) => {
+        exApp.use(errorHandler);
     });
+
+    app = server.build();
 
     describe('Special Routes', () => {
         it('/Login Test', (done) => {
@@ -76,7 +64,6 @@ describe('User Route Tests', () => {
                 .expect(200)
                 .end(function(err, res) {
                     if (err) {
-                        done();
                         throw err;
                     } else {
                         done();
@@ -92,7 +79,6 @@ describe('User Route Tests', () => {
                 .expect(401)
                 .end(function(err, res) {
                     if (err) {
-                        done();
                         throw err;
                     } else {
                         done();
@@ -108,27 +94,13 @@ describe('User Route Tests', () => {
                 .expect(401)
                 .end(function(err, res) {
                     if (err) {
-                        done();
                         throw err;
                     } else {
                         done();
                     }
                 });
         });
-        it('/Login Test; logged-in + able to call a protected route', async () => {
-            // noinspection TypeScriptValidateTypes
-            let agent = promisedAgent(app);
-            await agent
-                .post('/api/user/login')
-                .type('form')
-                .send({'email': 'christoph.ott@lean-coders.at', 'password': '123appTest$!'})
-                .then(function(res) {
-                    agent.saveCookies(res);
-                });
-            await agent
-                .get('/api/user/me')
-                .expect(200);
-        });
+
     });
 
     describe('Restricted Routes Not LoggedIn', () => {
@@ -140,7 +112,6 @@ describe('User Route Tests', () => {
                 .expect(401)
                 .end(function(err, res) {
                     if (err) {
-                        done();
                         throw err;
                     } else {
                         done();
@@ -151,13 +122,36 @@ describe('User Route Tests', () => {
 
     describe('Restricted Routes LoggedIn', () => {
 
-        let agent;
-        beforeEach(async() => {
-            agent = supertest.agent(app);
+        let agent = request.agent(app);
+        beforeEach(function(done){
+            // noinspection TypeScriptValidateTypes
+            agent
+                .post('/api/user/login')
+                .type('form')
+                .send({'email': 'christoph.ott@lean-coders.at', 'password': '123appTest$!'})
+                .end(function(err, res) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        done();
+                    }
+                });
         });
 
         describe('/me Route Test', () => {
-
+            it('/Login Test; logged-in + able to call a protected route', (done) => {
+                // noinspection TypeScriptValidateTypes
+                agent
+                    .get('/api/user/me')
+                    .expect(200)
+                    .end(function(err, res) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            done();
+                        }
+                    });
+            });
         });
 
     });

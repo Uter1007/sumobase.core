@@ -25,8 +25,7 @@ import {ActionEmailService} from '../../activity/services/action.email.activity.
 import SVC_TAGS from '../../../constants/services.tags';
 
 /* tslint:disable */
-import {AuthenticatorMiddleware} from '../../commons/authenticate/middleware/request.authenticater.middleware';
-let isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
+let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater.middleware');
 let multer = require('multer');
 let fs = require('fs');
 let path = require('path');
@@ -123,6 +122,12 @@ export class UserController extends BaseController {
     //  * @apiError Redirect to /api/user/notfound
     //  */
     @Post('/login', passport.authenticate('local'))
+    public login(request: express.Request, response: express.Response, next){
+        request.logIn(request.user, function() {
+            response.send(request.user);
+        });
+
+    }
 
     /**
      * @api {get} /api/user/logout User Logout

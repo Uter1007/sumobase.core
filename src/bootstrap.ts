@@ -26,22 +26,12 @@ import {ActionEmailMapper} from './modules/activity/mapper/action.email.activity
 import {ActionEmailService} from './modules/activity/services/action.email.activity.service';
 import {IUserRepository} from './modules/user/interfaces/user.repository.interface';
 import {IActionEmailRepository} from './modules/activity/interfaces/action.email.repository.interface';
-import {PassportMiddleware} from './modules/commons/authenticate/middleware/passport.middleware';
-import MIDDLEWARE_TAGS from './constants/middleware.tags';
-import {AuthenticatorMiddleware} from './modules/commons/authenticate/middleware/request.authenticater.middleware';
 import configLoader from './modules/commons/configloader/configloader.service';
 
 const config = configLoader.getConfig();
 const kernel = new Kernel();
 
 // put all your dependencies here
-
-/* Middlewares */
-kernel.bind<PassportMiddleware>(MIDDLEWARE_TAGS.PassportMiddleware)
-      .to(PassportMiddleware);
-
-kernel.bind<AuthenticatorMiddleware>(MIDDLEWARE_TAGS.AuthenticatorMiddleware)
-    .to(AuthenticatorMiddleware);
 
 /* Repositories */
 kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
