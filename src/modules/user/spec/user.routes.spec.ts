@@ -21,6 +21,7 @@ import errorHandler = require('../../../modules/commons/error/middleware/error.h
 import notFoundHandler = require('../../../modules/commons/error/middleware/notfound.handler.logic');
 import {PasswordService} from '../services/password.service';
 import SVC_TAGS from '../../../constants/services.tags';
+import supertest = require('supertest');
 
 require('./fakes/passport.fake.strategy');
 /* tslint:enable */
@@ -101,8 +102,15 @@ describe('User Route Tests', () => {
     });
 
     describe('Restricted Routes LoggedIn', () => {
+
+        let agent;
         beforeEach(async() => {
-            // feel free to add stuff here
+            agent = supertest.agent(app);
         });
+
+        describe('/me Route Test', () => {
+
+        });
+
     });
 });
