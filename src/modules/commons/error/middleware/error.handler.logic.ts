@@ -28,7 +28,7 @@ let errorHandler = (
         message = 'Unknown Exception';
     }
 
-    response.send(code, JSON.stringify(message));
+    response.status(code).send(JSON.stringify(message));
 };
 
 export = errorHandler;

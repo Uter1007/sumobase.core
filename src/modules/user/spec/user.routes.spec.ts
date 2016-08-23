@@ -5,6 +5,8 @@ chai.use(require('chai-as-promised'));
 let expect = chai.expect;
 let sinon = require('sinon');
 let request = require('supertest');
+let promisedRequest = require('supertest-as-promised');
+let promisedAgent = promisedRequest.agent;
 import kernel from './helper/user.kernel.test.helper';
 import 'reflect-metadata';
 import * as expressutils from 'inversify-express-utils';
@@ -80,6 +82,52 @@ describe('User Route Tests', () => {
                         done();
                     }
                 });
+        });
+        it('/Login Test; fails because of wrong password', (done) => {
+            // noinspection TypeScriptValidateTypes
+            request(app)
+                .post('/api/user/login')
+                .type('form')
+                .send({'email': 'christoph.ott@lean-coders.at', 'password': '123appTest$!.wrong'})
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) {
+                        done();
+                        throw err;
+                    } else {
+                        done();
+                    }
+                });
+        });
+        it('/Login Test; fails because of inexistent user', (done) => {
+            // noinspection TypeScriptValidateTypes
+            request(app)
+                .post('/api/user/login')
+                .type('form')
+                .send({'email': 'inexistent.user@somewhere.else', 'password': '123appTest$!.wrong'})
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) {
+                        done();
+                        throw err;
+                    } else {
+                        done();
+                    }
+                });
+        });
+        it('/Login Test; logged-in + able to call a protected route', async () => {
+            // noinspection TypeScriptValidateTypes
+            let agent = promisedAgent(app);
+            await agent
+                .post('/api/user/login')
+                .type('form')
+                .send({'email': 'christoph.ott@lean-coders.at', 'password': '123appTest$!'})
+                .then(function(res) {
+                    agent.saveCookies(res);
+                });
+            await agent
+                .get('/api/user/me')
+                .expect(200);
         });
     });
 
