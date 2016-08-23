@@ -123,6 +123,12 @@ export class UserController extends BaseController {
     //  * @apiError Redirect to /api/user/notfound
     //  */
     @Post('/login', passport.authenticate('local'))
+    public login(request: express.Request, response: express.Response, next){
+        request.logIn(request.user, function() {
+            response.send(request.user);
+        });
+
+    }
 
     /**
      * @api {get} /api/user/logout User Logout
