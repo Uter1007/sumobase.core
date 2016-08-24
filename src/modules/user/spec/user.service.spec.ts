@@ -402,8 +402,8 @@ describe('User Service', () => {
             .expects('update')
             .once()
             .withArgs('the id', {
-                id: 'the id',
                 firstName: 'Max',
+                id: 'the id',
                 lastName: 'Power'
             })
             .returns(Promise.resolve(true));
@@ -412,8 +412,8 @@ describe('User Service', () => {
             .expects('toUser')
             .once()
             .withArgs({
-                id: 'the id',
                 firstName: 'Max', // stems from UserService.update
+                id: 'the id',
                 lastName: 'Power' // stems from UserService.update
             });
 
@@ -456,8 +456,8 @@ describe('User Service', () => {
             .expects('update')
             .once()
             .withArgs('the id', {
-                id: 'the id',
                 firstName: 'Max',
+                id: 'the id',
                 lastName: 'Power'
             })
             .returns(Promise.resolve(false));

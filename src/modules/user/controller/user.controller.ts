@@ -129,7 +129,7 @@ export class UserController extends BaseController {
      * @apiError 401
      */
     @Post('/login', passport.authenticate('local'))
-    public login(request: express.Request, response: express.Response, next){
+    public login(request: express.Request, response: express.Response, next) {
         request.logIn(request.user, function() {
             response.send(request.user);
         });
