@@ -11,7 +11,6 @@ import session = require('express-session');
 
 /* tslint:disable */
 import kernel from './bootstrap';
-require('./modules/commons/authenticate/strategy/passport');
 let MongoStore = require('connect-mongo')(session);
 /* tslint:enable */
 
@@ -19,6 +18,9 @@ import errorHandler = require('./modules/commons/error/middleware/error.handler.
 import notFoundHandler = require('./modules/commons/error/middleware/notfound.handler.logic');
 
 import configLoader from './modules/commons/configloader/configloader.service';
+import {PassportMiddleware} from './modules/commons/authenticate/middleware/passport.middleware';
+import MIDDLEWARE_TAGS from './constants/middleware.tags';
+import {Strategy} from 'passport-local';
 
 const config = configLoader.getConfig();
 
@@ -39,7 +41,7 @@ server.setConfig((app) => {
 
     app.use(session({ resave: false,
                       saveUninitialized: true,
-                      secret: 'utersfirsttry',
+                      secret: config.passwordHandler.sessionPw,
                       store: new MongoStore( {mongooseConnection: mongoose.connection})
                     }));
 
@@ -57,6 +59,26 @@ server.setErrorConfig((app) => {
 
 let app = server.build();
 
+// passport configuration
+let passportManagement = kernel.get<PassportMiddleware>(MIDDLEWARE_TAGS.PassportMiddleware);
+
+passport.serializeUser(function(user, done) {
+    passportManagement.serializeUser(user, done);
+});
+
+passport.deserializeUser(async function(id, done) {
+    await passportManagement.deserializeUser(id, done);
+});
+
+passport.use(new Strategy(
+    {
+        passReqToCallback: true,
+        usernameField: 'email'
+    },
+    async function(req, email, password, done) {
+        await passportManagement.localStrategy(req, email, password, done);
+    }
+));
 
 // 404 Error Handler
 app.use(notFoundHandler);

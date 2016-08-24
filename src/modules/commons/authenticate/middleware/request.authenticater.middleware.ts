@@ -1,16 +1,19 @@
 import express = require('express');
 import {AuthenticationError} from '../../error/models/authentication.error';
+import {injectable} from 'inversify';
 
-let requestAuthenticater: express.RequestHandler = (
-    request: express.Request,
-    response: express.Response,
-    next: express.NextFunction
-) => {
-    if (request.isAuthenticated()) {
-        return next();
-    }
-    // in any other case, redirect to the home
-    next(new AuthenticationError('Not LoggedIn'));
-};
+@injectable()
+export class AuthenticatorMiddleware {
 
-export = requestAuthenticater;
+    public static requestAuthenticater: express.RequestHandler = (request: express.Request,
+                                                                  response: express.Response,
+                                                                  next: express.NextFunction) => {
+        if (request.isAuthenticated()) {
+            return next();
+        }
+
+        next(new AuthenticationError('Not LoggedIn'));
+    };
+}
+
+export default AuthenticatorMiddleware;

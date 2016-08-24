@@ -25,7 +25,8 @@ import {ActionEmailService} from '../../activity/services/action.email.activity.
 import SVC_TAGS from '../../../constants/services.tags';
 
 /* tslint:disable */
-let isLoggedIn = require('../../commons/authenticate/middleware/request.authenticater.middleware');
+import {AuthenticatorMiddleware} from '../../commons/authenticate/middleware/request.authenticater.middleware';
+let isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 let multer = require('multer');
 let fs = require('fs');
 let path = require('path');
