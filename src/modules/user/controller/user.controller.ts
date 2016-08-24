@@ -112,16 +112,22 @@ export class UserController extends BaseController {
         return await this._actionEmailService.updateActivationEmail(hash);
     }
 
-    // /**
-    //  * @api {post} /api/user/login User Login
-    //  * @apiVersion 1.0.0
-    //  * @apiName userLogin
-    //  * @apiGroup User
-    //  * @apiParam {String} email EMail of the User
-    //  * @apiParam {String} password clearText
-    //  * @apiSuccess Redirect to /api/user/me
-    //  * @apiError Redirect to /api/user/notfound
-    //  */
+    /**
+     * @api {post} /api/user/login User Login
+     * @apiVersion 1.0.0
+     * @apiName userLogin
+     * @apiGroup User
+     * @apiParam {String} email EMail of the User
+     * @apiParam {String} password clearText
+     * @apiSuccess {Object} userResponse Express Body Response
+     * @apiSuccess {String} userResponse.id Id of the User.
+     * @apiSuccess {String} userResponse.firstName Firstname of the User.
+     * @apiSuccess {String} userResponse.lastName  Lastname of the User.
+     * @apiSuccess {String} userResponse.email Email of the User.
+     * @apiSuccess {String} userResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
+     * @apiSuccess {String} userResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     * @apiError 401
+     */
     @Post('/login', passport.authenticate('local'))
     public login(request: express.Request, response: express.Response, next){
         request.logIn(request.user, function() {
