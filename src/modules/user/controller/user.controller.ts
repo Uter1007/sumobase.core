@@ -1,15 +1,12 @@
+/* tslint:disable */
 import * as express from 'express';
-
 import BaseController from '../../commons/base/base.controller';
-
 import { injectable, inject  } from 'inversify';
 import { Controller, Get, Post, Head, Put } from 'inversify-express-utils';
 import { ILogger } from '../../commons/logging/interfaces/logger.interface';
 import { User } from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
-
 import { UserService } from '../services/user.service';
-
 import TYPES from '../../../constants/services.tags';
 import {UserAlreadyInUseException} from '../../commons/error/models/user.alreadyinuse.exception';
 import {UserValidator} from '../services/validator/user.validator.service';
@@ -23,9 +20,9 @@ import {UnknownException} from '../../commons/error/models/unknown.exception';
 import {MailService} from '../../commons/mail/services/mail.service';
 import {ActionEmailService} from '../../activity/services/action.email.activity.service';
 import SVC_TAGS from '../../../constants/services.tags';
-
-/* tslint:disable */
 import {AuthenticatorMiddleware} from '../../commons/authenticate/middleware/request.authenticater.middleware';
+import {UserMapper} from '../mapper/user.mapper';
+import MAPPER_TAGS from '../../../constants/mapper.tags';
 let isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 let multer = require('multer');
 let fs = require('fs');
@@ -40,16 +37,19 @@ export class UserController extends BaseController {
     private _userService: UserService;
     private _mailService: MailService;
     private _actionEmailService: ActionEmailService;
+    private _userMapper: UserMapper;
 
     constructor(@inject(TYPES.Logger) log: ILogger,
                 @inject(TYPES.UserService) userService: UserService,
                 @inject(TYPES.MailService) mailService: MailService,
-                @inject(SVC_TAGS.ActionEmailService) actionEmailService: ActionEmailService) {
+                @inject(SVC_TAGS.ActionEmailService) actionEmailService: ActionEmailService,
+                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
         super();
         this._log = log;
         this._userService = userService;
         this._mailService = mailService;
         this._actionEmailService = actionEmailService;
+        this._userMapper = userMapper;
     }
 
     /**
@@ -78,7 +78,7 @@ export class UserController extends BaseController {
      */
     @Post('/register')
     public async register(request: express.Request): Promise<User> {
-        let user: IUser = User.createFromJSON(request.body);
+        let user: IUser = this._userMapper.fromJSON(request.body);
         let founduser = await this._userService.findUserByName(user.email);
         if (!founduser) {
             let clearTextPassword: string = request.body.password;
@@ -173,7 +173,7 @@ export class UserController extends BaseController {
      */
     @Put('/edit', isLoggedIn)
     public async edit(request: express.Request) {
-        let user = request.user;
+        let user: IUser = this._userMapper.fromJSON(request.user);
 
         if (request.body && typeof request.body.firstName === 'string') {
             user.firstName = request.body.firstName;

@@ -3,7 +3,7 @@ import { autoserialize } from 'cerialize';
 import { IUser } from '../interfaces/user.interface';
 import { UserState } from './userstate.model';
 import {BaseModel} from '../../commons/base/base.model';
-import { Deserialize } from 'cerialize';
+
 import {IsLength, IsEmail} from 'validator.ts/decorator/Validation';
 import 'reflect-metadata';
 
@@ -34,10 +34,6 @@ export class User extends BaseModel implements IUser {
 
     @autoserialize
     public modifiedOn: string;
-
-    public static createFromJSON(json: any) {
-        return Deserialize(json, User);
-    }
 
     constructor(email, firstname, lastname, userState, modifiedOn?, createdOn?, id?) {
         super();

@@ -1,6 +1,7 @@
 import 'reflect-metadata';
-import {User} from '../models/user.model';
+
 import {UserController} from '../controller/user.controller';
+import {UserMapper} from '../mapper/user.mapper';
 
 /* tslint:disable */
 let chai = require('chai');
@@ -18,6 +19,7 @@ describe('User Controller', () => {
     let actionMailServiceMock;
     let resMock;
     let userSkeleton;
+    let userMapper: UserMapper;
 
     let loggingObj = {
         // empty object - just a mock
@@ -67,6 +69,7 @@ describe('User Controller', () => {
             lastName: 'Power',
             password: 'the Password$123'
         };
+        userMapper = new UserMapper();
     });
 
     afterEach(function() {
@@ -110,9 +113,10 @@ describe('User Controller', () => {
             .withArgs(userSkeleton.lastName, userSkeleton.email, 'the hash');
 
         let userController = new UserController(loggerMock.object,
-            serviceMock.object,
-            mailServiceMock.object,
-            actionMailServiceMock.object);
+                                                serviceMock.object,
+                                                mailServiceMock.object,
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         await userController.register(reqMock.object);
 
@@ -146,9 +150,10 @@ describe('User Controller', () => {
             .never();
 
         let userController = new UserController(loggerMock.object,
-            serviceMock.object,
-            mailServiceMock.object,
-            actionMailServiceMock.object);
+                                                serviceMock.object,
+                                                mailServiceMock.object,
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         await expect(userController.register(reqMock.object)).to.be.rejectedWith('Error on register');
 
@@ -217,9 +222,10 @@ describe('User Controller', () => {
                 .never();
 
             let userController = new UserController(loggerMock.object,
-                serviceMock.object,
-                mailServiceMock.object,
-                actionMailServiceMock.object);
+                                                    serviceMock.object,
+                                                    mailServiceMock.object,
+                                                    actionMailServiceMock.object,
+                                                    userMapper);
 
             let result = userController.register(invalidReqMock.object);
             await expect(result).to.be.rejectedWith(testCase.expected.message);
@@ -244,9 +250,10 @@ describe('User Controller', () => {
             .once();
 
         let userController = new UserController(loggerMock.object,
-            serviceMock.object,
-            mailServiceMock.object,
-            actionMailServiceMock.object);
+                                                serviceMock.object,
+                                                mailServiceMock.object,
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         let result = userController.logout(reqMock.object);
         expect(result).to.be.true;
@@ -260,16 +267,18 @@ describe('User Controller', () => {
             body: {
                 lastName: 'P.'
             },
-            user: User.createFromJSON(userSkeleton)
+            user: userSkeleton
         };
         let reqMock = sinon.mock(reqObj);
 
-        let expectedResult = User.createFromJSON({
-            confirmPassword: 'the Password$123',
+        let expectedResult = userMapper.fromJSON({
+            createdOn: undefined,
             email: 'the@email.address',
             firstName: 'Max',
+            id: undefined,
             lastName: 'P.',
-            password: 'the Password$123'
+            modifiedOn: undefined,
+            state: 'pending'
         });
 
         serviceMock
@@ -281,7 +290,8 @@ describe('User Controller', () => {
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
                                                 mailServiceMock.object,
-                                                actionMailServiceMock.object);
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         let result = await userController.edit(reqMock.object);
         expect(result).to.deep.equal(expectedResult);
@@ -296,7 +306,7 @@ describe('User Controller', () => {
             body: {
                 lastName: ''
             },
-            user: User.createFromJSON(userSkeleton)
+            user: userSkeleton
         };
         let reqMock = sinon.mock(reqObj);
 
@@ -307,7 +317,8 @@ describe('User Controller', () => {
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
                                                 mailServiceMock.object,
-                                                actionMailServiceMock.object);
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         let result = userController.edit(reqMock.object);
         await expect(result).to.be.rejectedWith('User validation failed');
@@ -323,7 +334,7 @@ describe('User Controller', () => {
                 confirmPassword: 'the Password$1234',
                 password: 'the Password$1234'
             },
-            user: User.createFromJSON(userSkeleton)
+            user: userSkeleton
         };
         let reqMock = sinon.mock(reqObj);
 
@@ -335,7 +346,8 @@ describe('User Controller', () => {
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
                                                 mailServiceMock.object,
-                                                actionMailServiceMock.object);
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         let result = await userController.changepw(reqMock.object);
         expect(result).to.be.true;
@@ -351,7 +363,7 @@ describe('User Controller', () => {
                 confirmPassword: 'the Password$12345',
                 password: 'the Password$1234'
             },
-            user: User.createFromJSON(userSkeleton),
+            user: userMapper.fromJSON(userSkeleton),
 
         };
         let reqMock = sinon.mock(reqObj);
@@ -363,7 +375,8 @@ describe('User Controller', () => {
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
                                                 mailServiceMock.object,
-                                                actionMailServiceMock.object);
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         let result = userController.changepw(reqMock.object);
         await expect(result).to.be.rejectedWith('Passwords not equal');
@@ -394,7 +407,8 @@ describe('User Controller', () => {
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
                                                 mailServiceMock.object,
-                                                actionMailServiceMock.object);
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         await userController.checkUserName(reqMock.object, resMock.object, () => {
             // empty block
@@ -428,7 +442,8 @@ describe('User Controller', () => {
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
                                                 mailServiceMock.object,
-                                                actionMailServiceMock.object);
+                                                actionMailServiceMock.object,
+                                                userMapper);
 
         await userController.checkUserName(reqMock.object, resMock.object, () => {
             // empty block

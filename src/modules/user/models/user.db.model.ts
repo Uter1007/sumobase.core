@@ -11,7 +11,6 @@ export interface IUserDBSchema extends mongoose.Document {
     createdOn?: string;
     email?: string;
     firstName?: string;
-    image?: IUserAvatarDBSchema;
     lastName?: string;
     modifiedOn?: string;
     password?: string;

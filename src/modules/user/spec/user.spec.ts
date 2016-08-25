@@ -56,7 +56,7 @@ describe('User Tests', () => {
         describe('Json Request Tests', () => {
 
             it('map to user model', () => {
-                let user: IUser = User.createFromJSON(validUserJson);
+                let user: IUser = userMapper.fromJSON(validUserJson);
                 expect(user).to.be.an.instanceof(User);
                 expect(user.firstName).to.be.eq('testName');
                 expect(user.lastName).to.be.eq('testX');
@@ -67,7 +67,7 @@ describe('User Tests', () => {
 
             it('map without all relevantData ', () => {
                 delete validUserJson.lastName;
-                let user: IUser = User.createFromJSON(validUserJson);
+                let user: IUser = userMapper.fromJSON(validUserJson);
                 expect(user).to.be.an.instanceof(User);
                 expect(user.firstName).to.be.eq('testName');
                 expect(user.lastName).to.be.undefined;
