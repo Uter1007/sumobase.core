@@ -53,25 +53,22 @@ export class UserController extends BaseController {
     }
 
     /**
+     * @apiDefine MeObject
+     * @apiSuccess {String} id Id of the User.
+     * @apiSuccess {String} firstName Firstname of the User.
+     * @apiSuccess {String} lastName  Lastname of the User.
+     * @apiSuccess {String} email Email of the User.
+     * @apiSuccess {String} modifiedOn ModifiedOn Date (UTC specified) of the User.
+     * @apiSuccess {String} createdOn CreatedOn Date (UTC specified) of the User.
+     */
+
+    /**
      * @api {post} /api/user/register Register User
      * @apiVersion 1.0.0
      * @apiName userRegister
      * @apiGroup User
      *
-     * @apiParam {Object} registerRequest Express Body Request
-     * @apiParam {String} registerRequest.firstName Firstname of the User
-     * @apiParam {String} registerRequest.lastName Lastname of the User
-     * @apiParam {String} registerRequest.email Email of the User
-     * @apiParam {String} registerRequest.password Password of the User
-     * @apiParam {String} registerRequest.confirmPassword Password Confirmation of the User
-     *
-     * @apiSuccess {Object} registerResponse Express Body Response
-     * @apiSuccess {String} registerResponse.id Id of the User.
-     * @apiSuccess {String} registerResponse.firstName Firstname of the User.
-     * @apiSuccess {String} registerResponse.lastName  Lastname of the User.
-     * @apiSuccess {String} registerResponse.email Email of the User.
-     * @apiSuccess {String} registerResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
-     * @apiSuccess {String} registerResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     * @apiUse MeObject
      *
      * @apiError ValidationException register parameters are not valid
      * @apiError UserAlreadyInUseException user already registered
@@ -119,13 +116,7 @@ export class UserController extends BaseController {
      * @apiGroup User
      * @apiParam {String} email EMail of the User
      * @apiParam {String} password clearText
-     * @apiSuccess {Object} userResponse Express Body Response
-     * @apiSuccess {String} userResponse.id Id of the User.
-     * @apiSuccess {String} userResponse.firstName Firstname of the User.
-     * @apiSuccess {String} userResponse.lastName  Lastname of the User.
-     * @apiSuccess {String} userResponse.email Email of the User.
-     * @apiSuccess {String} userResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
-     * @apiSuccess {String} userResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     * @apiUse MeObject
      * @apiError 401
      */
     @Post('/login', passport.authenticate('local'))
@@ -156,17 +147,7 @@ export class UserController extends BaseController {
      * @apiName userEdit
      * @apiGroup User
      *
-     * @apiParam {Object} editRequest Express Body Request
-     * @apiParam {String} editRequest.firstName Firstname of the User
-     * @apiParam {String} editRequest.lastName Lastname of the User
-     *
-     * @apiSuccess {Object} editResponse Express Body Response
-     * @apiSuccess {String} editResponse.id Id of the User.
-     * @apiSuccess {String} editResponse.firstName Firstname of the User.
-     * @apiSuccess {String} editResponse.lastName  Lastname of the User.
-     * @apiSuccess {String} editResponse.email Email of the User.
-     * @apiSuccess {String} editResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
-     * @apiSuccess {String} editResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     * @apiUse MeObject
      *
      * @apiError ValidationException register parameters are not valid
      * @apiError UserAlreadyInUseException user already registered
@@ -245,13 +226,7 @@ export class UserController extends BaseController {
      * @apiName userMe
      * @apiGroup User
      *
-     * @apiSuccess {Object} userResponse Express Body Response
-     * @apiSuccess {String} userResponse.id Id of the User.
-     * @apiSuccess {String} userResponse.firstName Firstname of the User.
-     * @apiSuccess {String} userResponse.lastName  Lastname of the User.
-     * @apiSuccess {String} userResponse.email Email of the User.
-     * @apiSuccess {String} userResponse.modifiedOn ModifiedOn Date (UTC specified) of the User.
-     * @apiSuccess {String} userResponse.createdOn CreatedOn Date (UTC specified) of the User.
+     * @apiUse MeObject
      *
      * @apiError ValidationException register parameters are not valid
      * @apiError UserAlreadyInUseException user already registered
@@ -291,7 +266,7 @@ export class UserController extends BaseController {
     /**
      * @api {get} /api/user/avatar Retrieve Avatar Picture
      * @apiVersion 1.0.0
-     * @apiName uploadAvatar
+     * @apiName getAvatar
      * @apiGroup User
      *
      * @apiSuccess {Object} Avatar Picture File
