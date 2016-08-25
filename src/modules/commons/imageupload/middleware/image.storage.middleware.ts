@@ -7,7 +7,7 @@ let crypto = require('crypto');
 // image upload
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './temp/uploads/');
+        cb(null, process.cwd() + '/dist/temp/uploads/');
     },
     filename: function (req, file, cb) {
         crypto.pseudoRandomBytes(16, function (err, raw) {
