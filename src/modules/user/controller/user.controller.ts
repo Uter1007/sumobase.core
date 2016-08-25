@@ -18,7 +18,7 @@ import storage = require('../../commons/imageupload/middleware/image.storage.mid
 import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
 import {UnknownException} from '../../commons/error/models/unknown.exception';
 import {MailService} from '../../commons/mail/services/mail.service';
-import {ActionEmailService} from '../../activity/services/action.email.activity.service';
+import {ActionEmailService} from '../../commons/activity/services/action.email.activity.service';
 import SVC_TAGS from '../../../constants/services.tags';
 import {AuthenticatorMiddleware} from '../../commons/authenticate/middleware/request.authenticater.middleware';
 import {UserMapper} from '../mapper/user.mapper';

@@ -1,25 +1,25 @@
 import { injectable, inject } from 'inversify';
 import {ActionEmailRepository} from '../repository/action.email.activity.repository';
-import {ILogger} from '../../commons/logging/interfaces/logger.interface';
-import SVC_TAGS from '../../../constants/services.tags';
-import REPO_TAGS from '../../../constants/repositories.tags';
-import {EntityState} from '../../commons/base/base.state.enum';
-import {ActivationNotValid} from '../../commons/error/models/activation.not.valid.exception';
-import {UnknownException} from '../../commons/error/models/unknown.exception';
+import {ILogger} from '../../../commons/logging/interfaces/logger.interface';
+import SVC_TAGS from '../../../../constants/services.tags';
+import REPO_TAGS from '../../../../constants/repositories.tags';
+import {EntityState} from '../../../commons/base/base.state.enum';
+import {ActivationNotValid} from '../../../commons/error/models/activation.not.valid.exception';
+import {UnknownException} from '../../../commons/error/models/unknown.exception';
 import {ActionEmailMapper} from '../mapper/action.email.activity.mapper';
-import MAPPER_TAGS from '../../../constants/mapper.tags';
+import MAPPER_TAGS from '../../../../constants/mapper.tags';
 import {ActionEmail} from '../models/action.email.activity.model';
 import {ActivityType} from '../models/activity.type.enum';
-import {IUser} from '../../user/interfaces/user.interface';
+import {IUser} from '../../../user/interfaces/user.interface';
 import * as moment from 'moment';
 
 /* tslint:disable */
 import crypto = require('crypto');
-import {UserService} from '../../user/services/user.service';
-import {userDBModel} from '../../user/models/user.db.model';
-import {UserMapper} from '../../user/mapper/user.mapper';
-import {UserState} from '../../user/models/userstate.model';
-import {UserNotFoundException} from '../../commons/error/models/user.notfound.exception';
+import {UserService} from '../../../user/services/user.service';
+import {userDBModel} from '../../../user/models/user.db.model';
+import {UserMapper} from '../../../user/mapper/user.mapper';
+import {UserState} from '../../../user/models/userstate.model';
+import {UserNotFoundException} from '../../../commons/error/models/user.notfound.exception';
 
 /* tslint:enable */
 

@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
-import {BaseRepository} from '../../commons/base/base.repository';
-import SVC_TAGS from '../../../constants/services.tags';
-import {ILogger} from '../../commons/logging/interfaces/logger.interface';
+import {BaseRepository} from '../../../commons/base/base.repository';
+import SVC_TAGS from '../../../../constants/services.tags';
+import {ILogger} from '../../../commons/logging/interfaces/logger.interface';
 import {IActivityEmailDBSchema, activityEmailDBModel} from '../models/action.email.activity.db.model';
 import {IActionEmailRepository} from '../interfaces/action.email.repository.interface';
 

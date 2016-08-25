@@ -2,9 +2,9 @@ import { injectable, inject } from 'inversify';
 import {IActivityEmail} from '../interfaces/action.email.activity.interface';
 import {IActivityEmailDBSchema, activityEmailDBModel} from '../models/action.email.activity.db.model';
 import {ActionEmail} from '../models/action.email.activity.model';
-import {UserMapper} from '../../user/mapper/user.mapper';
-import MAPPER_TAGS from '../../../constants/mapper.tags';
-import {IUserDBSchema} from '../../user/models/user.db.model';
+import {UserMapper} from '../../../user/mapper/user.mapper';
+import MAPPER_TAGS from '../../../../constants/mapper.tags';
+import {IUserDBSchema} from '../../../user/models/user.db.model';
 
 @injectable()
 export class ActionEmailMapper {

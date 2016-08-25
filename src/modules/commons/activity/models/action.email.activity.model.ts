@@ -1,7 +1,7 @@
 import {IActivityEmail} from '../interfaces/action.email.activity.interface';
 import {ActivityType} from './activity.type.enum';
-import {IUser} from '../../user/interfaces/user.interface';
-import {EntityState} from '../../commons/base/base.state.enum';
+import {IUser} from '../../../user/interfaces/user.interface';
+import {EntityState} from '../../../commons/base/base.state.enum';
 export class ActionEmail implements IActivityEmail {
     public createdOn: string;
     public hash: string;
