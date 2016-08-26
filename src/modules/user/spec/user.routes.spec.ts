@@ -1,58 +1,14 @@
 /* tslint:disable */
+import 'reflect-metadata';
 let chai = require('chai');
 chai.use(require('chai-as-promised'));
 let expect = chai.expect;
 let sinon = require('sinon');
 let request = require('supertest');
-import kernel from './helper/user.kernel.test.helper';
-import 'reflect-metadata';
-import * as expressutils from 'inversify-express-utils';
-
-import session = require('express-session');
-
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as helmet from 'helmet';
-import * as passport from 'passport';
-
-import errorHandler = require('../../../modules/commons/error/middleware/error.handler.logic');
-import notFoundHandler = require('../../../modules/commons/error/middleware/notfound.handler.logic');
-import supertest = require('supertest');
-
-require('./fakes/passport.fake.strategy');
-
+let app = require('./fakes/app.fake');
 /* tslint:enable */
 
-
 describe('User Route Tests', () => {
-
-    let server: expressutils.interfaces.InversifyExpressServer;
-    let app: Express.Application;
-    server = new expressutils.InversifyExpressServer(kernel);
-
-    server.setConfig((exApp) => {
-        exApp.use(cookieParser());
-        exApp.use(bodyParser.json());
-        exApp.use(bodyParser.urlencoded({extended: true}));
-        exApp.use(helmet());
-
-        exApp.use(session({
-            resave: false,
-            saveUninitialized: true,
-            secret: 'testing',
-        }));
-        exApp.use(passport.initialize());
-        exApp.use(passport.session()); // persistent login sessions
-
-    });
-
-
-    // generic Error Handler1
-    server.setErrorConfig((exApp) => {
-        exApp.use(errorHandler);
-    });
-
-    app = server.build();
 
     describe('Special Routes', () => {
         it('/Login Test', (done) => {
