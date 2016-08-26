@@ -14,11 +14,11 @@ import kernel from './bootstrap';
 let MongoStore = require('connect-mongo')(session);
 /* tslint:enable */
 
-import errorHandler = require('./modules/commons/error/middleware/error.handler.logic');
-import notFoundHandler = require('./modules/commons/error/middleware/notfound.handler.logic');
+import errorHandler = require('./modules/core/error/middleware/error.handler.logic');
+import notFoundHandler = require('./modules/core/error/middleware/notfound.handler.logic');
 
-import configLoader from './modules/commons/configloader/configloader.service';
-import {PassportMiddleware} from './modules/commons/authenticate/middleware/passport.middleware';
+import configLoader from './modules/core/configloader/configloader.service';
+import {PassportMiddleware} from './modules/core/authenticate/middleware/passport.middleware';
 import MIDDLEWARE_TAGS from './constants/middleware.tags';
 import {Strategy} from 'passport-local';
 

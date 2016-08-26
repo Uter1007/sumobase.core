@@ -10,7 +10,7 @@
     "domain": "sandbox19446.mailgun.org",
     "templates": {
       "activation": {
-        "path": "dist/modules/commons/mail/templates/activation.hbs",
+        "path": "dist/modules/core/mail/templates/activation.hbs",
         "subject": "Account Aktivierung"
       }
     }
