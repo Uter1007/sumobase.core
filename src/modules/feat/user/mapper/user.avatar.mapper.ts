@@ -11,27 +11,31 @@ const automapper = require('automapper-ts');
 
 @injectable()
 export class UserAvatarMapper {
+
+    constructor() {
+        this.configMaps();
+    }
+
     public toUserAvatar(dbmodel: IUserAvatarDBSchema): IUserAvatar {
         const source = MongooseMapperHelper.getObject<IUserAvatarDBSchema>(dbmodel);
-
-        automapper
-            .createMap(MODEL_TAGS.UserDBAvatar, MODEL_TAGS.UserAvatar)
-            .forMember('filename', (opts) => {return 'avatar'; })
-            .convertToType(UserAvatar);
-
         return automapper.map(MODEL_TAGS.UserDBAvatar, MODEL_TAGS.UserAvatar, source);
-
     }
 
     public toDBmodel(userAvatar: IUserAvatar): IUserAvatarDBSchema {
 
         const source = MongooseMapperHelper.getObject<IUserAvatar>(userAvatar);
+        return automapper.map(MODEL_TAGS.UserAvatar, MODEL_TAGS.UserDBAvatar, source);
+    }
+
+    private configMaps() {
+        automapper
+            .createMap(MODEL_TAGS.UserDBAvatar, MODEL_TAGS.UserAvatar)
+            .forMember('filename', (opts) => {return 'avatar'; })
+            .convertToType(UserAvatar);
 
         automapper
             .createMap(MODEL_TAGS.UserAvatar, MODEL_TAGS.UserDBAvatar)
             .convertToType(userDBAvatarModel);
-
-        return automapper.map(MODEL_TAGS.UserAvatar, MODEL_TAGS.UserDBAvatar, source);
     }
 }
 

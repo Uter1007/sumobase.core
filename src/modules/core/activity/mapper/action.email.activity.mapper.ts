@@ -19,29 +19,17 @@ export class ActionEmailMapper {
 
     constructor(@inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
         this._userMapper = userMapper;
+        this.configMaps();
     }
 
     public toDBmodel(model: IActivityEmail): IActivityEmailDBSchema {
-
         const source = MongooseMapperHelper.getObject<IActivityEmail>(model);
-        automapper
-            .createMap(MODEL_TAGS.ActivityEmail, MODEL_TAGS.ActivityDBEmail)
-            .forMember('user', (opts) => { return opts.sourceObject[opts.sourcePropertyName]
-                                                    ? opts.sourceObject[opts.sourcePropertyName].id
-                                                    : undefined; })
-            .convertToType(activityEmailDBModel);
-
         return automapper.map(MODEL_TAGS.ActivityEmail, MODEL_TAGS.ActivityDBEmail, source);
     }
 
     public toActivityEmail(activityModel: IActivityEmailDBSchema, userModel: IUserDBSchema): ActionEmail {
 
         const source = MongooseMapperHelper.getObject<IActivityEmailDBSchema>(activityModel);
-
-        automapper
-            .createMap(MODEL_TAGS.ActivityDBEmail, MODEL_TAGS.ActivityEmail)
-            .convertToType(ActionEmail);
-
         let result: ActionEmail = automapper.map(MODEL_TAGS.ActivityDBEmail,
                                                  MODEL_TAGS.ActivityEmail, source);
 
@@ -50,6 +38,19 @@ export class ActionEmailMapper {
         }
 
         return result;
+    }
+
+    private configMaps() {
+        automapper
+            .createMap(MODEL_TAGS.ActivityEmail, MODEL_TAGS.ActivityDBEmail)
+            .forMember('user', (opts) => { return opts.sourceObject[opts.sourcePropertyName]
+                ? opts.sourceObject[opts.sourcePropertyName].id
+                : undefined; })
+            .convertToType(activityEmailDBModel);
+
+        automapper
+            .createMap(MODEL_TAGS.ActivityDBEmail, MODEL_TAGS.ActivityEmail)
+            .convertToType(ActionEmail);
     }
 }
 

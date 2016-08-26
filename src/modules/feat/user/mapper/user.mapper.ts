@@ -13,31 +13,34 @@ const automapper = require('automapper-ts');
 @injectable()
 export class UserMapper {
 
+    constructor() {
+        this.configMaps();
+    }
+
     public fromJSON(json: any): User {
         return Deserialize(json, User);
     }
 
     public toDBmodel(model: IUser): IUserDBSchema {
         const source = MongooseMapperHelper.getObject<IUser>(model);
-
-        automapper
-            .createMap(MODEL_TAGS.UserModel, MODEL_TAGS.UserDBModel)
-            .convertToType(userDBModel);
-
         return automapper.map(MODEL_TAGS.UserModel, MODEL_TAGS.UserDBModel, source);
     }
 
     public toUser(userModel: IUserDBSchema): User {
-
         const source = MongooseMapperHelper.getObject<IUserDBSchema>(userModel);
+        return automapper.map(MODEL_TAGS.UserDBModel, MODEL_TAGS.UserModel, source);
+    }
+
+    private configMaps() {
+        automapper
+            .createMap(MODEL_TAGS.UserModel, MODEL_TAGS.UserDBModel)
+            .convertToType(userDBModel);
 
         automapper
             .createMap(MODEL_TAGS.UserDBModel, MODEL_TAGS.UserModel)
             .forMember('avatar', (opts) => opts.ignore())
             .forMember('password', (opts) => opts.ignore())
             .convertToType(User);
-
-        return automapper.map(MODEL_TAGS.UserDBModel, MODEL_TAGS.UserModel, source);
     }
 }
 
