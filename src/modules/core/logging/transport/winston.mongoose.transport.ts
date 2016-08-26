@@ -5,7 +5,7 @@ import {LogRepository} from '../repository/log.repository';
 import {ILogModel} from '../models/logmodel.db.model';
 import {TestLogger} from '../factory/test.logger';
 
-class MongooseTransport extends winston.Transport {
+export class MongooseTransport extends winston.Transport {
 
     private _logRepository: LogRepository;
 
@@ -32,4 +32,3 @@ class MongooseTransport extends winston.Transport {
     };
 }
 
-export default MongooseTransport;

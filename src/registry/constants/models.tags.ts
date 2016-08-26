@@ -1,4 +1,4 @@
-const MODEL_TAGS = {
+export const MODEL_TAGS = {
     ActivityDBEmail: 'IActivityEmailDBSchema',
     ActivityEmail: 'IActivityEmail',
     UserAvatar: 'IUserAvatar',
@@ -6,5 +6,3 @@ const MODEL_TAGS = {
     UserDBModel: 'IUserDBSchema',
     UserModel: 'IUser'
 };
-
-export default MODEL_TAGS;

@@ -1,13 +1,11 @@
 import { injectable, inject } from 'inversify';
 import {ActionEmailRepository} from '../repository/action.email.activity.repository';
 import {ILogger} from '../../../core/logging/interfaces/logger.interface';
-import SVC_TAGS from '../../../../constants/services.tags';
-import REPO_TAGS from '../../../../constants/repositories.tags';
 import {EntityState} from '../../../core/base/base.state.enum';
 import {ActivationNotValid} from '../../../core/error/models/activation.not.valid.exception';
 import {UnknownException} from '../../../core/error/models/unknown.exception';
 import {ActionEmailMapper} from '../mapper/action.email.activity.mapper';
-import MAPPER_TAGS from '../../../../constants/mapper.tags';
+
 import {ActionEmail} from '../models/action.email.activity.model';
 import {ActivityType} from '../models/activity.type.enum';
 import {IUser} from '../../../feat/user/interfaces/user.interface';
@@ -19,6 +17,9 @@ import {UserService} from '../../../feat/user/services/user.service';
 import {UserMapper} from '../../../feat/user/mapper/user.mapper';
 import {UserState} from '../../../feat/user/models/userstate.model';
 import {UserNotFoundException} from '../../../core/error/models/user.notfound.exception';
+import {SVC_TAGS,
+        REPO_TAGS,
+        MAPPER_TAGS} from '../../../../registry/constants.index';
 
 /* tslint:enable */
 
@@ -107,4 +108,3 @@ export class ActionEmailService {
 
 }
 
-export default ActionEmailRepository;

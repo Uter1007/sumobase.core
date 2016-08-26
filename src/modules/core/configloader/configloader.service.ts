@@ -9,7 +9,7 @@ let path = require('path');
 import * as lodash from 'lodash';
 
 @injectable()
-class ConfigLoader {
+export class ConfigLoader {
 
     private static mergedConfig;
 
@@ -28,5 +28,3 @@ class ConfigLoader {
     }
 
 }
-
-export default ConfigLoader;

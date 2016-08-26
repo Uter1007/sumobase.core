@@ -1,6 +1,6 @@
 import {IRawMailDataModel, IMailResponse} from '../interfaces/mail.service.interface';
 import { injectable } from 'inversify';
-import ConfigLoader from '../../configloader/configloader.service';
+import {ConfigLoader} from '../../configloader/configloader.service';
 const mailConfig = ConfigLoader.getConfig().mail;
 
 /* tslint:disable */
@@ -39,5 +39,3 @@ export class MailGunService implements IMailFacade {
         });
     }
 }
-
-export default MailGunService;

@@ -1,4 +1,4 @@
-const SVC_TAGS = {
+export const SVC_TAGS = {
     ActionEmailService: Symbol('ActionEmailService'),
     LogConfig: Symbol('LogConfig'),
     Logger: Symbol('ILogger'),
@@ -7,5 +7,3 @@ const SVC_TAGS = {
     SessionService: Symbol('SessionService'),
     UserService: Symbol('UserService')
 };
-
-export default SVC_TAGS;

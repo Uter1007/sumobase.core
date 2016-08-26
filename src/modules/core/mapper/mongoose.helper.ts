@@ -4,7 +4,7 @@
     we only use id & doc from mongoose
 
  */
-class MongooseMapperHelper {
+export class MongooseMapperHelper {
 
     public static getObject<T>(object: any): T {
         // mongoose workaround
@@ -26,4 +26,3 @@ class MongooseMapperHelper {
     }
 }
 
-export default MongooseMapperHelper;

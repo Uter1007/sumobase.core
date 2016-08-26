@@ -1,14 +1,15 @@
 import {UserFakeRepository} from '../fakes/user.fake.repository';
 import {IUserRepository} from '../../interfaces/user.repository.interface';
-import REPO_TAGS from '../../../../../constants/repositories.tags';
 import {ILogger} from '../../../../core/logging/interfaces/logger.interface';
-import SVC_TAGS from '../../../../../constants/services.tags';
 import {WinstonLoggerFactory} from '../../../../core/logging/factory/winston.logger.factory';
 import {ActionEmailFakeRepository} from '../../../../core/activity/spec/fakes/action.email.activity.fake.repository';
 import {IActionEmailRepository} from '../../../../core/activity/interfaces/action.email.repository.interface';
 import {transports} from 'winston';
 import kernel from '../../../../../bootstrap';
 import {PasswordService} from '../../services/password.service';
+
+import {SVC_TAGS,
+        REPO_TAGS} from '../../../../../registry/constants.index';
 
 let logconfig = new transports.Console({
     colorize: true,

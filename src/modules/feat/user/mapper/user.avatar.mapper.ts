@@ -2,8 +2,8 @@ import {IUserAvatarDBSchema, userDBAvatarModel} from '../models/user.db.model';
 import {UserAvatar} from '../models/user.avatar.model';
 import {injectable} from 'inversify';
 import {IUserAvatar} from '../interfaces/user.avatar.interface';
-import MongooseMapperHelper from '../../../core/mapper/mongoose.helper';
-import MODEL_TAGS from '../../../../constants/models.tags';
+import {MongooseMapperHelper} from '../../../core/mapper/mongoose.helper';
+import {MODEL_TAGS} from '../../../../registry/constants.index';
 
 /* tslint:disable */
 const automapper = require('automapper-ts');
@@ -38,5 +38,3 @@ export class UserAvatarMapper {
             .convertToType(userDBAvatarModel);
     }
 }
-
-export default UserAvatarMapper;

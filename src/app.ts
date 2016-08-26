@@ -17,12 +17,14 @@ let MongoStore = require('connect-mongo')(session);
 import errorHandler = require('./modules/core/error/middleware/error.handler.logic');
 import notFoundHandler = require('./modules/core/error/middleware/notfound.handler.logic');
 
-import configLoader from './modules/core/configloader/configloader.service';
+import {ConfigLoader} from './modules/core/configloader/configloader.service';
 import {PassportMiddleware} from './modules/core/authenticate/middleware/passport.middleware';
-import MIDDLEWARE_TAGS from './constants/middleware.tags';
 import {Strategy} from 'passport-local';
 
-const config = configLoader.getConfig();
+import {MIDDLEWARE_TAGS} from './registry/constants.index';
+
+
+const config = ConfigLoader.getConfig();
 
 mongoose.connect(config.db.uri, {
     pass: config.db.password,

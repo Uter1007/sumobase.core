@@ -4,7 +4,7 @@ import {injectable} from 'inversify';
 import * as moment from 'moment';
 import kernel from '../helper/user.kernel.test.helper';
 import {PasswordService} from '../../services/password.service';
-import SVC_TAGS from '../../../../../constants/services.tags';
+import {SVC_TAGS} from '../../../../../registry/constants.index';
 
 @injectable()
 export class UserFakeRepository implements IUserRepository {

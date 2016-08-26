@@ -3,10 +3,9 @@ import {IActivityEmail} from '../interfaces/action.email.activity.interface';
 import {IActivityEmailDBSchema, activityEmailDBModel} from '../models/action.email.activity.db.model';
 import {ActionEmail} from '../models/action.email.activity.model';
 import {UserMapper} from '../../../feat/user/mapper/user.mapper';
-import MAPPER_TAGS from '../../../../constants/mapper.tags';
+import {MAPPER_TAGS, MODEL_TAGS} from '../../../../registry/constants.index';
 import {IUserDBSchema} from '../../../feat/user/models/user.db.model';
-import MongooseMapperHelper from '../../mapper/mongoose.helper';
-import MODEL_TAGS from '../../../../constants/models.tags';
+import {MongooseMapperHelper} from '../../mapper/mongoose.helper';
 
 /* tslint:disable */
 const automapper = require('automapper-ts');
@@ -53,5 +52,3 @@ export class ActionEmailMapper {
             .convertToType(ActionEmail);
     }
 }
-
-export default ActionEmailMapper;

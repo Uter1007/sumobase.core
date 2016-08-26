@@ -1,11 +1,13 @@
 import {UserService} from '../../../feat/user/services/user.service';
-import SVC_TAGS from '../../../../constants/services.tags';
 import {UserCantLoginException} from '../../error/models/user.cant.login.exception';
 import {AuthenticationError} from '../../error/models/authentication.error';
 import {UserMapper} from '../../../feat/user/mapper/user.mapper';
-import MAPPER_TAGS from '../../../../constants/mapper.tags';
 import {UserState} from '../../../feat/user/models/userstate.model';
 import {IUser} from '../../../feat/user/interfaces/user.interface';
+
+import {SVC_TAGS,
+        MAPPER_TAGS} from '../../../../registry/constants.index';
+
 import {injectable, inject} from 'inversify';
 
 @injectable()
@@ -47,4 +49,3 @@ export class PassportMiddleware {
     }
 }
 
-export default PassportMiddleware;

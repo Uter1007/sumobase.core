@@ -4,6 +4,13 @@ import 'reflect-metadata';
 import { TYPE } from 'inversify-express-utils';
 import { Kernel } from 'inversify';
 
+import {SVC_TAGS,
+        REPO_TAGS,
+        CTRL_TAGS,
+        MIDDLEWARE_TAGS,
+        MAPPER_TAGS} from './registry/constants.index';
+
+
 import { LogRepository } from './modules/core/logging/repository/log.repository';
 import { WinstonLoggerFactory } from './modules/core/logging/factory/winston.logger.factory';
 import { ILogger } from './modules/core/logging/interfaces/logger.interface';
@@ -14,10 +21,7 @@ import { UserRepository } from './modules/feat/user/repository/user.repository';
 import { UserService } from './modules/feat/user/services/user.service';
 import { MailService } from './modules/core/mail/services/mail.service';
 
-import CTRL_TAGS from './constants/controller.tags';
-import SVC_TAGS from './constants/services.tags';
-import REPO_TAGS from './constants/repositories.tags';
-import MAPPER_TAGS from './constants/mapper.tags';
+
 import {UserMapper} from './modules/feat/user/mapper/user.mapper';
 import {UserAvatarMapper} from './modules/feat/user/mapper/user.avatar.mapper';
 import {LogConfig} from './config/log.config';
@@ -26,12 +30,11 @@ import {ActionEmailMapper} from './modules/core/activity/mapper/action.email.act
 import {ActionEmailService} from './modules/core/activity/services/action.email.activity.service';
 import {IUserRepository} from './modules/feat/user/interfaces/user.repository.interface';
 import {IActionEmailRepository} from './modules/core/activity/interfaces/action.email.repository.interface';
-import configLoader from './modules/core/configloader/configloader.service';
+import {ConfigLoader} from './modules/core/configloader/configloader.service';
 import {PassportMiddleware} from './modules/core/authenticate/middleware/passport.middleware';
-import MIDDLEWARE_TAGS from './constants/middleware.tags';
 import {AuthenticatorMiddleware} from './modules/core/authenticate/middleware/request.authenticater.middleware';
 
-const config = configLoader.getConfig();
+const config = ConfigLoader.getConfig();
 const kernel = new Kernel();
 
 // put all your dependencies here

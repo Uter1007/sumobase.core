@@ -1,13 +1,13 @@
 /* tslint:disable */
 import * as express from 'express';
-import BaseController from '../../../core/base/base.controller';
+import {BaseController} from '../../../core/base/base.controller';
 import { injectable, inject  } from 'inversify';
 import { Controller, Get, Post, Head, Put } from 'inversify-express-utils';
 import { ILogger } from '../../../core/logging/interfaces/logger.interface';
 import { User } from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
 import { UserService } from '../services/user.service';
-import TYPES from '../../../../constants/services.tags';
+import {SVC_TAGS, MAPPER_TAGS} from '../../../../registry/constants.index';
 import {UserAlreadyInUseException} from '../../../core/error/models/user.alreadyinuse.exception';
 import {UserValidator} from '../services/validator/user.validator.service';
 import {ValidationException} from '../../../core/error/models/validation.exception';
@@ -19,10 +19,8 @@ import {UserAvatarValidator} from '../services/validator/user.avatar.validator.s
 import {UnknownException} from '../../../core/error/models/unknown.exception';
 import {MailService} from '../../../core/mail/services/mail.service';
 import {ActionEmailService} from '../../../core/activity/services/action.email.activity.service';
-import SVC_TAGS from '../../../../constants/services.tags';
 import {AuthenticatorMiddleware} from '../../../core/authenticate/middleware/request.authenticater.middleware';
 import {UserMapper} from '../mapper/user.mapper';
-import MAPPER_TAGS from '../../../../constants/mapper.tags';
 let isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 let multer = require('multer');
 let fs = require('fs');
@@ -39,9 +37,9 @@ export class UserController extends BaseController {
     private _actionEmailService: ActionEmailService;
     private _userMapper: UserMapper;
 
-    constructor(@inject(TYPES.Logger) log: ILogger,
-                @inject(TYPES.UserService) userService: UserService,
-                @inject(TYPES.MailService) mailService: MailService,
+    constructor(@inject(SVC_TAGS.Logger) log: ILogger,
+                @inject(SVC_TAGS.UserService) userService: UserService,
+                @inject(SVC_TAGS.MailService) mailService: MailService,
                 @inject(SVC_TAGS.ActionEmailService) actionEmailService: ActionEmailService,
                 @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
         super();

@@ -16,4 +16,3 @@ export class AuthenticatorMiddleware {
     };
 }
 
-export default AuthenticatorMiddleware;

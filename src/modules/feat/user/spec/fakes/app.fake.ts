@@ -20,7 +20,7 @@ import notFoundHandler = require('../../../../core/error/middleware/notfound.han
 
 import kernel from '../helper/user.kernel.test.helper';
 import {PassportMiddleware} from '../../../../core/authenticate/middleware/passport.middleware';
-import MIDDLEWARE_TAGS from '../../../../../constants/middleware.tags';
+import {MIDDLEWARE_TAGS} from '../../../../../registry/constants.index';
 
 /* tslint:enable */
 

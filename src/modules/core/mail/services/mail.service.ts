@@ -3,8 +3,8 @@ import {MailGunService} from './mail.gun.service';
 import {IMailService} from '../interfaces/mail.service.interface';
 import {IMailFacade} from '../interfaces/mailfacade.interface';
 
-import configLoader from '../../configloader/configloader.service';
-let config = configLoader.getConfig();
+import {ConfigLoader} from '../../configloader/configloader.service';
+let config = ConfigLoader.getConfig();
 
 /* tslint:disable */
 const handlebars = require('handlebars');

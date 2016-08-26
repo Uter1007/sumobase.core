@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import {BaseRepository} from '../../../core/base/base.repository';
 import {IUserDBSchema, userDBModel} from '../models/user.db.model';
-import SVC_TAGS from '../../../../constants/services.tags';
+import {SVC_TAGS} from '../../../../registry/constants.index';
 import {ILogger} from '../../../core/logging/interfaces/logger.interface';
 import {IUserRepository} from '../interfaces/user.repository.interface';
 

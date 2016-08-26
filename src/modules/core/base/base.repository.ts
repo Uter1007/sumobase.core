@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
 import { injectable, inject } from 'inversify';
 import {ILogger} from '../logging/interfaces/logger.interface';
-import SVC_TAGS from '../../../constants/services.tags';
+import {SVC_TAGS} from '../../../registry/constants.index';
 import {IUserDBSchema} from '../../feat/user/models/user.db.model';
 
 /* tslint:disable */

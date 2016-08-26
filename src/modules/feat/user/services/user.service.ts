@@ -4,10 +4,12 @@ import { IUser } from '../interfaces/user.interface';
 import { IUserDBSchema } from '../models/user.db.model';
 import { UserState } from '../models/userstate.model';
 
-import REPO_TAGS from '../../../../constants/repositories.tags';
-import SVC_TAGS from '../../../../constants/services.tags';
+import {SVC_TAGS,
+        REPO_TAGS,
+        MAPPER_TAGS} from '../../../../registry/constants.index';
+
 import {PasswordsNotEqualException} from '../../../core/error/models/password.notequal.exception';
-import MAPPER_TAGS from '../../../../constants/mapper.tags';
+
 import {UserMapper} from '../mapper/user.mapper';
 import {PasswordService} from './password.service';
 import {UnknownException} from '../../../core/error/models/unknown.exception';
@@ -184,4 +186,3 @@ export class UserService {
     }
 }
 
-export default UserService;

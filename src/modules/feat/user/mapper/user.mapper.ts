@@ -3,8 +3,8 @@ import {User} from '../models/user.model';
 import { injectable } from 'inversify';
 import {IUser} from '../interfaces/user.interface';
 import { Deserialize } from 'cerialize';
-import MongooseMapperHelper from '../../../core/mapper/mongoose.helper';
-import MODEL_TAGS from '../../../../constants/models.tags';
+import {MongooseMapperHelper} from '../../../core/mapper/mongoose.helper';
+import {MODEL_TAGS} from '../../../../registry/constants.index';;
 
 /* tslint:disable */
 const automapper = require('automapper-ts');
@@ -43,5 +43,3 @@ export class UserMapper {
             .convertToType(User);
     }
 }
-
-export default UserMapper;
