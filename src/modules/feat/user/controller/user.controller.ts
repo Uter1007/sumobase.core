@@ -1,30 +1,40 @@
 /* tslint:disable */
 import * as express from 'express';
-import {BaseController} from '../../../core/base/base.controller';
-import { injectable, inject  } from 'inversify';
-import { Controller, Get, Post, Head, Put } from 'inversify-express-utils';
-import { ILogger } from '../../../core/logging/interfaces/logger.interface';
-import { User } from '../models/user.model';
-import { IUser } from '../interfaces/user.interface';
-import { UserService } from '../services/user.service';
-import {SVC_TAGS, MAPPER_TAGS} from '../../../../registry/constants.index';
-import {UserAlreadyInUseException} from '../../../core/error/models/user.alreadyinuse.exception';
-import {UserValidator} from '../services/validator/user.validator.service';
-import {ValidationException} from '../../../core/error/models/validation.exception';
-import {PasswordValidator} from '../services/validator/password.validator.service';
-import {UserNotFoundException} from '../../../core/error/models/user.notfound.exception';
 import * as passport from 'passport';
+
+import multer = require('multer');
+import fs = require('fs');
+import path = require('path');
+
+import { injectable, inject  } from 'inversify';
+
+import { Controller, Get, Post, Head, Put } from 'inversify-express-utils';
+
+import {SVC_TAGS, MAPPER_TAGS} from '../../../../registry/constants.index';
+
+import {ValidationException,
+        UserAlreadyInUseException,
+        UnknownException,
+        UserNotFoundException
+       } from '../../../../registry/exceptions.index';
+
 import storage = require('../../../core/imageupload/middleware/image.storage.middleware');
-import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
-import {UnknownException} from '../../../core/error/models/unknown.exception';
+import { ILogger } from '../../../core/logging/interfaces/logger.interface';
+import {BaseController} from '../../../core/base/base.controller';
 import {MailService} from '../../../core/mail/services/mail.service';
 import {ActionEmailService} from '../../../core/activity/services/action.email.activity.service';
 import {AuthenticatorMiddleware} from '../../../core/authenticate/middleware/request.authenticater.middleware';
+
+import {UserValidator} from '../services/validator/user.validator.service';
+import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
+import { User } from '../models/user.model';
+import { IUser } from '../interfaces/user.interface';
+import { UserService } from '../services/user.service';
 import {UserMapper} from '../mapper/user.mapper';
-let isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
-let multer = require('multer');
-let fs = require('fs');
-let path = require('path');
+import {PasswordValidator} from '../services/validator/password.validator.service';
+
+const isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
+
 /* tslint:enable */
 
 @injectable()
