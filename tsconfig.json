@@ -6,9 +6,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "exclude": [
-    "node_modules"
-  ],
   "files": [
     "typings/index.d.ts",
     "node_modules/inversify-dts/inversify-binding-decorators/inversify-binding-decorators.d.ts",
