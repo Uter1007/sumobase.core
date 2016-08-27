@@ -32,6 +32,7 @@ import { IUser } from '../interfaces/user.interface';
 import { UserService } from '../services/user.service';
 import {UserMapper} from '../mapper/user.mapper';
 import {PasswordValidator} from '../services/validator/password.validator.service';
+import { IUserDBSchema } from '../models/user.db.model';
 
 const isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 
@@ -225,7 +226,6 @@ export class UserController extends BaseController {
         }
 
         next();
-
     }
 
     /**
@@ -296,6 +296,27 @@ export class UserController extends BaseController {
         } else {
             throw new UnknownException('No User was found');
         }
+    }
+
+    /**
+     * @api {post} /api/user/forgot Request forgot password link
+     * @apiVersion 1.0.0
+     * @apiName forgotPassword
+     * @apiGroup User
+     *
+     * @apiSuccess {Object} Avatar Picture File
+     */
+    @Post('/forgot')
+    public async forgotPassword(request: express.Request, response: express.Response) {
+        let foundUser: IUserDBSchema = await this._userService.findUserByName(request.body.email);
+        if (!foundUser) {
+            throw new UserNotFoundException('User can not be found');
+        }
+
+        let activationLink = await this._actionEmailService.createForgotPasswordEmail(foundUser);
+        await this._mailService.sendActivationMail(foundUser.lastName, foundUser.email, activationLink.hash);
+
+        return true;
     }
 
     // routes that may not be needed

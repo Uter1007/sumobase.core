@@ -1,5 +1,5 @@
 export enum ActivityType {
-    ActiviationEmail = <any>'ActiviationEmail',
+    ActivationEmail = <any>'ActivationEmail',
     ForgotEmail = <any>'ForgotEmail',
-    RecoverdEmail = <any>'RecoverdEmail'
+    RecoveredEmail = <any>'RecoveredEmail'
 }

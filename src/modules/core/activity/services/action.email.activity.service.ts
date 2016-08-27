@@ -53,15 +53,22 @@ export class ActionEmailService {
     }
 
     public async createActivationEmail(user: IUser) {
-        try {
+        return this.createActionEmail(user, ActivityType.ActivationEmail);
+    }
 
+    public async createForgotPasswordEmail(user: IUser) {
+        return this.createActionEmail(user, ActivityType.ForgotEmail);
+    }
+
+    public async createActionEmail(user: IUser, activityType: ActivityType) {
+        try {
             let randomHash = crypto.randomBytes(20).toString('hex');
             let emailActivity = new ActionEmail(randomHash,
-                                                ActivityType.ActiviationEmail,
-                                                user, undefined,
-                                                EntityState.ACTIVE,
-                                                moment().utc().format('dd.MM.YYYY HH:mm:ss'),
-                                                undefined);
+                activityType,
+                user, undefined,
+                EntityState.ACTIVE,
+                moment().utc().format('dd.MM.YYYY HH:mm:ss'),
+                undefined);
 
             let dbModel = this._actionEmailMapper.toDBmodel(emailActivity);
             dbModel.createdOn = moment().utc().toString();

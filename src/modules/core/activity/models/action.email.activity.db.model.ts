@@ -20,10 +20,11 @@ const activityEmailSchema = new mongoose.Schema({
         enum: [<any>EntityState.ACTIVE, <any>EntityState.DISABLED ],
         required: true,
         type: String, },
-    type: {default: <any>ActivityType.ActiviationEmail,
-           enum: [<any>ActivityType.ActiviationEmail,
+
+    type: {default: <any>ActivityType.ActivationEmail,
+           enum: [<any>ActivityType.ActivationEmail,
                    <any>ActivityType.ForgotEmail,
-                   <any>ActivityType.RecoverdEmail ],
+                   <any>ActivityType.RecoveredEmail ],
            required: true,
            type: String, },
     user: { required: true, type: String  }
