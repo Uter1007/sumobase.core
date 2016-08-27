@@ -25,22 +25,12 @@ import {SVC_TAGS,
 
 @injectable()
 export class ActionEmailService {
-    private _log: ILogger;
-    private _actionEmailRepository: ActionEmailRepository;
-    private _actionEmailMapper: ActionEmailMapper;
-    private _userService: UserService;
-    private _userMapper: UserMapper;
 
-    constructor(@inject(SVC_TAGS.Logger) log: ILogger,
-                @inject(SVC_TAGS.UserService) userService: UserService,
-                @inject(REPO_TAGS.ActionEmailRepository) actionEmailRepository: ActionEmailRepository,
-                @inject(MAPPER_TAGS.ActionEmailMapper) actionEmailMapper: ActionEmailMapper,
-                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
-        this._log = log;
-        this._actionEmailRepository = actionEmailRepository;
-        this._actionEmailMapper = actionEmailMapper;
-        this._userService = userService;
-        this._userMapper = userMapper;
+    constructor(@inject(SVC_TAGS.Logger) private _log: ILogger,
+                @inject(SVC_TAGS.UserService) private _userService: UserService,
+                @inject(REPO_TAGS.ActionEmailRepository) private _actionEmailRepository: ActionEmailRepository,
+                @inject(MAPPER_TAGS.ActionEmailMapper) private _actionEmailMapper: ActionEmailMapper,
+                @inject(MAPPER_TAGS.UserMapper) private _userMapper: UserMapper) {
     }
 
     public async findActionEmailbyHash(hash: string) {

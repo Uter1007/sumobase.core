@@ -42,23 +42,12 @@ const isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 @Controller('/api/user')
 export class UserController extends BaseController {
 
-    private _log: ILogger;
-    private _userService: UserService;
-    private _mailService: MailService;
-    private _actionEmailService: ActionEmailService;
-    private _userMapper: UserMapper;
-
-    constructor(@inject(SVC_TAGS.Logger) log: ILogger,
-                @inject(SVC_TAGS.UserService) userService: UserService,
-                @inject(SVC_TAGS.MailService) mailService: MailService,
-                @inject(SVC_TAGS.ActionEmailService) actionEmailService: ActionEmailService,
-                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
+    constructor(@inject(SVC_TAGS.Logger) private _log: ILogger,
+                @inject(SVC_TAGS.UserService) private _userService: UserService,
+                @inject(SVC_TAGS.MailService) private _mailService: MailService,
+                @inject(SVC_TAGS.ActionEmailService) private _actionEmailService: ActionEmailService,
+                @inject(MAPPER_TAGS.UserMapper) private _userMapper: UserMapper) {
         super();
-        this._log = log;
-        this._userService = userService;
-        this._mailService = mailService;
-        this._actionEmailService = actionEmailService;
-        this._userMapper = userMapper;
     }
 
     /**

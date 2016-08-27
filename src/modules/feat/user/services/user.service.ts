@@ -22,22 +22,11 @@ import {IUserRepository} from '../interfaces/user.repository.interface';
 @injectable()
 export class UserService {
 
-    private _userRepository: IUserRepository;
-    private _log: ILogger;
-    private _userMapper: UserMapper;
-    private _pw: PasswordService;
-    private _userAvatarMapper: UserAvatarMapper;
-
-    constructor(@inject(SVC_TAGS.Logger) log: ILogger,
-                @inject(REPO_TAGS.UserRepository) userRepository: IUserRepository,
-                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper,
-                @inject(SVC_TAGS.PasswordService) pw: PasswordService,
-                @inject(MAPPER_TAGS.UserAvatarMapper) userAvatarMapper: UserAvatarMapper) {
-        this._userRepository = userRepository;
-        this._log = log;
-        this._userMapper = userMapper;
-        this._pw = pw;
-        this._userAvatarMapper = userAvatarMapper;
+    constructor(@inject(SVC_TAGS.Logger) private _log: ILogger,
+                @inject(REPO_TAGS.UserRepository) private _userRepository: IUserRepository,
+                @inject(MAPPER_TAGS.UserMapper) private _userMapper: UserMapper,
+                @inject(SVC_TAGS.PasswordService) private _pw: PasswordService,
+                @inject(MAPPER_TAGS.UserAvatarMapper) private _userAvatarMapper: UserAvatarMapper) {
     }
 
     public async findUserByUserNameAndPassword(userName: string, password: string) {
