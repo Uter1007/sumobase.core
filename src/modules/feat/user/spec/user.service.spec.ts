@@ -214,7 +214,6 @@ describe('User Service', () => {
                                           pwMock.object,
                                           userAvatarMock.object);
 
-
         let result = await userService.findUserById('the user id');
         expect(result).to.equal(error);
 
@@ -242,7 +241,6 @@ describe('User Service', () => {
                                           mapperMock.object,
                                           pwMock.object,
                                           userAvatarMock.object);
-
 
         let user = await userService.findUserById('the user id');
         expect(user.email).to.equal('the username');

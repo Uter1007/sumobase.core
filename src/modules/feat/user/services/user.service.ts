@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { ILogger } from '../../../core/logging/interfaces/logger.interface';
 import { IUser } from '../interfaces/user.interface';
-import { IUserDBSchema } from '../models/user.db.model';
+import { IUserDBSchema, userDBAvatarModel } from '../models/user.db.model';
 import { UserState } from '../models/userstate.model';
 
 import {SVC_TAGS,
@@ -29,14 +29,14 @@ export class UserService {
                 @inject(MAPPER_TAGS.UserAvatarMapper) private _userAvatarMapper: UserAvatarMapper) {
     }
 
-    public async findUserByUserNameAndPassword(userName: string, password: string) {
+    public async findUserByUserNameAndPassword(userName: string, password: string): Promise<IUser> {
         try {
 
-            let user =  await this._userRepository.findOne({ 'email': userName });
+            let user = await this._userRepository.findOne({ 'email': userName });
             return this._pw.compare(password, user.password)
                 .then((result) => {
                     if (result) {
-                        return user;
+                        return this._userMapper.toUser(user);
                     } else {
                         throw new PasswordsNotEqualException('Not in my House !');
                     }
@@ -48,18 +48,13 @@ export class UserService {
         }
     }
 
-    public async findUserByName(userName: string) {
+    public async findUserByName(userName: string): Promise<IUser> {
         try {
-            return await this._userRepository.findOne({'email': userName, });
-        } catch (err) {
-            this._log.error('An error occurred:', err);
-            return err;
-        }
-    }
-
-    public async findUserById(userId) {
-        try {
-            return await this._userRepository.findById(userId);
+            let foundUser = await this._userRepository.findOne({'email': userName, });
+            if (!foundUser) {
+                throw new UserNotFoundException('User can not be found');
+            }
+            return this._userMapper.toUser(foundUser);
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;
@@ -69,7 +64,7 @@ export class UserService {
     // todo: maybe change baseRepo update to use find and update on its own
     public async update(userModel: IUser) {
         try {
-            let foundUser = await this.findUserById(userModel.id);
+            let foundUser = await this._findUserById(userModel.id);
             if (!foundUser) {
                 throw new UserNotFoundException('User can not be found');
             }
@@ -88,11 +83,11 @@ export class UserService {
 
     public async updateImage(id: string, image: Buffer, contentType: string): Promise<boolean> {
         try {
-            let foundUser = await this.findUserById(id);
+            let foundUser = await this._findUserById(id);
             if (!foundUser) {
                 throw new UserNotFoundException('User can not be found');
             }
-            foundUser.avatar = {contentType: contentType, data: image};
+            foundUser.avatar = new userDBAvatarModel({contentType: contentType, data: image});
             let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
             if (updateSuccess) {
                 return true;
@@ -106,7 +101,7 @@ export class UserService {
 
     public async retrieveImage(id: string): Promise<IUserAvatar> {
         try {
-            let foundUser = await this.findUserById(id);
+            let foundUser = await this._findUserById(id);
             if (foundUser) {
                 if (foundUser.avatar) {
                     return this._userAvatarMapper.toUserAvatar(foundUser.avatar);
@@ -121,7 +116,7 @@ export class UserService {
 
     public async updatePassword(id: string, password: string) {
         try {
-            let foundUser = await this.findUserById(id);
+            let foundUser = await this._findUserById(id);
             if (!foundUser) {
                 throw new UserNotFoundException('User can not be found');
             }
@@ -164,6 +159,30 @@ export class UserService {
                 return true;
             }
             throw new UnknownException('User can not be updated');
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
+    public async findUserById(userId: string): Promise<IUser> {
+        try {
+            let foundUser = await this._userRepository.findById(userId);
+
+            if (!foundUser) {
+                throw new UserNotFoundException('User can not be found');
+            }
+            return this._userMapper.toUser(foundUser);
+
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
+    private async _findUserById(userId): Promise<IUserDBSchema> {
+        try {
+            return await this._userRepository.findById(userId);
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;

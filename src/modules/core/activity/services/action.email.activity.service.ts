@@ -20,6 +20,7 @@ import {UserNotFoundException} from '../../../core/error/models/user.notfound.ex
 import {SVC_TAGS,
         REPO_TAGS,
         MAPPER_TAGS} from '../../../../registry/constants.index';
+import {ForgetPasswordNotValid} from '../../error/models/forget.password.exception';
 
 /* tslint:enable */
 
@@ -33,21 +34,12 @@ export class ActionEmailService {
                 @inject(MAPPER_TAGS.UserMapper) private _userMapper: UserMapper) {
     }
 
-    public async findActionEmailbyHash(hash: string) {
-        try {
-            return await this._actionEmailRepository.findOne({'hash': hash });
-        } catch (err) {
-            this._log.error('An error occurred:', err);
-            return err;
-        }
-    }
-
     public async createActivationEmail(user: IUser) {
-        return this.createActionEmail(user, ActivityType.ActivationEmail);
+        return await this.createActionEmail(user, ActivityType.ActivationEmail);
     }
 
     public async createForgotPasswordEmail(user: IUser) {
-        return this.createActionEmail(user, ActivityType.ForgotEmail);
+        return await this.createActionEmail(user, ActivityType.ForgotEmail);
     }
 
     public async createActionEmail(user: IUser, activityType: ActivityType) {
@@ -70,9 +62,39 @@ export class ActionEmailService {
         }
     }
 
+    public async updateForgetEmail(hash: string): Promise<IUser> {
+        try {
+
+            let foundActivity = await this._findActionEmailbyHashAndType(hash, <any>ActivityType.ForgotEmail);
+            if (!foundActivity) {
+                throw new ForgetPasswordNotValid('No ForgotEmail was found');
+            }
+            let founduser = await this._userService.findUserById(foundActivity.user);
+            if (!founduser) {
+                throw new UserNotFoundException('No User was found');
+            }
+            let checkdate = moment(foundActivity.createdOn).utc().add(7, 'days');
+            if (moment.utc() >= checkdate) {
+                throw new ForgetPasswordNotValid('Date ran out');
+            }
+
+            let updateSuccess = await this._actionEmailRepository.update(foundActivity.id, foundActivity);
+
+            if (updateSuccess) {
+                return founduser;
+            }
+
+            throw new UnknownException('ForgetPasswordLink can not be updated');
+
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
     public async updateActivationEmail(hash: string): Promise<boolean> {
         try {
-            let foundActivity = await this.findActionEmailbyHash(hash);
+            let foundActivity = await this._findActionEmailbyHashAndType(hash, <any>ActivityType.ActivationEmail);
             if (!foundActivity) {
                 throw new ActivationNotValid('No ActivationLink was found');
             }
@@ -97,6 +119,15 @@ export class ActionEmailService {
                 return await this._userService.activateUser(foundActivity.user);
             }
             throw new UnknownException('ActivationLink can not be updated');
+        } catch (err) {
+            this._log.error('An error occurred:', err);
+            return err;
+        }
+    }
+
+    private async _findActionEmailbyHashAndType(hash: string, type: string) {
+        try {
+            return await this._actionEmailRepository.findOne({'hash': hash, 'type': type });
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;

@@ -293,24 +293,39 @@ export class UserController extends BaseController {
      * @apiName forgotPassword
      * @apiGroup User
      *
-     * @apiSuccess {Object} Avatar Picture File
+     * @apiSuccess {Boolean} Sends Email and returns true
      */
     @Post('/forgot')
     public async forgotPassword(request: express.Request, response: express.Response) {
-        let foundUser: IUserDBSchema = await this._userService.findUserByName(request.body.email);
+        let foundUser = await this._userService.findUserByName(request.body.email);
         if (!foundUser) {
             throw new UserNotFoundException('User can not be found');
         }
-
         let activationLink = await this._actionEmailService.createForgotPasswordEmail(foundUser);
         await this._mailService.sendActivationMail(foundUser.lastName, foundUser.email, activationLink.hash);
 
         return true;
     }
 
-    // routes that may not be needed
-    @Get('/notfound')
-    public notfound() {
-        throw new UserNotFoundException('user can\'t be found');
+    /**
+     * @api {post} /api/user/recover Request for Password Recovery
+     * @apiVersion 1.0.0
+     * @apiName recoverPassword
+     * @apiGroup User
+     *
+     * @apiSuccess {User} User will be loggedIn and returns User
+     * @apiUse MeObject
+     */
+    @Post('/recover')
+    public async recover(request: express.Request, response: express.Response): Promise<User> {
+        let hash = request.body.hash;
+        let user = await this._actionEmailService.updateForgetEmail(hash);
+        if (user) {
+            request.logIn(request.user, function() {
+                response.send(request.user);
+            });
+        }
+
+        throw new UnknownException('Somehting went wrong on recovery');
     }
 }

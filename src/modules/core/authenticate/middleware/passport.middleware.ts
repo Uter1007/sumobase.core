@@ -29,7 +29,7 @@ export class PassportMiddleware {
 
     public deserializeUser = async (id: string, done) => {
         let user = await this._userService.findUserById(id);
-        done(null, this._userMapper.toUser(user));
+        done(null, user);
     }
 
     public localStrategy = async (req, email, password, done) => {
@@ -38,11 +38,10 @@ export class PassportMiddleware {
             if (!user) {
                 return done(null, false, new UserCantLoginException('Can\'t login User'));
             }
-            let mappedUser = this._userMapper.toUser(user);
-            if (mappedUser.state !== UserState.ACTIVE) {
+            if (user.state !== UserState.ACTIVE) {
                 return done(null, false, new UserCantLoginException('User has wrong User State'));
             }
-            done(null, mappedUser);
+            done(null, user);
         } catch ( exception ) {
             return done(new AuthenticationError('Email or Password was wrong'));
         }

@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import {IUser} from '../interfaces/user.interface';
 import { Deserialize } from 'cerialize';
 import {MongooseMapperHelper} from '../../../core/mapper/mongoose.helper';
-import {MODEL_TAGS} from '../../../../registry/constants.index';;
+import {MODEL_TAGS} from '../../../../registry/constants.index';
 
 /* tslint:disable */
 const automapper = require('automapper-ts');
