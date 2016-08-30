@@ -46,11 +46,11 @@ export class UserService {
 
     public async findUserByName(userName: string): Promise<IUser> {
         try {
-            let foundUser = await this._userRepository.findOne({'email': userName, });
-            if (!foundUser) {
-                throw new UserNotFoundException('User can not be found');
+            let foundUser = await this._userRepository.findOne({'email': userName });
+            if (foundUser) {
+                return this._userMapper.toUser(foundUser);
             }
-            return this._userMapper.toUser(foundUser);
+            return undefined;
         } catch (err) {
             this._log.error('An error occurred:', err);
             return err;
