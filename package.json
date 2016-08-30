@@ -54,6 +54,7 @@
     "gulp-typescript": "^2.13.6",
     "sinon": "^1.17.5",
     "supertest": "^2.0.0",
+    "supertest-as-promised": "^4.0.0",
     "yargs": "^4.8.1"
   }
 }
