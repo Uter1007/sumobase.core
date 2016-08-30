@@ -1,6 +1,7 @@
 import { injectable, inject } from 'inversify';
 import {ActionEmailRepository} from '../repository/action.email.activity.repository';
-import {ILogger} from '../../../core/logging/interfaces/logger.interface';
+import {IActionEmailRepositoryName} from '../interfaces/action.email.repository.interface';
+import {ILogger, ILoggerName} from '../../../core/logging/interfaces/logger.interface';
 import {EntityState} from '../../../core/base/base.state.enum';
 import {ActivationNotValid} from '../../../core/error/models/activation.not.valid.exception';
 import {UnknownException} from '../../../core/error/models/unknown.exception';
@@ -17,9 +18,6 @@ import {UserService} from '../../../feat/user/services/user.service';
 import {UserMapper} from '../../../feat/user/mapper/user.mapper';
 import {UserState} from '../../../feat/user/models/userstate.model';
 import {UserNotFoundException} from '../../../core/error/models/user.notfound.exception';
-import {SVC_TAGS,
-        REPO_TAGS,
-        MAPPER_TAGS} from '../../../../registry/constants.index';
 import {ForgetPasswordNotValid} from '../../error/models/forget.password.exception';
 
 /* tslint:enable */
@@ -27,11 +25,11 @@ import {ForgetPasswordNotValid} from '../../error/models/forget.password.excepti
 @injectable()
 export class ActionEmailService {
 
-    constructor(@inject(SVC_TAGS.Logger) private _log: ILogger,
-                @inject(SVC_TAGS.UserService) private _userService: UserService,
-                @inject(REPO_TAGS.ActionEmailRepository) private _actionEmailRepository: ActionEmailRepository,
-                @inject(MAPPER_TAGS.ActionEmailMapper) private _actionEmailMapper: ActionEmailMapper,
-                @inject(MAPPER_TAGS.UserMapper) private _userMapper: UserMapper) {
+    constructor(@inject(ILoggerName) private _log: ILogger,
+                @inject(UserService.name) private _userService: UserService,
+                @inject(IActionEmailRepositoryName) private _actionEmailRepository: ActionEmailRepository,
+                @inject(ActionEmailMapper.name) private _actionEmailMapper: ActionEmailMapper,
+                @inject(UserMapper.name) private _userMapper: UserMapper) {
     }
 
     public async createActivationEmail(user: IUser) {

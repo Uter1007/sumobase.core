@@ -5,9 +5,6 @@ import {UserMapper} from '../../../feat/user/mapper/user.mapper';
 import {UserState} from '../../../feat/user/models/userstate.model';
 import {IUser} from '../../../feat/user/interfaces/user.interface';
 
-import {SVC_TAGS,
-        MAPPER_TAGS} from '../../../../registry/constants.index';
-
 import {injectable, inject} from 'inversify';
 
 @injectable()
@@ -16,8 +13,8 @@ export class PassportMiddleware {
     private _userService: UserService;
     private _userMapper: UserMapper;
 
-    constructor(@inject(SVC_TAGS.UserService) userService: UserService,
-                @inject(MAPPER_TAGS.UserMapper) userMapper: UserMapper) {
+    constructor(@inject(UserService.name) userService: UserService,
+                @inject(UserMapper.name) userMapper: UserMapper) {
 
         this._userService = userService;
         this._userMapper = userMapper;

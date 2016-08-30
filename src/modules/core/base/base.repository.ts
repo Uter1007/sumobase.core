@@ -3,8 +3,7 @@
 import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
 import { injectable, inject } from 'inversify';
-import {ILogger} from '../logging/interfaces/logger.interface';
-import {SVC_TAGS} from '../../../registry/constants.index';
+import {ILogger, ILoggerName} from '../logging/interfaces/logger.interface';
 import {IUserDBSchema} from '../../feat/user/models/user.db.model';
 
 /* tslint:disable */
@@ -16,10 +15,8 @@ import {IBaseRepository} from './base.repository.interface';
 class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
 
     protected _model: mongoose.Model<mongoose.Document>;
-    protected _log: ILogger;
 
-    constructor(@inject(SVC_TAGS.Logger) log: ILogger) {
-        this._log = log;
+    constructor(@inject(ILoggerName) protected _log: ILogger) {
     }
 
     public create: ((item: T) => Promise<any>) = (item: T) => {

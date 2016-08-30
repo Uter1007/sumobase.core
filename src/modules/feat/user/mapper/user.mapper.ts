@@ -1,10 +1,9 @@
-import {IUserDBSchema, userDBModel} from '../models/user.db.model';
+import {IUserDBSchema, IUserDBSchemaName, userDBModel} from '../models/user.db.model';
 import {User} from '../models/user.model';
 import { injectable } from 'inversify';
-import {IUser} from '../interfaces/user.interface';
+import {IUser, IUserName} from '../interfaces/user.interface';
 import { Deserialize } from 'cerialize';
 import {MongooseMapperHelper} from '../../../core/mapper/mongoose.helper';
-import {MODEL_TAGS} from '../../../../registry/constants.index';
 
 /* tslint:disable */
 const automapper = require('automapper-ts');
@@ -23,21 +22,21 @@ export class UserMapper {
 
     public toDBmodel(model: IUser): IUserDBSchema {
         const source = MongooseMapperHelper.getObject<IUser>(model);
-        return automapper.map(MODEL_TAGS.UserModel, MODEL_TAGS.UserDBModel, source);
+        return automapper.map(IUserName, IUserDBSchemaName, source);
     }
 
     public toUser(userModel: IUserDBSchema): User {
         const source = MongooseMapperHelper.getObject<IUserDBSchema>(userModel);
-        return automapper.map(MODEL_TAGS.UserDBModel, MODEL_TAGS.UserModel, source);
+        return automapper.map(IUserDBSchemaName, IUserName, source);
     }
 
     private configMaps() {
         automapper
-            .createMap(MODEL_TAGS.UserModel, MODEL_TAGS.UserDBModel)
+            .createMap(IUserName, IUserDBSchemaName)
             .convertToType(userDBModel);
 
         automapper
-            .createMap(MODEL_TAGS.UserDBModel, MODEL_TAGS.UserModel)
+            .createMap(IUserDBSchemaName, IUserName)
             .forMember('avatar', (opts) => opts.ignore())
             .forMember('password', (opts) => opts.ignore())
             .convertToType(User);

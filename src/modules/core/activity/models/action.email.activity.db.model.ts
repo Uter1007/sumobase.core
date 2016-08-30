@@ -2,6 +2,8 @@ import * as mongoose from 'mongoose';
 import {ActivityType} from './activity.type.enum';
 import {EntityState} from '../../../core/base/base.state.enum';
 
+export let IActivityEmailDBSchemaName = 'IActivityEmailDBSchema';
+
 export interface IActivityEmailDBSchema extends mongoose.Document {
     createdOn: string;
     hash: string;

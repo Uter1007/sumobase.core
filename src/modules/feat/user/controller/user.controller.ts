@@ -10,8 +10,6 @@ import { injectable, inject  } from 'inversify';
 
 import { Controller, Get, Post, Head, Put } from 'inversify-express-utils';
 
-import {SVC_TAGS, MAPPER_TAGS} from '../../../../registry/constants.index';
-
 import {ValidationException,
         UserAlreadyInUseException,
         UnknownException,
@@ -19,7 +17,7 @@ import {ValidationException,
        } from '../../../../registry/exceptions.index';
 
 import storage = require('../../../core/imageupload/middleware/image.storage.middleware');
-import { ILogger } from '../../../core/logging/interfaces/logger.interface';
+import { ILogger, ILoggerName } from '../../../core/logging/interfaces/logger.interface';
 import {BaseController} from '../../../core/base/base.controller';
 import {MailService} from '../../../core/mail/services/mail.service';
 import {ActionEmailService} from '../../../core/activity/services/action.email.activity.service';
@@ -32,7 +30,6 @@ import { IUser } from '../interfaces/user.interface';
 import { UserService } from '../services/user.service';
 import {UserMapper} from '../mapper/user.mapper';
 import {PasswordValidator} from '../services/validator/password.validator.service';
-import { IUserDBSchema } from '../models/user.db.model';
 
 const isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 
@@ -42,11 +39,11 @@ const isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 @Controller('/api/user')
 export class UserController extends BaseController {
 
-    constructor(@inject(SVC_TAGS.Logger) private _log: ILogger,
-                @inject(SVC_TAGS.UserService) private _userService: UserService,
-                @inject(SVC_TAGS.MailService) private _mailService: MailService,
-                @inject(SVC_TAGS.ActionEmailService) private _actionEmailService: ActionEmailService,
-                @inject(MAPPER_TAGS.UserMapper) private _userMapper: UserMapper) {
+    constructor(@inject(ILoggerName) private _log: ILogger,
+                @inject(UserService.name) private _userService: UserService,
+                @inject(MailService.name) private _mailService: MailService,
+                @inject(ActionEmailService.name) private _actionEmailService: ActionEmailService,
+                @inject(UserMapper.name) private _userMapper: UserMapper) {
         super();
     }
 
@@ -320,7 +317,7 @@ export class UserController extends BaseController {
     public async recover(request: express.Request, response: express.Response) {
         let hash = request.body.hash;
         let user = await this._actionEmailService.updateForgetEmail(hash);
-        if (user && user instanceof IUser) {
+        if (user && user instanceof User) {
             request.user = user;
             request.logIn(request.user, function() {
                 response.send(request.user);

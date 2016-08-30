@@ -4,7 +4,6 @@ import {injectable} from 'inversify';
 import * as moment from 'moment';
 import kernel from '../helper/user.kernel.test.helper';
 import {PasswordService} from '../../services/password.service';
-import {SVC_TAGS} from '../../../../../registry/constants.index';
 
 @injectable()
 export class UserFakeRepository implements IUserRepository {
@@ -33,7 +32,7 @@ export class UserFakeRepository implements IUserRepository {
     }
 
     public findOne: ((query: any) => Promise<any>) = (query: any) => {
-        let pwService = kernel.get<PasswordService>(SVC_TAGS.PasswordService);
+        let pwService = kernel.get<PasswordService>(PasswordService.name);
         return pwService.hash('123appTest$!').then((result) => {
             this._testuser.password = result;
             return Promise.resolve(this._testuser);

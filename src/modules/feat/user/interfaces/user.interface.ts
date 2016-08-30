@@ -1,5 +1,7 @@
 import { UserState } from '../models/userstate.model';
 
+export let IUserName = 'IUser';
+
 export interface IUser {
     id?: string;
     createdOn: string;

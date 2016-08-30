@@ -21,9 +21,6 @@ import {ConfigLoader} from './modules/core/configloader/configloader.service';
 import {PassportMiddleware} from './modules/core/authenticate/middleware/passport.middleware';
 import {Strategy} from 'passport-local';
 
-import {MIDDLEWARE_TAGS} from './registry/constants.index';
-
-
 const config = ConfigLoader.getConfig();
 
 mongoose.connect(config.db.uri, {
@@ -62,7 +59,7 @@ server.setErrorConfig((app) => {
 let app = server.build();
 
 // passport configuration
-let passportManagement = kernel.get<PassportMiddleware>(MIDDLEWARE_TAGS.PassportMiddleware);
+let passportManagement = kernel.get<PassportMiddleware>(PassportMiddleware.name);
 
 passport.serializeUser(function(user, done) {
     passportManagement.serializeUser(user, done);

@@ -1,12 +1,8 @@
 import { injectable, inject } from 'inversify';
-import { ILogger } from '../../../core/logging/interfaces/logger.interface';
+import { ILogger, ILoggerName } from '../../../core/logging/interfaces/logger.interface';
 import { IUser } from '../interfaces/user.interface';
 import { IUserDBSchema, userDBAvatarModel } from '../models/user.db.model';
 import { UserState } from '../models/userstate.model';
-
-import {SVC_TAGS,
-        REPO_TAGS,
-        MAPPER_TAGS} from '../../../../registry/constants.index';
 
 import {PasswordsNotEqualException} from '../../../core/error/models/password.notequal.exception';
 
@@ -17,16 +13,16 @@ import {UserNotFoundException} from '../../../core/error/models/user.notfound.ex
 import {UserAvatarMapper} from '../mapper/user.avatar.mapper';
 import {IUserAvatar} from '../interfaces/user.avatar.interface';
 import * as moment from 'moment';
-import {IUserRepository} from '../interfaces/user.repository.interface';
+import {IUserRepository, IUserRepositoryName} from '../interfaces/user.repository.interface';
 
 @injectable()
 export class UserService {
 
-    constructor(@inject(SVC_TAGS.Logger) private _log: ILogger,
-                @inject(REPO_TAGS.UserRepository) private _userRepository: IUserRepository,
-                @inject(MAPPER_TAGS.UserMapper) private _userMapper: UserMapper,
-                @inject(SVC_TAGS.PasswordService) private _pw: PasswordService,
-                @inject(MAPPER_TAGS.UserAvatarMapper) private _userAvatarMapper: UserAvatarMapper) {
+    constructor(@inject(ILoggerName) private _log: ILogger,
+                @inject(IUserRepositoryName) private _userRepository: IUserRepository,
+                @inject(UserMapper.name) private _userMapper: UserMapper,
+                @inject(PasswordService.name) private _pw: PasswordService,
+                @inject(UserAvatarMapper.name) private _userAvatarMapper: UserAvatarMapper) {
     }
 
     public async findUserByUserNameAndPassword(userName: string, password: string): Promise<IUser> {

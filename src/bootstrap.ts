@@ -4,16 +4,9 @@ import 'reflect-metadata';
 import { TYPE } from 'inversify-express-utils';
 import { Kernel } from 'inversify';
 
-import {SVC_TAGS,
-        REPO_TAGS,
-        CTRL_TAGS,
-        MIDDLEWARE_TAGS,
-        MAPPER_TAGS} from './registry/constants.index';
-
-
 import { LogRepository } from './modules/core/logging/repository/log.repository';
 import { WinstonLoggerFactory } from './modules/core/logging/factory/winston.logger.factory';
-import { ILogger } from './modules/core/logging/interfaces/logger.interface';
+import { ILogger, ILoggerName } from './modules/core/logging/interfaces/logger.interface';
 import { Controller } from 'inversify-express-utils';
 import { PasswordService } from './modules/feat/user/services/password.service';
 import { UserController } from './modules/feat/user/controller/user.controller';
@@ -21,15 +14,14 @@ import { UserRepository } from './modules/feat/user/repository/user.repository';
 import { UserService } from './modules/feat/user/services/user.service';
 import { MailService } from './modules/core/mail/services/mail.service';
 
-
 import {UserMapper} from './modules/feat/user/mapper/user.mapper';
 import {UserAvatarMapper} from './modules/feat/user/mapper/user.avatar.mapper';
 import {LogConfig} from './config/log.config';
 import {ActionEmailRepository} from './modules/core/activity/repository/action.email.activity.repository';
 import {ActionEmailMapper} from './modules/core/activity/mapper/action.email.activity.mapper';
 import {ActionEmailService} from './modules/core/activity/services/action.email.activity.service';
-import {IUserRepository} from './modules/feat/user/interfaces/user.repository.interface';
-import {IActionEmailRepository} from './modules/core/activity/interfaces/action.email.repository.interface';
+import {IUserRepository, IUserRepositoryName} from './modules/feat/user/interfaces/user.repository.interface';
+import {IActionEmailRepository, IActionEmailRepositoryName} from './modules/core/activity/interfaces/action.email.repository.interface';
 import {ConfigLoader} from './modules/core/configloader/configloader.service';
 import {PassportMiddleware} from './modules/core/authenticate/middleware/passport.middleware';
 import {AuthenticatorMiddleware} from './modules/core/authenticate/middleware/request.authenticater.middleware';
@@ -40,54 +32,54 @@ const kernel = new Kernel();
 // put all your dependencies here
 
 /* Middlewares */
-kernel.bind<PassportMiddleware>(MIDDLEWARE_TAGS.PassportMiddleware)
+kernel.bind<PassportMiddleware>(PassportMiddleware.name)
     .to(PassportMiddleware);
 
-kernel.bind<AuthenticatorMiddleware>(MIDDLEWARE_TAGS.AuthenticatorMiddleware)
+kernel.bind<AuthenticatorMiddleware>(AuthenticatorMiddleware.name)
     .to(AuthenticatorMiddleware);
 
 /* Repositories */
-kernel.bind<LogRepository>(REPO_TAGS.LogRepository)
+kernel.bind<LogRepository>(LogRepository.name)
     .to(LogRepository);
 
-kernel.bind<IUserRepository>(REPO_TAGS.UserRepository)
+kernel.bind<IUserRepository>(IUserRepositoryName)
     .to(UserRepository);
 
-kernel.bind<IActionEmailRepository>(REPO_TAGS.ActionEmailRepository)
+kernel.bind<IActionEmailRepository>(IActionEmailRepositoryName)
     .to(ActionEmailRepository);
 
 /* Services */
-kernel.bind<LogConfig>(SVC_TAGS.LogConfig)
+kernel.bind<LogConfig>(LogConfig.name)
     .to(LogConfig);
 
-kernel.bind<ILogger>(SVC_TAGS.Logger)
+kernel.bind<ILogger>(ILoggerName)
     .to(WinstonLoggerFactory(new LogConfig()));
 
-kernel.bind<PasswordService>(SVC_TAGS.PasswordService)
+kernel.bind<PasswordService>(PasswordService.name)
     .toConstantValue(new PasswordService(config.passwordHandler.saltingRounds));
 
-kernel.bind<ActionEmailService>(SVC_TAGS.ActionEmailService)
+kernel.bind<ActionEmailService>(ActionEmailService.name)
     .to(ActionEmailService);
 
-kernel.bind<UserService>(SVC_TAGS.UserService)
+kernel.bind<UserService>(UserService.name)
     .to(UserService);
 
-kernel.bind<MailService>(SVC_TAGS.MailService)
+kernel.bind<MailService>(MailService.name)
     .to(MailService);
 
 /* Mappers */
-kernel.bind<UserMapper>(MAPPER_TAGS.UserMapper)
+kernel.bind<UserMapper>(UserMapper.name)
     .to(UserMapper).inSingletonScope();
 
-kernel.bind<UserAvatarMapper>(MAPPER_TAGS.UserAvatarMapper)
+kernel.bind<UserAvatarMapper>(UserAvatarMapper.name)
     .to(UserAvatarMapper).inSingletonScope();
 
-kernel.bind<ActionEmailMapper>(MAPPER_TAGS.ActionEmailMapper)
+kernel.bind<ActionEmailMapper>(ActionEmailMapper.name)
     .to(ActionEmailMapper).inSingletonScope();
 
 /* Controllers */
 kernel.bind<Controller>(TYPE.Controller)
     .to(UserController)
-    .whenTargetNamed(CTRL_TAGS.UserController);
+    .whenTargetNamed(UserController.name);
 
 export default kernel;

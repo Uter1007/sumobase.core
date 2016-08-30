@@ -20,7 +20,6 @@ import notFoundHandler = require('../../../../core/error/middleware/notfound.han
 
 import kernel from '../helper/user.kernel.test.helper';
 import {PassportMiddleware} from '../../../../core/authenticate/middleware/passport.middleware';
-import {MIDDLEWARE_TAGS} from '../../../../../registry/constants.index';
 
 /* tslint:enable */
 
@@ -52,7 +51,7 @@ server.setErrorConfig((exApp) => {
 
 app = server.build();
 
-let passportManagement = kernel.get<PassportMiddleware>(MIDDLEWARE_TAGS.PassportMiddleware);
+let passportManagement = kernel.get<PassportMiddleware>(PassportMiddleware.name);
 
 passport.serializeUser(function(user, done) {
     passportManagement.serializeUser(user, done);

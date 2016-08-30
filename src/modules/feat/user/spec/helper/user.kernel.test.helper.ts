@@ -1,15 +1,12 @@
 import {UserFakeRepository} from '../fakes/user.fake.repository';
-import {IUserRepository} from '../../interfaces/user.repository.interface';
-import {ILogger} from '../../../../core/logging/interfaces/logger.interface';
+import {IUserRepository, IUserRepositoryName} from '../../interfaces/user.repository.interface';
+import {ILogger, ILoggerName} from '../../../../core/logging/interfaces/logger.interface';
 import {WinstonLoggerFactory} from '../../../../core/logging/factory/winston.logger.factory';
 import {ActionEmailFakeRepository} from '../../../../core/activity/spec/fakes/action.email.activity.fake.repository';
-import {IActionEmailRepository} from '../../../../core/activity/interfaces/action.email.repository.interface';
+import {IActionEmailRepository, IActionEmailRepositoryName} from '../../../../core/activity/interfaces/action.email.repository.interface';
 import {transports} from 'winston';
 import kernel from '../../../../../bootstrap';
 import {PasswordService} from '../../services/password.service';
-
-import {SVC_TAGS,
-        REPO_TAGS} from '../../../../../registry/constants.index';
 
 let logconfig = new transports.Console({
     colorize: true,
@@ -19,22 +16,22 @@ let logconfig = new transports.Console({
 });
 
 // remove Modules you want to Mock or Fake
-kernel.unbind(REPO_TAGS.UserRepository);
-kernel.unbind(SVC_TAGS.Logger);
-kernel.unbind(REPO_TAGS.ActionEmailRepository);
-kernel.unbind(SVC_TAGS.PasswordService);
+kernel.unbind(IUserRepositoryName);
+kernel.unbind(ILoggerName);
+kernel.unbind(IActionEmailRepositoryName);
+kernel.unbind(PasswordService.name);
 
 /* added Fakes & custom Customizations for Tests*/
-kernel.bind<IUserRepository>(REPO_TAGS.UserRepository)
+kernel.bind<IUserRepository>(IUserRepositoryName)
     .to(UserFakeRepository);
 
-kernel.bind<ILogger>(SVC_TAGS.Logger)
+kernel.bind<ILogger>(ILoggerName)
     .to(WinstonLoggerFactory(logconfig));
 
-kernel.bind<IActionEmailRepository>(REPO_TAGS.ActionEmailRepository)
+kernel.bind<IActionEmailRepository>(IActionEmailRepositoryName)
     .to(ActionEmailFakeRepository);
 
-kernel.bind<PasswordService>(SVC_TAGS.PasswordService)
+kernel.bind<PasswordService>(PasswordService.name)
     .toConstantValue(new PasswordService(1));
 
 export default kernel;

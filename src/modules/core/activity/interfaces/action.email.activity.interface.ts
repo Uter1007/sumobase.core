@@ -1,6 +1,9 @@
 import {ActivityType} from '../models/activity.type.enum';
 import {EntityState} from '../../../core/base/base.state.enum';
 import {IUser} from '../../../feat/user/interfaces/user.interface';
+
+export let IActivityEmailName = 'IActivityEmail';
+
 export interface IActivityEmail {
     createdOn: string;
     hash: string;
