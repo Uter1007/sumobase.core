@@ -317,15 +317,16 @@ export class UserController extends BaseController {
      * @apiUse MeObject
      */
     @Post('/recover')
-    public async recover(request: express.Request, response: express.Response): Promise<User> {
+    public async recover(request: express.Request, response: express.Response) {
         let hash = request.body.hash;
         let user = await this._actionEmailService.updateForgetEmail(hash);
         if (user) {
+            request.user = user;
             request.logIn(request.user, function() {
                 response.send(request.user);
             });
+        } else {
+            throw new UnknownException('Somehting went wrong on recovery');
         }
-
-        throw new UnknownException('Somehting went wrong on recovery');
     }
 }
