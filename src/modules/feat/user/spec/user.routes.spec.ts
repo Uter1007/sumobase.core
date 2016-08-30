@@ -80,7 +80,7 @@ describe('User Route Tests', () => {
                 .expect(404); // 404 = "already in use"
         });
 
-        it('/Check Test; e-mail address of existing user', async () => {
+        it('/Check Test; e-mail address of non-existing user', async () => {
             let agent = request.agent(app);
             await agent
                 .head('/api/user/check')
