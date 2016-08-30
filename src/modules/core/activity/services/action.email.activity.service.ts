@@ -73,11 +73,14 @@ export class ActionEmailService {
             if (!founduser) {
                 throw new UserNotFoundException('No User was found');
             }
+            if (foundActivity.state !== EntityState.ACTIVE) {
+                throw new ActivationNotValid('Link is not active anymore');
+            }
             let checkdate = moment(foundActivity.createdOn).utc().add(7, 'days');
             if (moment.utc() >= checkdate) {
                 throw new ForgetPasswordNotValid('Date ran out');
             }
-
+            foundActivity.state = EntityState.DISABLED;
             let updateSuccess = await this._actionEmailRepository.update(foundActivity.id, foundActivity);
 
             if (updateSuccess) {
