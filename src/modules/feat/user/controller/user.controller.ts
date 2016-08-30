@@ -320,7 +320,7 @@ export class UserController extends BaseController {
     public async recover(request: express.Request, response: express.Response) {
         let hash = request.body.hash;
         let user = await this._actionEmailService.updateForgetEmail(hash);
-        if (user) {
+        if (user && user instanceof IUser) {
             request.user = user;
             request.logIn(request.user, function() {
                 response.send(request.user);
