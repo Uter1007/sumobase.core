@@ -32,8 +32,8 @@ export class UserFakeRepository implements IUserRepository {
     }
 
     public findOne: ((query: any) => Promise<any>) = (query: any) => {
-        if(query.email && query.email !== this._testuser.email) {
-            return Promise.resolve();
+        if (query.email && query.email !== this._testuser.email) {
+            return Promise.resolve(undefined);
         }
         let pwService = kernel.get<PasswordService>(PasswordService.name);
         return pwService.hash('123appTest$!').then((result) => {

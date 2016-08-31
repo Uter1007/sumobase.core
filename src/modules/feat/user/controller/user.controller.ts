@@ -203,15 +203,13 @@ export class UserController extends BaseController {
      * @apiSuccess (404)  UserName already in use
      */
     @Head('/check')
-    public async checkUserName(request: express.Request, response: express.Response, next) {
+    public async checkUserName(request: express.Request, response: express.Response) {
         let founduser = await this._userService.findUserByName(request.header('email'));
         if (founduser) {
-            response.status(404);
+            response.send(404, 'Already in Use');
         } else {
-            response.status(200);
+            response.send(200, 'free to go');
         }
-
-        next();
     }
 
     /**

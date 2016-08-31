@@ -53,6 +53,9 @@ describe('User Controller', () => {
     let resObj = {
         status: (code) => {
             // empty block - just a mock
+        },
+        send: (number, str) => {
+            // empty block - just a mock
         }
     };
 
@@ -400,9 +403,9 @@ describe('User Controller', () => {
             .returns(Promise.resolve(null));
 
         resMock
-            .expects('status')
+            .expects('send')
             .once()
-            .withArgs(200);
+            .withArgs(200, 'free to go');
 
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
@@ -410,9 +413,7 @@ describe('User Controller', () => {
                                                 actionMailServiceMock.object,
                                                 userMapper);
 
-        await userController.checkUserName(reqMock.object, resMock.object, () => {
-            // empty block
-        });
+        await userController.checkUserName(reqMock.object, resMock.object);
 
         serviceMock.verify();
         reqMock.verify();
@@ -435,9 +436,9 @@ describe('User Controller', () => {
             .returns(Promise.resolve('some other user'));
 
         resMock
-            .expects('status')
+            .expects('send')
             .once()
-            .withArgs(404);
+            .withArgs(404, 'Already in Use');
 
         let userController = new UserController(loggerMock.object,
                                                 serviceMock.object,
@@ -445,9 +446,7 @@ describe('User Controller', () => {
                                                 actionMailServiceMock.object,
                                                 userMapper);
 
-        await userController.checkUserName(reqMock.object, resMock.object, () => {
-            // empty block
-        });
+        await userController.checkUserName(reqMock.object, resMock.object);
 
         serviceMock.verify();
         reqMock.verify();
