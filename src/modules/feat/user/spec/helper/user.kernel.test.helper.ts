@@ -1,9 +1,10 @@
 import {UserFakeRepository} from '../fakes/user.fake.repository';
-import {IUserRepository, IUserRepositoryName} from '../../interfaces/user.repository.interface';
-import {ILogger, ILoggerName} from '../../../../core/logging/interfaces/logger.interface';
+import {IUserRepository, userRepositoryInterfaceName} from '../../interfaces/user.repository.interface';
+import {ILogger, loggerInterfaceName} from '../../../../core/logging/interfaces/logger.interface';
 import {WinstonLoggerFactory} from '../../../../core/logging/factory/winston.logger.factory';
 import {ActionEmailFakeRepository} from '../../../../core/activity/spec/fakes/action.email.activity.fake.repository';
-import {IActionEmailRepository, IActionEmailRepositoryName} from '../../../../core/activity/interfaces/action.email.repository.interface';
+import {IActionEmailRepository,
+        actionEmailRepositoryInterfaceName} from '../../../../core/activity/interfaces/action.email.repository.interface';
 import {transports} from 'winston';
 import kernel from '../../../../../bootstrap';
 import {PasswordService} from '../../services/password.service';
@@ -16,19 +17,19 @@ let logconfig = new transports.Console({
 });
 
 // remove Modules you want to Mock or Fake
-kernel.unbind(IUserRepositoryName);
-kernel.unbind(ILoggerName);
-kernel.unbind(IActionEmailRepositoryName);
+kernel.unbind(userRepositoryInterfaceName);
+kernel.unbind(loggerInterfaceName);
+kernel.unbind(actionEmailRepositoryInterfaceName);
 kernel.unbind(PasswordService.name);
 
 /* added Fakes & custom Customizations for Tests*/
-kernel.bind<IUserRepository>(IUserRepositoryName)
+kernel.bind<IUserRepository>(userRepositoryInterfaceName)
     .to(UserFakeRepository);
 
-kernel.bind<ILogger>(ILoggerName)
+kernel.bind<ILogger>(loggerInterfaceName)
     .to(WinstonLoggerFactory(logconfig));
 
-kernel.bind<IActionEmailRepository>(IActionEmailRepositoryName)
+kernel.bind<IActionEmailRepository>(actionEmailRepositoryInterfaceName)
     .to(ActionEmailFakeRepository);
 
 kernel.bind<PasswordService>(PasswordService.name)

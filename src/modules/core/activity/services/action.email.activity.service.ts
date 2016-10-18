@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import {ActionEmailRepository} from '../repository/action.email.activity.repository';
-import {IActionEmailRepositoryName} from '../interfaces/action.email.repository.interface';
-import {ILogger, ILoggerName} from '../../../core/logging/interfaces/logger.interface';
+import {actionEmailRepositoryInterfaceName} from '../interfaces/action.email.repository.interface';
+import {ILogger, loggerInterfaceName} from '../../../core/logging/interfaces/logger.interface';
 import {EntityState} from '../../../core/base/base.state.enum';
 import {ActivationNotValid} from '../../../core/error/models/activation.not.valid.exception';
 import {UnknownException} from '../../../core/error/models/unknown.exception';
@@ -25,9 +25,9 @@ import {ForgetPasswordNotValid} from '../../error/models/forget.password.excepti
 @injectable()
 export class ActionEmailService {
 
-    constructor(@inject(ILoggerName) private _log: ILogger,
+    constructor(@inject(loggerInterfaceName) private _log: ILogger,
                 @inject(UserService.name) private _userService: UserService,
-                @inject(IActionEmailRepositoryName) private _actionEmailRepository: ActionEmailRepository,
+                @inject(actionEmailRepositoryInterfaceName) private _actionEmailRepository: ActionEmailRepository,
                 @inject(ActionEmailMapper.name) private _actionEmailMapper: ActionEmailMapper,
                 @inject(UserMapper.name) private _userMapper: UserMapper) {
     }

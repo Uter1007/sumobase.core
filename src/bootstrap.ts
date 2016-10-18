@@ -6,7 +6,8 @@ import { Kernel } from 'inversify';
 
 import { LogRepository } from './modules/core/logging/repository/log.repository';
 import { WinstonLoggerFactory } from './modules/core/logging/factory/winston.logger.factory';
-import { ILogger, ILoggerName } from './modules/core/logging/interfaces/logger.interface';
+import { ILogger,
+         loggerInterfaceName } from './modules/core/logging/interfaces/logger.interface';
 import { Controller } from 'inversify-express-utils';
 import { PasswordService } from './modules/feat/user/services/password.service';
 import { UserController } from './modules/feat/user/controller/user.controller';
@@ -20,8 +21,9 @@ import {LogConfig} from './config/log.config';
 import {ActionEmailRepository} from './modules/core/activity/repository/action.email.activity.repository';
 import {ActionEmailMapper} from './modules/core/activity/mapper/action.email.activity.mapper';
 import {ActionEmailService} from './modules/core/activity/services/action.email.activity.service';
-import {IUserRepository, IUserRepositoryName} from './modules/feat/user/interfaces/user.repository.interface';
-import {IActionEmailRepository, IActionEmailRepositoryName} from './modules/core/activity/interfaces/action.email.repository.interface';
+import {IUserRepository, userRepositoryInterfaceName} from './modules/feat/user/interfaces/user.repository.interface';
+import {IActionEmailRepository,
+        actionEmailRepositoryInterfaceName} from './modules/core/activity/interfaces/action.email.repository.interface';
 import {ConfigLoader} from './modules/core/configloader/configloader.service';
 import {PassportMiddleware} from './modules/core/authenticate/middleware/passport.middleware';
 import {AuthenticatorMiddleware} from './modules/core/authenticate/middleware/request.authenticater.middleware';
@@ -42,17 +44,17 @@ kernel.bind<AuthenticatorMiddleware>(AuthenticatorMiddleware.name)
 kernel.bind<LogRepository>(LogRepository.name)
     .to(LogRepository);
 
-kernel.bind<IUserRepository>(IUserRepositoryName)
+kernel.bind<IUserRepository>(userRepositoryInterfaceName)
     .to(UserRepository);
 
-kernel.bind<IActionEmailRepository>(IActionEmailRepositoryName)
+kernel.bind<IActionEmailRepository>(actionEmailRepositoryInterfaceName)
     .to(ActionEmailRepository);
 
 /* Services */
 kernel.bind<LogConfig>(LogConfig.name)
     .to(LogConfig);
 
-kernel.bind<ILogger>(ILoggerName)
+kernel.bind<ILogger>(loggerInterfaceName)
     .to(WinstonLoggerFactory(new LogConfig()));
 
 kernel.bind<PasswordService>(PasswordService.name)

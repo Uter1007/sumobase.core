@@ -51,10 +51,10 @@ describe('User Controller', () => {
         }
     };
     let resObj = {
-        status: (code) => {
+        send: (num, str) => {
             // empty block - just a mock
         },
-        send: (number, str) => {
+        status: (code) => {
             // empty block - just a mock
         }
     };

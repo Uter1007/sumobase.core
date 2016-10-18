@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 import { UserState } from './userstate.model';
 
-export let IUserAvatarDBSchemaName = 'IUserAvatarDBSchema';
+export const userAvatarDBSchemaInterfaceName = 'IUserAvatarDBSchema';
 export interface IUserAvatarDBSchema extends mongoose.Document {
     contentType: string;
     data: Buffer;
 }
 
-export let IUserDBSchemaName = 'IUserDBSchema';
+export const userDBSchemaInterfaceName = 'IUserDBSchema';
 export interface IUserDBSchema extends mongoose.Document {
     avatar?: IUserAvatarDBSchema;
     createdOn?: string;

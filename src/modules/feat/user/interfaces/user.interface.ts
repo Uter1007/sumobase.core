@@ -1,6 +1,6 @@
 import { UserState } from '../models/userstate.model';
 
-export let IUserName = 'IUser';
+export const userInterfaceName = 'IUser';
 
 export interface IUser {
     id?: string;

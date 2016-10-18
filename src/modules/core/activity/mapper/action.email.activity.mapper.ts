@@ -1,6 +1,9 @@
 import { injectable, inject } from 'inversify';
-import {IActivityEmail, IActivityEmailName} from '../interfaces/action.email.activity.interface';
-import {IActivityEmailDBSchema, IActivityEmailDBSchemaName, activityEmailDBModel} from '../models/action.email.activity.db.model';
+import {IActivityEmail,
+        activityEmailInterfaceName} from '../interfaces/action.email.activity.interface';
+import {IActivityEmailDBSchema,
+        activityEmailDBSchemaNameInterface,
+        activityEmailDBModel} from '../models/action.email.activity.db.model';
 import {ActionEmail} from '../models/action.email.activity.model';
 import {UserMapper} from '../../../feat/user/mapper/user.mapper';
 import {IUserDBSchema} from '../../../feat/user/models/user.db.model';
@@ -22,14 +25,15 @@ export class ActionEmailMapper {
 
     public toDBmodel(model: IActivityEmail): IActivityEmailDBSchema {
         const source = MongooseMapperHelper.getObject<IActivityEmail>(model);
-        return automapper.map(IActivityEmailName, IActivityEmailDBSchemaName, source);
+        return automapper.map(activityEmailInterfaceName,
+                              activityEmailDBSchemaNameInterface, source);
     }
 
     public toActivityEmail(activityModel: IActivityEmailDBSchema, userModel: IUserDBSchema): ActionEmail {
 
         const source = MongooseMapperHelper.getObject<IActivityEmailDBSchema>(activityModel);
-        let result: ActionEmail = automapper.map(IActivityEmailDBSchemaName,
-                                                 IActivityEmailName, source);
+        let result: ActionEmail = automapper.map(activityEmailDBSchemaNameInterface,
+                                                 activityEmailInterfaceName, source);
 
         if (userModel) {
             result.user = this._userMapper.toUser(userModel);
@@ -40,14 +44,14 @@ export class ActionEmailMapper {
 
     private configMaps() {
         automapper
-            .createMap(IActivityEmailName, IActivityEmailDBSchemaName)
+            .createMap(activityEmailInterfaceName, activityEmailDBSchemaNameInterface)
             .forMember('user', (opts) => { return opts.sourceObject[opts.sourcePropertyName]
                 ? opts.sourceObject[opts.sourcePropertyName].id
                 : undefined; })
             .convertToType(activityEmailDBModel);
 
         automapper
-            .createMap(IActivityEmailDBSchemaName, IActivityEmailName)
+            .createMap(activityEmailDBSchemaNameInterface, activityEmailInterfaceName)
             .convertToType(ActionEmail);
     }
 }

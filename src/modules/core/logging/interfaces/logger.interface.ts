@@ -1,6 +1,6 @@
 import {LogLevel} from '../models/loglevel.model';
 
-export const ILoggerName = 'ILogger';
+export const loggerInterfaceName = 'ILogger';
 
 export interface ILogger {
     warn(msg: string): void;

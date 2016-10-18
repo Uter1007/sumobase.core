@@ -1,7 +1,9 @@
-import {IUserAvatarDBSchema, IUserAvatarDBSchemaName, userDBAvatarModel} from '../models/user.db.model';
+import {IUserAvatarDBSchema,
+        userAvatarDBSchemaInterfaceName,
+        userDBAvatarModel} from '../models/user.db.model';
 import {UserAvatar} from '../models/user.avatar.model';
 import {injectable} from 'inversify';
-import {IUserAvatar, IUserAvatarName} from '../interfaces/user.avatar.interface';
+import {IUserAvatar, userAvatarInterfaceName} from '../interfaces/user.avatar.interface';
 import {MongooseMapperHelper} from '../../../core/mapper/mongoose.helper';
 
 /* tslint:disable */
@@ -17,23 +19,23 @@ export class UserAvatarMapper {
 
     public toUserAvatar(dbmodel: IUserAvatarDBSchema): IUserAvatar {
         const source = MongooseMapperHelper.getObject<IUserAvatarDBSchema>(dbmodel);
-        return automapper.map(IUserAvatarDBSchemaName, UserAvatar.name, source);
+        return automapper.map(userAvatarDBSchemaInterfaceName, UserAvatar.name, source);
     }
 
     public toDBmodel(userAvatar: IUserAvatar): IUserAvatarDBSchema {
 
         const source = MongooseMapperHelper.getObject<IUserAvatar>(userAvatar);
-        return automapper.map(IUserAvatarName, IUserAvatarDBSchemaName, source);
+        return automapper.map(userAvatarInterfaceName, userAvatarDBSchemaInterfaceName, source);
     }
 
     private configMaps() {
         automapper
-            .createMap(IUserAvatarDBSchemaName, IUserAvatarName)
+            .createMap(userAvatarDBSchemaInterfaceName, userAvatarInterfaceName)
             .forMember('filename', (opts) => {return 'avatar'; })
             .convertToType(UserAvatar);
 
         automapper
-            .createMap(IUserAvatarName, IUserAvatarDBSchemaName)
+            .createMap(userAvatarInterfaceName, userAvatarDBSchemaInterfaceName)
             .convertToType(userDBAvatarModel);
     }
 }

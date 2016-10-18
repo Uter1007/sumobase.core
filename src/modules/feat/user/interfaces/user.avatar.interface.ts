@@ -1,4 +1,4 @@
-export let IUserAvatarName = 'IUserAvatar';
+export const userAvatarInterfaceName = 'IUserAvatar';
 
 export interface IUserAvatar {
     data: Buffer;

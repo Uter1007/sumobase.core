@@ -17,7 +17,7 @@ import {ValidationException,
        } from '../../../../registry/exceptions.index';
 
 import storage = require('../../../core/imageupload/middleware/image.storage.middleware');
-import { ILogger, ILoggerName } from '../../../core/logging/interfaces/logger.interface';
+import { ILogger, loggerInterfaceName } from '../../../core/logging/interfaces/logger.interface';
 import {BaseController} from '../../../core/base/base.controller';
 import {MailService} from '../../../core/mail/services/mail.service';
 import {ActionEmailService} from '../../../core/activity/services/action.email.activity.service';
@@ -39,7 +39,7 @@ const isLoggedIn = AuthenticatorMiddleware.requestAuthenticater;
 @Controller('/api/user')
 export class UserController extends BaseController {
 
-    constructor(@inject(ILoggerName) private _log: ILogger,
+    constructor(@inject(loggerInterfaceName) private _log: ILogger,
                 @inject(UserService.name) private _userService: UserService,
                 @inject(MailService.name) private _mailService: MailService,
                 @inject(ActionEmailService.name) private _actionEmailService: ActionEmailService,
