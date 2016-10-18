@@ -16,7 +16,7 @@
     "mongoose": "registry:dt/mongoose#3.8.5+20160517033907",
     "multer": "registry:dt/multer#0.0.0+20160726135055",
     "nconf": "registry:dt/nconf#0.0.0+20160724073144",
-    "node": "registry:dt/node#6.0.0+20160728152422",
+    "node": "registry:dt/node#6.0.0+20161014191813",
     "passport": "registry:dt/passport#0.2.0+20160720063208",
     "passport-local": "registry:dt/passport-local#0.0.0+20160316155526",
     "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",

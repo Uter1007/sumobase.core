@@ -39,19 +39,21 @@ gulp.task("lint", function() {
 });
 
 gulp.task('ts-compile', function() {
+
+    var tsProject = tsc.createProject('tsconfig.json');
+
     return gulp.src([
         "src/**/**.ts",
-        "src/**/**.json",
         "typings/index.d.ts",
         "node_modules/inversify-dts/inversify-binding-decorators/inversify-binding-decorators.d.ts",
         "node_modules/inversify-dts/inversify-express-utils/inversify-express-utils.d.ts",
         "node_modules/inversify-dts/inversify-logger-middleware/inversify-logger-middleware.d.ts",
         "node_modules/inversify-dts/inversify/inversify.d.ts"
     ])
-        .pipe(sourcemaps.init())
-        .pipe(tsc(tsProject))
-        .js.pipe(sourcemaps.write('./src/ts'))
-        .pipe(gulp.dest('dist'));
+    .pipe(sourcemaps.init())
+    .pipe(tsProject())
+    .js.pipe(sourcemaps.write('./src/ts'))
+    .pipe(gulp.dest('dist'));
 });
 
 
