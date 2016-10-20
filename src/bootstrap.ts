@@ -1,14 +1,13 @@
 // load everything needed to the kernel
 
 import 'reflect-metadata';
-import { TYPE } from 'inversify-express-utils';
+import { TYPE, interfaces, Controller, } from 'inversify-express-utils';
 import { Kernel } from 'inversify';
 
 import { LogRepository } from './modules/core/logging/repository/log.repository';
 import { WinstonLoggerFactory } from './modules/core/logging/factory/winston.logger.factory';
 import { ILogger,
          loggerInterfaceName } from './modules/core/logging/interfaces/logger.interface';
-import { Controller } from 'inversify-express-utils';
 import { PasswordService } from './modules/feat/user/services/password.service';
 import { UserController } from './modules/feat/user/controller/user.controller';
 import { UserRepository } from './modules/feat/user/repository/user.repository';
@@ -80,7 +79,7 @@ kernel.bind<ActionEmailMapper>(ActionEmailMapper.name)
     .to(ActionEmailMapper).inSingletonScope();
 
 /* Controllers */
-kernel.bind<Controller>(TYPE.Controller)
+kernel.bind<interfaces.Controller>(TYPE.Controller)
     .to(UserController)
     .whenTargetNamed(UserController.name);
 

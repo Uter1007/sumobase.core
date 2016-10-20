@@ -32,7 +32,7 @@ process.setMaxListeners(0);
 
 // start the server
 let server = new InversifyExpressServer(kernel);
-server.setConfig((app) => {
+server.setConfig((app: express.Application) => {
     app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));

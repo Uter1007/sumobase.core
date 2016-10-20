@@ -4,8 +4,8 @@ import {UserController} from '../controller/user.controller';
 import {UserMapper} from '../mapper/user.mapper';
 
 /* tslint:disable */
-let chai = require('chai');
-let chaiAsPromised = require("chai-as-promised");
+import chai = require('chai');
+import chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 let expect = chai.expect;
 let sinon = require('sinon');

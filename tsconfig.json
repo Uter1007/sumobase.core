@@ -7,11 +7,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "files": [
-    "typings/index.d.ts",
-    "node_modules/inversify-dts/inversify-binding-decorators/inversify-binding-decorators.d.ts",
-    "node_modules/inversify-dts/inversify-express-utils/inversify-express-utils.d.ts",
-    "node_modules/inversify-dts/inversify-logger-middleware/inversify-logger-middleware.d.ts",
-    "node_modules/inversify-dts/inversify/inversify.d.ts"
-  ]
+  "exclude": [
+    "dist",
+    "coverage",
+    "node_modules"
+  ],
+  "typeRoots": [ "node_modules/@types/", "typings/index.d.ts" ]
 }

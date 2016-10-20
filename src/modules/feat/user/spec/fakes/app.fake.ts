@@ -7,7 +7,7 @@ let sinon = require('sinon');
 let request = require('supertest');
 
 import 'reflect-metadata';
-import * as expressutils from 'inversify-express-utils';
+import { interfaces, Controller, InversifyExpressServer, TYPE } from 'inversify-express-utils';
 import session = require('express-session');
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
@@ -20,12 +20,13 @@ import notFoundHandler = require('../../../../core/error/middleware/notfound.han
 
 import kernel from '../helper/user.kernel.test.helper';
 import {PassportMiddleware} from '../../../../core/authenticate/middleware/passport.middleware';
+import {Express} from 'express-serve-static-core';
 
 /* tslint:enable */
 
-let server: expressutils.interfaces.InversifyExpressServer;
+let server: InversifyExpressServer;
 let app: Express.Application;
-server = new expressutils.InversifyExpressServer(kernel);
+server = new InversifyExpressServer(kernel);
 
 server.setConfig((exApp) => {
     exApp.use(cookieParser());
