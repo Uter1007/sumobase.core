@@ -1,13 +1,17 @@
 import {UserFakeRepository} from '../fakes/user.fake.repository';
-import {IUserRepository, userRepositoryInterfaceName} from '../../interfaces/user.repository.interface';
+
 import {ILogger, loggerInterfaceName} from '../../../../core/logging/interfaces/logger.interface';
 import {WinstonLoggerFactory} from '../../../../core/logging/factory/winston.logger.factory';
 import {ActionEmailFakeRepository} from '../../../../core/activity/spec/fakes/action.email.activity.fake.repository';
-import {IActionEmailRepository,
-        actionEmailRepositoryInterfaceName} from '../../../../core/activity/interfaces/action.email.repository.interface';
+
 import {transports} from 'winston';
 import kernel from '../../../../../bootstrap';
 import {PasswordService} from '../../services/password.service';
+import {
+    actionEmailRepositoryInterfaceName,
+    IActionEmailRepository
+} from '../../../../core/activity/models/action.email.activity.db.model';
+import {userRepositoryInterfaceName, IUserRepository} from '../../repository/user.repository';
 
 let logconfig = new transports.Console({
     colorize: true,

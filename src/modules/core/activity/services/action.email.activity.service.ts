@@ -1,6 +1,5 @@
 import { injectable, inject } from 'inversify';
 import {ActionEmailRepository} from '../repository/action.email.activity.repository';
-import {actionEmailRepositoryInterfaceName} from '../interfaces/action.email.repository.interface';
 import {ILogger, loggerInterfaceName} from '../../../core/logging/interfaces/logger.interface';
 import {EntityState} from '../../../core/base/base.state.enum';
 import {ActivationNotValid} from '../../../core/error/models/activation.not.valid.exception';
@@ -9,7 +8,6 @@ import {ActionEmailMapper} from '../mapper/action.email.activity.mapper';
 
 import {ActionEmail} from '../models/action.email.activity.model';
 import {ActivityType} from '../models/activity.type.enum';
-import {IUser} from '../../../feat/user/interfaces/user.interface';
 import * as moment from 'moment';
 
 /* tslint:disable */
@@ -19,6 +17,8 @@ import {UserMapper} from '../../../feat/user/mapper/user.mapper';
 import {UserState} from '../../../feat/user/models/userstate.model';
 import {UserNotFoundException} from '../../../core/error/models/user.notfound.exception';
 import {ForgetPasswordNotValid} from '../../error/models/forget.password.exception';
+import {IUser} from '../../../feat/user/models/user.model';
+import {actionEmailRepositoryInterfaceName} from '../models/action.email.activity.db.model';
 
 /* tslint:enable */
 

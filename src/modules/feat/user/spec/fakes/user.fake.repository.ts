@@ -1,9 +1,9 @@
 import {IUserDBSchema} from '../../models/user.db.model';
-import {IUserRepository} from '../../interfaces/user.repository.interface';
 import {injectable} from 'inversify';
 import * as moment from 'moment';
 import kernel from '../helper/user.kernel.test.helper';
 import {PasswordService} from '../../services/password.service';
+import {IUserRepository} from '../../repository/user.repository';
 
 @injectable()
 export class UserFakeRepository implements IUserRepository {

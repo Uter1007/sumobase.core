@@ -10,7 +10,10 @@ import { ILogger,
          loggerInterfaceName } from './modules/core/logging/interfaces/logger.interface';
 import { PasswordService } from './modules/feat/user/services/password.service';
 import { UserController } from './modules/feat/user/controller/user.controller';
-import { UserRepository } from './modules/feat/user/repository/user.repository';
+import {
+    UserRepository, IUserRepository,
+    userRepositoryInterfaceName
+} from './modules/feat/user/repository/user.repository';
 import { UserService } from './modules/feat/user/services/user.service';
 import { MailService } from './modules/core/mail/services/mail.service';
 
@@ -20,12 +23,14 @@ import {LogConfig} from './config/log.config';
 import {ActionEmailRepository} from './modules/core/activity/repository/action.email.activity.repository';
 import {ActionEmailMapper} from './modules/core/activity/mapper/action.email.activity.mapper';
 import {ActionEmailService} from './modules/core/activity/services/action.email.activity.service';
-import {IUserRepository, userRepositoryInterfaceName} from './modules/feat/user/interfaces/user.repository.interface';
-import {IActionEmailRepository,
-        actionEmailRepositoryInterfaceName} from './modules/core/activity/interfaces/action.email.repository.interface';
+
 import {ConfigLoader} from './modules/core/configloader/configloader.service';
 import {PassportMiddleware} from './modules/core/authenticate/middleware/passport.middleware';
 import {AuthenticatorMiddleware} from './modules/core/authenticate/middleware/request.authenticater.middleware';
+import {
+    IActionEmailRepository,
+    actionEmailRepositoryInterfaceName
+} from './modules/core/activity/models/action.email.activity.db.model';
 
 const config = ConfigLoader.getConfig();
 const kernel = new Kernel();

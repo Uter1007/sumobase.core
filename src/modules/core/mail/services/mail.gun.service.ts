@@ -7,7 +7,6 @@ const mailConfig = ConfigLoader.getConfig().mail;
 const mailgun = require('mailgun-js')({apiKey: mailConfig.apiKey, domain: mailConfig.domain});
 /* tslint:enable */
 
-import * as Promise from 'bluebird';
 import {IMailFacade} from '../interfaces/mailfacade.interface';
 
 @injectable()

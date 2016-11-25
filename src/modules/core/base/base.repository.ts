@@ -1,7 +1,6 @@
 'use strict';
 
 import * as mongoose from 'mongoose';
-import * as Promise from 'bluebird';
 import { injectable, inject } from 'inversify';
 import {ILogger, loggerInterfaceName} from '../logging/interfaces/logger.interface';
 import {IUserDBSchema} from '../../feat/user/models/user.db.model';
@@ -19,7 +18,7 @@ class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
     constructor(@inject(loggerInterfaceName) protected _log: ILogger) {
     }
 
-    public create: ((item: T) => Promise<any>) = (item: T) => {
+    public create(item: T): Promise<any> {
 
         return new Promise<any>( (resolve: any, reject: any) => {
             this._model.create(item, (error: any, result: any): void => {
@@ -34,7 +33,7 @@ class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
         });
     };
 
-    public retrieveAll: (() => Promise<any[]>) = () => {
+    public retrieveAll(): Promise<any[]> {
         return new Promise<any[]>( (resolve: any, reject: any) => {
             this._model.find({}, (error: any, result: any): void => {
                 if (error) {
@@ -48,7 +47,7 @@ class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
         });
     };
 
-    public findOne: ((query: any) => Promise<any>) = (query: any) => {
+    public findOne(query: any): Promise<any> {
         return new Promise<IUserDBSchema>( (resolve: any, reject: any) => {
             this._model.findOne(query, (error: any, result: any): void => {
                 if (error) {
@@ -62,7 +61,7 @@ class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
         });
     };
 
-    public find: ((query: any) => Promise<any[]> ) = (query: any) => {
+    public find(query: any): Promise<any[]> {
         return new Promise<any[]>( (resolve: any, reject: any) => {
             this._model.find(query, (error: any, result: any): void => {
                 if (error) {
@@ -76,7 +75,7 @@ class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
         });
     };
 
-    public update: ((_id: string, item: T) =>  Promise<boolean>) = (_id: string, item: T)  => {
+    public update(_id: string, item: T): Promise<boolean> {
         return new Promise<boolean>( (resolve: any, reject: any) => {
             this._model.update({_id: this.toObjectId(_id)}, item, (error: any, result: any): void => {
                 if (error) {
@@ -90,7 +89,7 @@ class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
         });
     };
 
-    public delete: ((_id: string) => Promise<boolean>) = (_id: string) => {
+    public delete(_id: string): Promise<boolean> {
         return new Promise<boolean>( (resolve: any, reject: any) => {
             this._model.remove({_id: this.toObjectId(_id)}, (error: any) => {
                 if (error) {
@@ -104,7 +103,7 @@ class BaseRepository<T extends mongoose.Document> implements IBaseRepository {
         });
     };
 
-    public findById: ((_id: string) => Promise<any>) = (_id: string) => {
+    public findById(_id: string): Promise<any> {
         return new Promise<any>( (resolve: any, reject: any) => {
             this._model.findById(_id, (error: any, result: any): void => {
                 if (error) {

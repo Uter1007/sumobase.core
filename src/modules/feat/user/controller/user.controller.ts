@@ -25,8 +25,7 @@ import {AuthenticatorMiddleware} from '../../../core/authenticate/middleware/req
 
 import {UserValidator} from '../services/validator/user.validator.service';
 import {UserAvatarValidator} from '../services/validator/user.avatar.validator.service';
-import { User } from '../models/user.model';
-import { IUser } from '../interfaces/user.interface';
+import {User, IUser} from '../models/user.model';
 import { UserService } from '../services/user.service';
 import {UserMapper} from '../mapper/user.mapper';
 import {PasswordValidator} from '../services/validator/password.validator.service';

@@ -1,13 +1,13 @@
 import { injectable, inject } from 'inversify';
-import {IActivityEmail,
-        activityEmailInterfaceName} from '../interfaces/action.email.activity.interface';
+
 import {IActivityEmailDBSchema,
         activityEmailDBSchemaNameInterface,
         activityEmailDBModel} from '../models/action.email.activity.db.model';
-import {ActionEmail} from '../models/action.email.activity.model';
+import {ActionEmail, IActivityEmail, activityEmailInterfaceName} from '../models/action.email.activity.model';
 import {UserMapper} from '../../../feat/user/mapper/user.mapper';
 import {IUserDBSchema} from '../../../feat/user/models/user.db.model';
 import {MongooseMapperHelper} from '../../mapper/mongoose.helper';
+import {ObjectID} from 'mongodb';
 
 /* tslint:disable */
 const automapper = require('automapper-ts');
@@ -24,9 +24,8 @@ export class ActionEmailMapper {
     }
 
     public toDBmodel(model: IActivityEmail): IActivityEmailDBSchema {
-        const source = MongooseMapperHelper.getObject<IActivityEmail>(model);
         return automapper.map(activityEmailInterfaceName,
-                              activityEmailDBSchemaNameInterface, source);
+                              activityEmailDBSchemaNameInterface, model);
     }
 
     public toActivityEmail(activityModel: IActivityEmailDBSchema, userModel: IUserDBSchema): ActionEmail {
@@ -45,6 +44,12 @@ export class ActionEmailMapper {
     private configMaps() {
         automapper
             .createMap(activityEmailInterfaceName, activityEmailDBSchemaNameInterface)
+            .forMember('_id', (opts) => { return new ObjectID(opts.mapFrom('id')) })
+            .forMember('hash', (opts) => { opts.mapFrom('hash') })
+            .forMember('type', (opts) => { opts.mapFrom('type') })
+            .forMember('state', (opts) => { opts.mapFrom('state') })
+            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
+            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .forMember('user', (opts) => { return opts.sourceObject[opts.sourcePropertyName]
                 ? opts.sourceObject[opts.sourcePropertyName].id
                 : undefined; })
@@ -52,6 +57,17 @@ export class ActionEmailMapper {
 
         automapper
             .createMap(activityEmailDBSchemaNameInterface, activityEmailInterfaceName)
+            .forMember('id', (opts) => {
+                const i = opts.mapFrom('_id');
+                if (i) {
+                    return i.toString();
+                }
+            })
+            .forMember('hash', (opts) => { opts.mapFrom('hash') })
+            .forMember('type', (opts) => { opts.mapFrom('type') })
+            .forMember('state', (opts) => { opts.mapFrom('state') })
+            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
+            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .convertToType(ActionEmail);
     }
 }

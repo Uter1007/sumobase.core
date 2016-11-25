@@ -2,6 +2,14 @@ import * as mongoose from 'mongoose';
 import {ActivityType} from './activity.type.enum';
 import {EntityState} from '../../../core/base/base.state.enum';
 
+import {IBaseRepository} from '../../../core/base/base.repository.interface';
+
+export const actionEmailRepositoryInterfaceName = 'IActionEmailRepository';
+
+export interface IActionEmailRepository extends IBaseRepository {
+
+}
+
 export const activityEmailDBSchemaNameInterface = 'IActivityEmailDBSchema';
 
 export interface IActivityEmailDBSchema extends mongoose.Document {

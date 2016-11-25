@@ -1,9 +1,8 @@
 import {IUserDBSchema, userDBSchemaInterfaceName, userDBModel} from '../models/user.db.model';
-import {User} from '../models/user.model';
+import {User, IUser, userInterfaceName} from '../models/user.model';
 import { injectable } from 'inversify';
-import {IUser, userInterfaceName} from '../interfaces/user.interface';
-import { Deserialize } from 'cerialize';
 import {MongooseMapperHelper} from '../../../core/mapper/mongoose.helper';
+import {ObjectID} from 'mongodb';
 
 /* tslint:disable */
 const automapper = require('automapper-ts');
@@ -17,12 +16,11 @@ export class UserMapper {
     }
 
     public fromJSON(json: any): User {
-        return Deserialize(json, User);
+        return automapper.map(userDBSchemaInterfaceName, userInterfaceName, json);
     }
 
     public toDBmodel(model: IUser): IUserDBSchema {
-        const source = MongooseMapperHelper.getObject<IUser>(model);
-        return automapper.map(userInterfaceName, userDBSchemaInterfaceName, source);
+        return automapper.map(userInterfaceName, userDBSchemaInterfaceName, model);
     }
 
     public toUser(userModel: IUserDBSchema): User {
@@ -33,12 +31,31 @@ export class UserMapper {
     private configMaps() {
         automapper
             .createMap(userInterfaceName, userDBSchemaInterfaceName)
+            .forMember('_id', (opts) => { return new ObjectID(opts.mapFrom('id')) })
+            .forMember('firstName', (opts) => { opts.mapFrom('firstName') })
+            .forMember('lastName', (opts) => { opts.mapFrom('lastName') })
+            .forMember('email', (opts) => { opts.mapFrom('email') })
+            .forMember('state', (opts) => { opts.mapFrom('state') })
+            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
+            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .convertToType(userDBModel);
 
         automapper
             .createMap(userDBSchemaInterfaceName, userInterfaceName)
             .forMember('avatar', (opts) => opts.ignore())
             .forMember('password', (opts) => opts.ignore())
+            .forMember('id', (opts) => {
+                const i = opts.mapFrom('_id');
+                if (i) {
+                    return i.toString();
+                }
+            })
+            .forMember('firstName', (opts) => { opts.mapFrom('firstName') })
+            .forMember('lastName', (opts) => { opts.mapFrom('lastName') })
+            .forMember('email', (opts) => { opts.mapFrom('email') })
+            .forMember('state', (opts) => { opts.mapFrom('state') })
+            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
+            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .convertToType(User);
     }
 }

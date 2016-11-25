@@ -22,7 +22,8 @@ export class ConfigLoader {
 
     private static initConfig() {
         console.log('initConfig');
-        const filePath = path.join(process.cwd(), 'dist/config/config.local.json');
+        console.log('basePath: ' + process.cwd());
+        const filePath = path.join(process.cwd(), '/dist/config/config.local.json');
         console.log(filePath);
         this.mergedConfig = lodash.merge(config, (fs.existsSync(filePath)) && require(filePath) || {});
     }

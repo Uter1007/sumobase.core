@@ -3,9 +3,9 @@ import {UserCantLoginException} from '../../error/models/user.cant.login.excepti
 import {AuthenticationError} from '../../error/models/authentication.error';
 import {UserMapper} from '../../../feat/user/mapper/user.mapper';
 import {UserState} from '../../../feat/user/models/userstate.model';
-import {IUser} from '../../../feat/user/interfaces/user.interface';
 
 import {injectable, inject} from 'inversify';
+import {IUser} from '../../../feat/user/models/user.model';
 
 @injectable()
 export class PassportMiddleware {
@@ -22,12 +22,12 @@ export class PassportMiddleware {
 
     public serializeUser = (user: IUser, done) => {
         done(null, user.id);
-    }
+    };
 
     public deserializeUser = async (id: string, done) => {
         let user = await this._userService.findUserById(id);
         done(null, user);
-    }
+    };
 
     public localStrategy = async (req, email, password, done) => {
         try {
@@ -42,6 +42,6 @@ export class PassportMiddleware {
         } catch ( exception ) {
             return done(new AuthenticationError('Email or Password was wrong'));
         }
-    }
+    };
 }
 

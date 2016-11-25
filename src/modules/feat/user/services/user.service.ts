@@ -1,6 +1,5 @@
 import { injectable, inject } from 'inversify';
 import { ILogger, loggerInterfaceName } from '../../../core/logging/interfaces/logger.interface';
-import { IUser } from '../interfaces/user.interface';
 import { IUserDBSchema, userDBAvatarModel } from '../models/user.db.model';
 import { UserState } from '../models/userstate.model';
 
@@ -11,9 +10,10 @@ import {PasswordService} from './password.service';
 import {UnknownException} from '../../../core/error/models/unknown.exception';
 import {UserNotFoundException} from '../../../core/error/models/user.notfound.exception';
 import {UserAvatarMapper} from '../mapper/user.avatar.mapper';
-import {IUserAvatar} from '../interfaces/user.avatar.interface';
 import * as moment from 'moment';
-import {IUserRepository, userRepositoryInterfaceName} from '../interfaces/user.repository.interface';
+import {IUser} from '../models/user.model';
+import {IUserRepository, userRepositoryInterfaceName} from '../repository/user.repository';
+import {IUserAvatar} from '../models/user.avatar.model';
 
 @injectable()
 export class UserService {
@@ -66,7 +66,7 @@ export class UserService {
             }
             foundUser.firstName = userModel.firstName;
             foundUser.lastName = userModel.lastName;
-            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            let updateSuccess = await this._userRepository.update(foundUser._id.toString(), foundUser);
             if (updateSuccess) {
                 return this._userMapper.toUser(foundUser);
             }
@@ -84,7 +84,7 @@ export class UserService {
                 throw new UserNotFoundException('User can not be found');
             }
             foundUser.avatar = new userDBAvatarModel({contentType: contentType, data: image});
-            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            let updateSuccess = await this._userRepository.update(foundUser._id.toString(), foundUser);
             if (updateSuccess) {
                 return true;
             }
@@ -118,7 +118,7 @@ export class UserService {
             }
             let hashpw = await this.hashPassword(password);
             foundUser.password = hashpw;
-            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            let updateSuccess = await this._userRepository.update(foundUser._id.toString(), foundUser);
             if (updateSuccess) {
                 return true;
             }
@@ -150,7 +150,7 @@ export class UserService {
                 throw new UserNotFoundException('User can not be found');
             }
             foundUser.state = UserState.ACTIVE;
-            let updateSuccess = await this._userRepository.update(foundUser.id, foundUser);
+            let updateSuccess = await this._userRepository.update(foundUser._id.toString(), foundUser);
             if (updateSuccess) {
                 return true;
             }

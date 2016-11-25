@@ -1,8 +1,7 @@
 'use strict';
 
-import {IUser} from '../interfaces/user.interface';
 import {IUserDBSchema, userDBModel} from '../models/user.db.model';
-import {User} from '../models/user.model';
+import {User, IUser} from '../models/user.model';
 import {PasswordValidator} from '../services/validator/password.validator.service';
 import {PasswordsNotEqualException} from '../../../core/error/models/password.notequal.exception';
 import {PasswordNotComplexException} from '../../../core/error/models/password.notcomplex.exception';
