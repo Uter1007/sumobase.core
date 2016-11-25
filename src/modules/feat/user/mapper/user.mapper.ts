@@ -15,8 +15,8 @@ export class UserMapper {
         this.configMaps();
     }
 
-    public fromJSON(json: any): User {
-        return automapper.map(userDBSchemaInterfaceName, userInterfaceName, json);
+    public fromJSON(json: any): IUser {
+        return automapper.map('{}', userInterfaceName, json);
     }
 
     public toDBmodel(model: IUser): IUserDBSchema {
@@ -29,33 +29,19 @@ export class UserMapper {
     }
 
     private configMaps() {
+
+        automapper
+            .createMap('{}', userInterfaceName)
+            .convertToType(User);
+
         automapper
             .createMap(userInterfaceName, userDBSchemaInterfaceName)
-            .forMember('_id', (opts) => { return new ObjectID(opts.mapFrom('id')) })
-            .forMember('firstName', (opts) => { opts.mapFrom('firstName') })
-            .forMember('lastName', (opts) => { opts.mapFrom('lastName') })
-            .forMember('email', (opts) => { opts.mapFrom('email') })
-            .forMember('state', (opts) => { opts.mapFrom('state') })
-            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
-            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .convertToType(userDBModel);
 
         automapper
             .createMap(userDBSchemaInterfaceName, userInterfaceName)
             .forMember('avatar', (opts) => opts.ignore())
             .forMember('password', (opts) => opts.ignore())
-            .forMember('id', (opts) => {
-                const i = opts.mapFrom('_id');
-                if (i) {
-                    return i.toString();
-                }
-            })
-            .forMember('firstName', (opts) => { opts.mapFrom('firstName') })
-            .forMember('lastName', (opts) => { opts.mapFrom('lastName') })
-            .forMember('email', (opts) => { opts.mapFrom('email') })
-            .forMember('state', (opts) => { opts.mapFrom('state') })
-            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
-            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .convertToType(User);
     }
 }

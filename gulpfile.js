@@ -52,7 +52,7 @@ gulp.task('ts-compile', function() {
     ])
     .pipe(sourcemaps.init())
     .pipe(tsProject())
-    .js.pipe(sourcemaps.write('./src/ts'))
+    .js.pipe(sourcemaps.write('../../code/ts'))
     .pipe(gulp.dest('dist'));
 });
 

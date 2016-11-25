@@ -29,16 +29,11 @@ export class UserAvatarMapper {
     private configMaps() {
         automapper
             .createMap(userAvatarDBSchemaInterfaceName, userAvatarInterfaceName)
-            .forMember('data', (opts) => { opts.mapFrom('data') })
-            .forMember('contentType', (opts) => { opts.mapFrom('contentType') })
             .forMember('filename', (opts) => {return 'avatar'; })
             .convertToType(UserAvatar);
 
         automapper
             .createMap(userAvatarInterfaceName, userAvatarDBSchemaInterfaceName)
-            .forMember('data', (opts) => { opts.mapFrom('data') })
-            .forMember('contentType', (opts) => { opts.mapFrom('contentType') })
-            .forMember('filename', (opts) => { opts.mapFrom('filename') })
             .convertToType(userDBAvatarModel);
     }
 }

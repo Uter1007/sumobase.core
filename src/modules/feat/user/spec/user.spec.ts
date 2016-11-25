@@ -30,13 +30,11 @@ describe('User Tests', () => {
                 'email': 'test@test.com'
             };
 
-            userModel = new User('test@test.com',
-                'firstname',
-                'lastname',
-                UserState.DISABLED,
-                undefined,
-                undefined,
-                123);
+            userModel.email = 'test@test.com';
+            userModel.firstName = 'firstname';
+            userModel.lastName = 'lastname';
+            userModel.state = UserState.DISABLED;
+            userModel.id = '123';
 
             dbUser = new userDBModel({
                 createdOn: '2013-02-04T10:35:24-08:00',
@@ -107,29 +105,26 @@ describe('User Tests', () => {
             let invalidUserNoLastName: User;
 
             beforeEach(() => {
-                validUser = new User('test@test.com',
-                    'firstname',
-                    'lastname',
-                    UserState.ACTIVE,
-                    undefined,
-                    undefined,
-                    123);
+                validUser = new User();
 
-                invalidUserNoEmail = new User('test',
-                    'firstname',
-                    'lastname',
-                    UserState.ACTIVE,
-                    undefined,
-                    undefined,
-                    undefined);
+                validUser.email = 'test@test.com';
+                validUser.firstName = 'firstname';
+                validUser.lastName = 'lastname';
+                validUser.state = UserState.ACTIVE;
+                validUser.id = '123';
 
-                invalidUserNoLastName = new User('test',
-                    '',
-                    'lastname',
-                    UserState.ACTIVE,
-                    undefined,
-                    undefined,
-                    undefined);
+                invalidUserNoEmail = new User();
+
+                invalidUserNoEmail.email = 'test';
+                invalidUserNoEmail.firstName = 'firstname';
+                invalidUserNoEmail.lastName = 'lastname';
+                invalidUserNoEmail.state = UserState.ACTIVE;
+
+                invalidUserNoLastName = new User();
+                invalidUserNoLastName.email = 'test';
+                invalidUserNoLastName.firstName = '';
+                invalidUserNoLastName.lastName = 'lastname';
+                invalidUserNoLastName.state = UserState.ACTIVE;
 
             });
 
