@@ -150,7 +150,11 @@ export class UserService {
                 throw new UserNotFoundException('User can not be found');
             }
             foundUser.state = UserState.ACTIVE;
-            let updateSuccess = await this._userRepository.update(foundUser._id.toString(), foundUser);
+            let founduserid: string = undefined;
+            if (foundUser._id) {
+                founduserid = foundUser._id.toString();
+            }
+            let updateSuccess = await this._userRepository.update(founduserid, foundUser);
             if (updateSuccess) {
                 return true;
             }

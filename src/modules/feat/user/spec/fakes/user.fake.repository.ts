@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import kernel from '../helper/user.kernel.test.helper';
 import {PasswordService} from '../../services/password.service';
 import {IUserRepository} from '../../repository/user.repository';
+import {ObjectID} from 'mongodb';
 
 @injectable()
 export class UserFakeRepository implements IUserRepository {
@@ -17,6 +18,7 @@ export class UserFakeRepository implements IUserRepository {
             email : 'christoph.ott@lean-coders.at',
             firstName : 'christoph',
             id : '57af7a9d77257f6c0a3af0b7',
+            _id: new ObjectID('57af7a9d77257f6c0a3af0b7'),
             lastName: 'ott',
             modifiedOn : moment().utc(),
             state : 'active',

@@ -393,7 +393,8 @@ describe('User Service', () => {
             .once()
             .withArgs('the id')
             .returns(Promise.resolve({
-                id: 'the id'
+                id: 'the id',
+                _id: 'the id'
             }));
 
         repoMock
@@ -402,6 +403,7 @@ describe('User Service', () => {
             .withArgs('the id', {
                 firstName: 'Max',
                 id: 'the id',
+                _id: 'the id',
                 lastName: 'Power'
             })
             .returns(Promise.resolve(true));
@@ -412,6 +414,7 @@ describe('User Service', () => {
             .withArgs({
                 firstName: 'Max', // stems from UserService.update
                 id: 'the id',
+                _id: 'the id',
                 lastName: 'Power' // stems from UserService.update
             });
 
@@ -447,7 +450,8 @@ describe('User Service', () => {
             .once()
             .withArgs('the id')
             .returns(Promise.resolve({
-                id: 'the id'
+                id: 'the id',
+                _id: 'the id'
             }));
 
         repoMock
@@ -456,6 +460,7 @@ describe('User Service', () => {
             .withArgs('the id', {
                 firstName: 'Max',
                 id: 'the id',
+                _id: 'the id',
                 lastName: 'Power'
             })
             .returns(Promise.resolve(false));
@@ -493,7 +498,8 @@ describe('User Service', () => {
             .once()
             .withArgs('the id')
             .returns(Promise.resolve({
-                id: 'the id'
+                id: 'the id',
+                _id: 'the id'
             }));
 
         pwMock
@@ -507,6 +513,7 @@ describe('User Service', () => {
             .once()
             .withArgs('the id', {
                 id: 'the id',
+                _id: 'the id',
                 password: 'the password\'s hash'
             })
             .returns(Promise.resolve(true));
@@ -539,7 +546,8 @@ describe('User Service', () => {
             .once()
             .withArgs('the id')
             .returns(Promise.resolve({
-                id: 'the id'
+                id: 'the id',
+                _id: 'the id'
             }));
 
         pwMock
@@ -553,6 +561,7 @@ describe('User Service', () => {
             .once()
             .withArgs('the id', {
                 id: 'the id',
+                _id: 'the id',
                 password: 'the password\'s hash'
             })
             .returns(Promise.resolve(false));

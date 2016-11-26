@@ -44,6 +44,12 @@ export class ActionEmailMapper {
     private configMaps() {
         automapper
             .createMap(activityEmailInterfaceName, activityEmailDBSchemaNameInterface)
+            .forMember('_id', (opts) => { return new ObjectID(opts.mapFrom('id')) })
+            .forMember('hash', (opts) => { opts.mapFrom('hash') })
+            .forMember('type', (opts) => { opts.mapFrom('type') })
+            .forMember('state', (opts) => { opts.mapFrom('state') })
+            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
+            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .forMember('user', (opts) => { return opts.sourceObject[opts.sourcePropertyName]
                 ? opts.sourceObject[opts.sourcePropertyName].id
                 : undefined; })
@@ -51,6 +57,17 @@ export class ActionEmailMapper {
 
         automapper
             .createMap(activityEmailDBSchemaNameInterface, activityEmailInterfaceName)
+            .forMember('id', (opts) => {
+                const i = opts.mapFrom('_id');
+                if (i) {
+                    return i.toString();
+                }
+            })
+            .forMember('hash', (opts) => { opts.mapFrom('hash') })
+            .forMember('type', (opts) => { opts.mapFrom('type') })
+            .forMember('state', (opts) => { opts.mapFrom('state') })
+            .forMember('modifiedOn', (opts) => { opts.mapFrom('modifiedOn') })
+            .forMember('createdOn', (opts) => { opts.mapFrom('createdOn') })
             .convertToType(ActionEmail);
     }
 }

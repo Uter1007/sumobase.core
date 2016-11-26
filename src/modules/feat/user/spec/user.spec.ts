@@ -30,6 +30,7 @@ describe('User Tests', () => {
                 'email': 'test@test.com'
             };
 
+            userModel = new User();
             userModel.email = 'test@test.com';
             userModel.firstName = 'firstname';
             userModel.lastName = 'lastname';

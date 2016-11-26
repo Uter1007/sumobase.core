@@ -5,8 +5,9 @@ import {BaseModel} from '../../../core/base/base.model';
 import {IsLength, IsEmail} from 'validator.ts/decorator/Validation';
 import 'reflect-metadata';
 import {autoserialize} from 'cerialize';
-import {IUserDBSchema} from './user.db.model';
+import {IUserDBSchema, userDBModel} from './user.db.model';
 import {ObjectID} from 'mongodb';
+import {IUserAvatar} from './user.avatar.model';
 
 export const userInterfaceName = 'IUser';
 
@@ -49,6 +50,8 @@ export class User extends BaseModel implements IUser {
     @autoserialize
     public modifiedOn: string;
 
+    public password: string;
+
     constructor() {
         super();
         this.state = UserState.PENDING;
@@ -56,14 +59,22 @@ export class User extends BaseModel implements IUser {
 
     public toDB(): IUserDBSchema {
 
-        let user: IUserDBSchema = {
-            _id: new ObjectID(this.id),
-            createdOn: this.createdOn,
-            modifiedOn: this.modifiedOn,
-            firstName: this.firstName,
+        let userdb = new userDBModel();
 
-        };
+        userdb.createdOn = this.createdOn;
+        userdb.modifiedOn = this.modifiedOn;
+        userdb.firstName = this.firstName;
+        userdb.lastName = this.lastName;
+        userdb.email = this.email;
+        userdb.state = this.state;
 
-        return user;
+        userdb.password = this.password;
+
+        if (this.id){
+            userdb._id = new ObjectID(this.id);
+
+        }
+
+        return userdb;
     }
 }
